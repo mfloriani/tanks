@@ -33,7 +33,12 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.layer == playerLayer || collision.gameObject.layer == enemyLayer)
         {
-
+            // Destroy Object
+            Destroy(gameObject);
+        }
+        if(collision.gameObject.layer == wallLayer)
+        {
+            Destroy(gameObject);
         }
     }
 }
