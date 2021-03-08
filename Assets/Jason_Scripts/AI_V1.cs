@@ -19,6 +19,17 @@ public class AI_V1 : MonoBehaviour
     [SerializeField] float timeTaken = 3.0f;
     [SerializeField] Vector3 AIPos;
 
+
+    enum AIMovementMode
+    {
+        smooth,
+        instant
+    };
+
+    [SerializeField] AIMovementMode movement;
+    [SerializeField] bool bCoroutineStart = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,13 +53,11 @@ public class AI_V1 : MonoBehaviour
             }
         }
         targetNodePos = nodes[randomIndex].transform.position;
-
-        StartCoroutine(MoveAI());
     }
 
     IEnumerator MoveAI()
     {
-        while(randomIndex != 10000)
+        while(bCoroutineStart)
         {
             this.transform.position = nextNode;
             yield return new WaitForSeconds(1f);
@@ -58,7 +67,15 @@ public class AI_V1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //MoveAISmooth();
+        if(movement == AIMovementMode.instant)
+        {
+            StartMovement();
+        }
+        else if(movement == AIMovementMode.smooth)
+        {
+            bCoroutineStart = false;
+            MoveAISmooth();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -109,6 +126,15 @@ public class AI_V1 : MonoBehaviour
             float speed = timer / timeTaken;
 
             transform.position = Vector3.Lerp(AIPos, nextNode, speed);
+        }
+    }
+
+    void StartMovement()
+    {
+        if (!bCoroutineStart)
+        {
+            bCoroutineStart = true;
+            StartCoroutine(MoveAI());
         }
     }
 }
