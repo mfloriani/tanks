@@ -117,6 +117,10 @@ public class AI_V1 : MonoBehaviour
     {
         timer += Time.deltaTime;
 
+        Vector3 direction = (nextNode - this.transform.position).normalized;
+
+        Quaternion _lookRotation = Quaternion.LookRotation(direction);
+
         if (timer > timeTaken)
         {
             CalculateNextNode();
@@ -126,6 +130,7 @@ public class AI_V1 : MonoBehaviour
             float speed = timer / timeTaken;
 
             transform.position = Vector3.Lerp(AIPos, nextNode, speed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * 5.0f);
         }
     }
 
