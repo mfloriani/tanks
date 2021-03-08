@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class TankManager : MonoBehaviour
 {
-
+    [SerializeField]
     private float _rTrack;      //speed for right track
+    [SerializeField]
     private float _lTrack;      //speed for left track
+        [SerializeField]
     private float _speed;
     private bool _firing;
     private float _aimX;
     private float _aimY;
     private float _aim;
     private Rigidbody2D _body;
+    [SerializeField]
+    private Vector2 _movement;
+
+    private GameObject _gun;
 
     public enum powerUp         //enum for state of powerUp applied to tank
     {
@@ -75,7 +81,7 @@ public class TankManager : MonoBehaviour
         set { _aimY = value; }
     }
 
-    private float aimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
+    private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
         float radAngle = Mathf.Atan2(aimX, aimY);
         if (radAngle < 0.0f) radAngle += (Mathf.PI * 2.0f);
@@ -84,22 +90,27 @@ public class TankManager : MonoBehaviour
         return angle;
     }
 
-    private void reload()
+    private void Reload()
     {
 
     }
 
-    private void drive()    //this don't work
+    private void Drive()    //this don't work
     {
-        float turn = (lTrack - rTrack) * Time.deltaTime;
-        Quaternion turnRotation = Quaternion.Euler(0f, 1f, 0f);
-        _body.MoveRotation(Quaternion.Euler(_body.transform.eulerAngles) * turnRotation);
-        Vector2 movement = transform.forward * (lTrack + rTrack) * _speed;
-        _body.MovePosition(_body.position * 2 * Time.fixedDeltaTime);
-
+        float turn = -(rTrack - lTrack) * 10f;
+        gameObject.transform.RotateAround(gameObject.transform.position,new Vector3(0f,0f,1f), turn);
+        Debug.Log(turn + ",  " + _movement);
+        _movement = -(gameObject.transform.up) * (lTrack + rTrack) * _speed;
+        gameObject.transform.Translate(_movement * Time.deltaTime, Space.World);
 
     }
 
+    private void Target()
+    {
+        float rotation = AimAngle();
+        _gun.transform.Rotate(0f,0f,rotation);
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -109,11 +120,13 @@ public class TankManager : MonoBehaviour
         _body = gameObject.GetComponent<Rigidbody2D>();
         _readyToFire = false;
         _speed = 2.0f;
+        _gun = gameObject.transform.GetChild(0).gameObject;
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        drive();
+        Drive();
+      //  Target();
     }
     void Die()
     {
@@ -130,7 +143,7 @@ public class TankManager : MonoBehaviour
 
         }
         
-        reload();
+        Reload();
 
         if (_health <= 0)
             Die();
