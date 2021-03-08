@@ -1,3 +1,5 @@
+#define Testing
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +13,6 @@ public class AI_Algorithm : MonoBehaviour
     [SerializeField] Vector3 targetPos;
 
     bool bPlayerFound;
-
     /// <summary>
     /// This will handle how the AI behaves
     /// </summary>
@@ -26,8 +27,17 @@ public class AI_Algorithm : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player");
+
         aiStates = AIStates.Wander;
+
+
     }
+
+    IEnumerator StartMovement()
+    {
+        yield return null;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -52,8 +62,18 @@ public class AI_Algorithm : MonoBehaviour
         ///</ summary >
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+    }
+
     void LastPlayerPosition(Vector3 position)
     {
         targetPos = position;
+    }
+
+    void CalculateNode()
+    {
+        
     }
 }
