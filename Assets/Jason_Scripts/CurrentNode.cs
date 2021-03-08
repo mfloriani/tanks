@@ -32,6 +32,38 @@ public class CurrentNode : MonoBehaviour
     /// </summary>
     public void CreateNodeList()
     {
+        /*
+        accessibleNodes.Clear();
+
+        hit = Physics2D.Raycast(transform.position, Vector2.up);
+
+        if(hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.down);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.left);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.right);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+        */
+
         accessibleNodes.Clear();
 
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))

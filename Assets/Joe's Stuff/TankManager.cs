@@ -90,6 +90,7 @@ public class TankManager : MonoBehaviour
         set { _target = value; }
     }
 
+
     private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
         float radAngle = Mathf.Atan2(aimX, aimY);
@@ -98,6 +99,7 @@ public class TankManager : MonoBehaviour
 
         return angle;
     }
+
 
     private void Drive()    //this DOES work
     {
@@ -115,6 +117,7 @@ public class TankManager : MonoBehaviour
         target = -target + 180;
         _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
+    
     public void Die()
     {
         Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
@@ -138,8 +141,6 @@ public class TankManager : MonoBehaviour
         Target();
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (_health <= 0)
@@ -149,6 +150,9 @@ public class TankManager : MonoBehaviour
         {
             turret.Fire(target);
         }
+
+        if (_health <= 0)
+            Die();
     }
 
 

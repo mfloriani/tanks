@@ -35,6 +35,8 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.layer == playerLayer || collision.gameObject.layer == enemyLayer)
         {
+            //collision.gameObject.GetComponent<TankManager>().Die();
+            Destroy(gameObject);
             if(collision.gameObject.GetComponent<TankManager>() != null)
                 collision.gameObject.GetComponent<TankManager>().Die();
             Die();
