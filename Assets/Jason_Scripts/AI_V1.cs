@@ -19,6 +19,17 @@ public class AI_V1 : MonoBehaviour
     [SerializeField] float timeTaken = 3.0f;
     [SerializeField] Vector3 AIPos;
 
+
+    enum AIMovementMode
+    {
+        smooth,
+        instant
+    };
+
+    [SerializeField] AIMovementMode movement;
+    [SerializeField] bool bCoroutineStart = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,13 +53,11 @@ public class AI_V1 : MonoBehaviour
             }
         }
         targetNodePos = nodes[randomIndex].transform.position;
-
-        //StartCoroutine(MoveAI());
     }
 
     IEnumerator MoveAI()
     {
-        while(randomIndex != 10000)
+        while(bCoroutineStart)
         {
             this.transform.position = nextNode;
             yield return new WaitForSeconds(1f);
@@ -58,17 +67,14 @@ public class AI_V1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if(timer > timeTaken)
+        if(movement == AIMovementMode.instant)
         {
-            CalculateNextNode();
+            StartMovement();
         }
-        else
+        else if(movement == AIMovementMode.smooth)
         {
-            float speed = timer / timeTaken;
-
-            transform.position = Vector3.Lerp(AIPos, nextNode, speed);
+            bCoroutineStart = false;
+            MoveAISmooth();
         }
     }
 
@@ -104,6 +110,31 @@ public class AI_V1 : MonoBehaviour
                 timer = 0;
                 AIPos = transform.position;
             }
+        }
+    }
+
+    void MoveAISmooth()
+    {
+        timer += Time.deltaTime;
+
+        if (timer > timeTaken)
+        {
+            CalculateNextNode();
+        }
+        else
+        {
+            float speed = timer / timeTaken;
+
+            transform.position = Vector3.Lerp(AIPos, nextNode, speed);
+        }
+    }
+
+    void StartMovement()
+    {
+        if (!bCoroutineStart)
+        {
+            bCoroutineStart = true;
+            StartCoroutine(MoveAI());
         }
     }
 }

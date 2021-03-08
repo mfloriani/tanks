@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     public float moveSpeed;
     public Vector2 moveDir;
 
-    private int wallLayer = 8;
+    private int wallLayer = 9;
     public int playerLayer = 6;
     public int enemyLayer = 7;
 
@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.layer == playerLayer || collision.gameObject.layer == enemyLayer)
         {
-            // Destroy Object
+            //collision.gameObject.GetComponent<TankManager>().Die();
             Destroy(gameObject);
         }
         if(collision.gameObject.layer == wallLayer)
