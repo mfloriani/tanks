@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TankManager : MonoBehaviour
 {
+    public Firing turret;
+
+
     [SerializeField]
     private float _rTrack;      //speed for right track
     [SerializeField]
@@ -17,7 +20,7 @@ public class TankManager : MonoBehaviour
     private Rigidbody2D _body;
     [SerializeField]
     private Vector2 _movement;
-
+    private float _target;
     private GameObject _gun;
 
     public enum powerUp         //enum for state of powerUp applied to tank
@@ -81,6 +84,13 @@ public class TankManager : MonoBehaviour
         set { _aimY = value; }
     }
 
+    public float target           //getters and setters for target angle to be used by other classes
+    {
+        get { return _target; }
+        set { _target = value; }
+    }
+
+
     private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
         float radAngle = Mathf.Atan2(aimX, aimY);
@@ -90,12 +100,8 @@ public class TankManager : MonoBehaviour
         return angle;
     }
 
-    private void Reload()
-    {
 
-    }
-
-    private void Drive()    //this don't work
+    private void Drive()    //this DOES work
     {
         float turn = -(rTrack - lTrack) * 10f;
         gameObject.transform.RotateAround(gameObject.transform.position,new Vector3(0f,0f,1f), turn);
@@ -107,10 +113,11 @@ public class TankManager : MonoBehaviour
 
     private void Target()
     {
-        float rotation = AimAngle();
-        //Vector3 joint = gameObject.transform.position
-        //_gun.transform.RotateAround(, new Vector3(0f,0f,1f) ,rotation);
+        target = ((Mathf.Round(AimAngle() / 45) * 45) );
+        target = -target + 180;
+        _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
+    
     public void Die()
     {
         Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
@@ -131,26 +138,21 @@ public class TankManager : MonoBehaviour
     void FixedUpdate()
     {
         Drive();
-        //Target();
+        Target();
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        //drive();
-
-        if (firing && _readyToFire)
-        {
-
-        }
-        
-        Reload();
-
         if (_health <= 0)
             Die();
 
+        if(firing)
+        {
+            turret.Fire(target);
+        }
 
+        if (_health <= 0)
+            Die();
     }
 
 
