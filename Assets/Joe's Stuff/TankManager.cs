@@ -99,7 +99,7 @@ public class TankManager : MonoBehaviour
     {
         float turn = -(rTrack - lTrack) * 10f;
         gameObject.transform.RotateAround(gameObject.transform.position,new Vector3(0f,0f,1f), turn);
-        Debug.Log(turn + ",  " + _movement);
+
         _movement = -(gameObject.transform.up) * (lTrack + rTrack) * _speed;
         gameObject.transform.Translate(_movement * Time.deltaTime, Space.World);
 
@@ -108,9 +108,14 @@ public class TankManager : MonoBehaviour
     private void Target()
     {
         float rotation = AimAngle();
-        _gun.transform.Rotate(0f,0f,rotation);
+        //Vector3 joint = gameObject.transform.position
+        //_gun.transform.RotateAround(, new Vector3(0f,0f,1f) ,rotation);
     }
-    
+    public void Die()
+    {
+        Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -126,12 +131,9 @@ public class TankManager : MonoBehaviour
     void FixedUpdate()
     {
         Drive();
-      //  Target();
+        //Target();
     }
-    void Die()
-    {
 
-    }
 
     // Update is called once per frame
     void Update()
