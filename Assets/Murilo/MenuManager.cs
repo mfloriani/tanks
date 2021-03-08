@@ -46,7 +46,7 @@ public class MenuManager : MonoBehaviour
     {
         _isMainMenu = SceneManager.GetActiveScene().buildIndex == _mainMenuSceneIndex;
 
-        Debug.Log(_isMainMenu + " - " + _isGamePaused);
+        //Debug.Log(_isMainMenu + " - " + _isGamePaused);
 
         if (Input.GetButtonDown("Start Button") && !_isMainMenu)
         {
