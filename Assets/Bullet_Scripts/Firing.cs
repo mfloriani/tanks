@@ -6,11 +6,11 @@ using UnityEngine;
 public class Firing : MonoBehaviour
 {
     // Firerate. Set this in the inspector as required.
-    public float cooldown = 1.5f;
+    public float cooldown;
     float currentCooldown;
 
     // The bullet - set this to the bullet prefab in the inspector
-    public GameObject bulletObject;
+    public GameObject placeholder;
 
     public List<GameObject> currentBullets;
     private float spawnOffset = 1; // testing value - not final
@@ -33,17 +33,21 @@ public class Firing : MonoBehaviour
     public void Fire(float zRotation)
     {
         if (currentCooldown >= cooldown)
-        {            
+        {
+            
             // Reset fire cooldown
             currentCooldown = 0;
             // Instantiate new bullet
-            GameObject newBullet = Instantiate(bulletObject);
-            newBullet.transform.position = transform.position;
-            newBullet.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+            GameObject newBullet = Instantiate(placeholder, placeholder.transform.position, placeholder.transform.rotation, null);
+            newBullet.SetActive(true);
+            //newBullet.transform.parent = null;
+            ////newBullet.transform.position = placeholder.transform.position;
+            ////newBullet.transform.rotation = placeholder.transform.rotation;
+
             // Offset bullet from tank
-            newBullet.transform.Translate(-newBullet.transform.up * spawnOffset);
+            //newBullet.transform.Translate(-newBullet.transform.up * spawnOffset);
             // Set bullet move direction
-            newBullet.GetComponent<Bullet>().moveDir = -newBullet.transform.up;
+            newBullet.GetComponent<Bullet>().moveDir = placeholder.transform.up;
             // Set bullet parent to this GameObject
             newBullet.GetComponent<Bullet>().SetParent(gameObject);
             // Add bullet to active bullet list
