@@ -37,5 +37,7 @@ public class Firing : MonoBehaviour
         GameObject newBullet = Instantiate(bulletObject, transform);
         newBullet.transform.Translate(newBullet.transform.right * spawnOffset);
         newBullet.GetComponent<Bullet>().moveDir = newBullet.transform.right;
+        newBullet.GetComponent<Bullet>().SetParent(gameObject);
+        currentBullets.Add(newBullet);
     }
 }
