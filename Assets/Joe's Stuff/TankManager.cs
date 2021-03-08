@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TankManager : MonoBehaviour
 {
+    public Firing turret;
+
+
     [SerializeField]
     private float _rTrack;      //speed for right track
     [SerializeField]
@@ -109,8 +112,8 @@ public class TankManager : MonoBehaviour
     private void Target()
     {
         target = ((Mathf.Round(AimAngle() / 45) * 45) );
-
-        _gun.transform.eulerAngles = new Vector3(0f, 0f, -target + 180);
+        target = -target + 180;
+        _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
     public void Die()
     {
@@ -141,6 +144,11 @@ public class TankManager : MonoBehaviour
     {
         if (_health <= 0)
             Die();
+
+        if(firing)
+        {
+            turret.Fire(target);
+        }
     }
 
 
