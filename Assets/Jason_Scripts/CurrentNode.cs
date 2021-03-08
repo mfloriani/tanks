@@ -12,13 +12,19 @@ public class CurrentNode : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+
         //Calls our node function
         CreateNodeList();
+    }
 
-        if(this.tag != "Node")
-        {
-            this.tag = "Node";
-        }
+    private void Update()
+    {
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 100, Color.white);
     }
 
     /// <summary>
@@ -26,6 +32,38 @@ public class CurrentNode : MonoBehaviour
     /// </summary>
     public void CreateNodeList()
     {
+        /*
+        accessibleNodes.Clear();
+
+        hit = Physics2D.Raycast(transform.position, Vector2.up);
+
+        if(hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.down);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.left);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+
+        hit = Physics2D.Raycast(transform.position, Vector2.right);
+
+        if (hit.collider.tag == "Node")
+        {
+            accessibleNodes.Add(hit.collider.gameObject);
+        }
+        */
+
         accessibleNodes.Clear();
 
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))
