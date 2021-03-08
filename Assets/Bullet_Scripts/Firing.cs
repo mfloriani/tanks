@@ -18,6 +18,7 @@ public class Firing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Set firing cooldown so firing can begin immediately
         currentBullets = new List<GameObject>();
         currentCooldown = cooldown;
     }
@@ -36,7 +37,9 @@ public class Firing : MonoBehaviour
             // Reset fire cooldown
             currentCooldown = 0;
             // Instantiate new bullet
-            GameObject newBullet = Instantiate(bulletObject, transform);
+            GameObject newBullet = Instantiate(bulletObject);
+            newBullet.transform.position = transform.position;
+            newBullet.transform.rotation = transform.rotation;
             // Offset bullet from tank
             newBullet.transform.Translate(newBullet.transform.right * spawnOffset);
             // Set bullet move direction
@@ -46,6 +49,5 @@ public class Firing : MonoBehaviour
             // Add bullet to active bullet list
             currentBullets.Add(newBullet);
         }
-        
     }
 }
