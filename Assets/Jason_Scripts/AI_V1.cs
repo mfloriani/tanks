@@ -43,7 +43,7 @@ public class AI_V1 : MonoBehaviour
         }
         targetNodePos = nodes[randomIndex].transform.position;
 
-        //StartCoroutine(MoveAI());
+        StartCoroutine(MoveAI());
     }
 
     IEnumerator MoveAI()
@@ -58,18 +58,7 @@ public class AI_V1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if(timer > timeTaken)
-        {
-            CalculateNextNode();
-        }
-        else
-        {
-            float speed = timer / timeTaken;
-
-            transform.position = Vector3.Lerp(AIPos, nextNode, speed);
-        }
+        //MoveAISmooth();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -104,6 +93,22 @@ public class AI_V1 : MonoBehaviour
                 timer = 0;
                 AIPos = transform.position;
             }
+        }
+    }
+
+    void MoveAISmooth()
+    {
+        timer += Time.deltaTime;
+
+        if (timer > timeTaken)
+        {
+            CalculateNextNode();
+        }
+        else
+        {
+            float speed = timer / timeTaken;
+
+            transform.position = Vector3.Lerp(AIPos, nextNode, speed);
         }
     }
 }
