@@ -34,7 +34,9 @@ public class Firing : MonoBehaviour
     {
         if (currentCooldown >= cooldown)
         {
-            
+
+            gameObject.GetComponent<AudioSource>().PlayOneShot(gameObject.GetComponent<AudioSource>().clip);
+            gameObject.GetComponent<ParticleSystem>().Play();
             // Reset fire cooldown
             currentCooldown = 0;
             // Instantiate new bullet
