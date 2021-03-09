@@ -4,6 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
+enum GameMode
+{
+    None,
+    Normal,
+    BattleRoyale
+}
+
+//enum SceneState
+//{
+//    MainMenu,
+//    ControllerMenu,
+//    PauseMenu,
+//    Playing
+//}
+
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
@@ -17,6 +32,10 @@ public class MenuManager : MonoBehaviour
 
     const string MAIN_MENU = "Main Menu";
     const string PAUSE_MENU = "Pause Menu";
+    const string CONTROLLER_MENU = "Controller Menu";
+
+    GameMode _selectedMode = GameMode.None;
+    
 
     void Awake()
     {
@@ -46,15 +65,20 @@ public class MenuManager : MonoBehaviour
     {
         _isMainMenu = SceneManager.GetActiveScene().buildIndex == _mainMenuSceneIndex;
 
-        Debug.Log(_isMainMenu + " - " + _isGamePaused);
+        //Debug.Log(_isMainMenu + " - " + _isGamePaused);
 
-        if (Input.GetButtonDown("Start Button") && !_isMainMenu)
+        if (Input.GetButtonDown("Joy1_Start") && !_isMainMenu)
         {
             if (_isGamePaused)
                 Resume();
             else
                 Pause();
         }
+    }
+
+    public bool IsInsideMainMenu()
+    {
+        return _isMainMenu;
     }
 
     public void Resume()
@@ -75,16 +99,31 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(_firstSelectedPauseMenu);
     }
 
-    public void PlaySkirmish()
+    public void SelectSkirmishMode()
     {
+        _selectedMode = GameMode.Normal;
+
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
-        SceneManager.LoadScene("Skirmish_demo");
+        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
+        
     }
 
-    public void PlayBattleRoyale()
+    public void SelectBattleRoyaleMode()
     {
+        _selectedMode = GameMode.BattleRoyale;
+
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
-        SceneManager.LoadScene("Battle_royale_demo");
+        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);        
+    }
+
+    public void StartGame()
+    {
+        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
+
+        if (_selectedMode == GameMode.Normal)
+            SceneManager.LoadScene("Skirmish_demo");
+        else if (_selectedMode == GameMode.BattleRoyale)
+            SceneManager.LoadScene("Battle_royale_demo");
     }
 
     public void Quit()
@@ -102,5 +141,7 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
+
+
     }
 }
