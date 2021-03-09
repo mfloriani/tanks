@@ -138,6 +138,7 @@ public class TankManager : MonoBehaviour
     void FixedUpdate()
     {
         Drive();
+        if(aimX + aimY != 0)
         Target();
     }
 

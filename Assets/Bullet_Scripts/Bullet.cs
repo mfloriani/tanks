@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+        transform.Translate(gameObject.transform.up * moveSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
