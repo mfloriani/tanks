@@ -51,6 +51,7 @@ public class AI_V2 : MonoBehaviour
             }
         }
         targetNodePos = nodes[randomIndex].transform.position;
+        target.transform.position = targetNodePos;
     }
 
     IEnumerator MoveAI()
@@ -93,6 +94,7 @@ public class AI_V2 : MonoBehaviour
                 newRandomIndex = randomIndex;
 
                 targetNodePos = nodes[randomIndex].transform.position;
+                target.transform.position = targetNodePos;
             }
             CalculateNextNode();
         }
@@ -100,11 +102,11 @@ public class AI_V2 : MonoBehaviour
 
     void CalculateNextNode()
     {
-        for (int i = 0; i < currentNode.GetComponent<CurrentNode>().accessibleNodes.Count; i++)
+        for (int i = 0; i < currentNode.GetComponent<CurrentNode>().accessibleNodes2D.Count; i++)
         {
-            if (Vector2.Distance(currentNode.GetComponent<CurrentNode>().accessibleNodes[i].transform.position, targetNodePos) < Vector2.Distance(nextNode, targetNodePos))
+            if (Vector2.Distance(currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position, targetNodePos) < Vector2.Distance(nextNode, targetNodePos))
             {
-                nextNode = currentNode.GetComponent<CurrentNode>().accessibleNodes[i].transform.position;
+                nextNode = currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position;
                 timer = 0;
                 AIPos = transform.position;
             }
