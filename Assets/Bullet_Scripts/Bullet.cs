@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private GameObject parent;
+
     // Variables
     public float moveSpeed;
     public Vector2 moveDir;
@@ -35,10 +37,24 @@ public class Bullet : MonoBehaviour
         {
             //collision.gameObject.GetComponent<TankManager>().Die();
             Destroy(gameObject);
+            if(collision.gameObject.GetComponent<TankManager>() != null)
+                collision.gameObject.GetComponent<TankManager>().Die();
+            Die();
         }
         if(collision.gameObject.layer == wallLayer)
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    public void SetParent(GameObject newParent)
+    {
+        parent = newParent;
+    }
+
+    private void Die()
+    {
+        parent.GetComponent<Firing>().currentBullets.Remove(gameObject);
+        Destroy(gameObject);
     }
 }
