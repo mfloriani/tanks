@@ -7,6 +7,7 @@ public class TankManager : MonoBehaviour
     public Firing turret;
 
 
+
     [SerializeField]
     private float _rTrack;      //speed for right track
     [SerializeField]
@@ -14,14 +15,23 @@ public class TankManager : MonoBehaviour
         [SerializeField]
     private float _speed;
     private bool _firing;
+    private bool _honking;
     private float _aimX;
     private float _aimY;
     private float _aim;
     private Rigidbody2D _body;
     [SerializeField]
     private Vector2 _movement;
+    [SerializeField]
+    private int _player;
     private float _target;
     private GameObject _gun;
+    private ParticleSystem _smoke;
+
+    public Sprite[] bodySprites;
+    public Sprite[] turretSprites;
+    public Sprite[] shellSprites;
+    public AudioClip[] hornSounds;
 
     public enum powerUp         //enum for state of powerUp applied to tank
     {
@@ -62,6 +72,12 @@ public class TankManager : MonoBehaviour
         set { _firing = value; }
     }
 
+    public bool honking            //getters and setters for dead state to be used by other classes
+    {
+        get { return _honking; }
+        set { _honking = value; }
+    }
+
     public float rTrack            //getters and setters for right track speed to be used by other classes
     {
         get { return _rTrack; }
@@ -90,6 +106,12 @@ public class TankManager : MonoBehaviour
         set { _target = value; }
     }
 
+    public float smoke           //getters and setters for target angle to be used by other classes
+    {
+        get { return _smoke.emissionRate; }
+        set { _smoke.emissionRate = value; }
+    }
+
 
     private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
@@ -100,13 +122,22 @@ public class TankManager : MonoBehaviour
         return angle;
     }
 
+    private void setPlayer()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = bodySprites[_player];
+        gameObject.GetComponent<AudioSource>().clip = hornSounds[_player];
+        gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
+        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
+    }
 
     private void Drive()    //this DOES work
     {
-        float turn = -(rTrack - lTrack) * 10f;
+
+        float turn = -(rTrack - lTrack) * _speed * 5f;
         gameObject.transform.RotateAround(gameObject.transform.position,new Vector3(0f,0f,1f), turn);
 
         _movement = -(gameObject.transform.up) * (lTrack + rTrack) * _speed;
+        _smoke.emissionRate = (_movement.magnitude * 100f);
         gameObject.transform.Translate(_movement * Time.deltaTime, Space.World);
 
     }
@@ -133,6 +164,9 @@ public class TankManager : MonoBehaviour
         _readyToFire = false;
         _speed = 2.0f;
         _gun = gameObject.transform.GetChild(0).gameObject;
+        _smoke = gameObject.GetComponent<ParticleSystem>();
+
+        setPlayer();
     }
 
     void FixedUpdate()
@@ -151,6 +185,9 @@ public class TankManager : MonoBehaviour
         {
             turret.Fire(target);
         }
+
+        if (honking)
+            gameObject.GetComponent<AudioSource>().PlayOneShot(gameObject.GetComponent<AudioSource>().clip);
 
         if (_health <= 0)
             Die();

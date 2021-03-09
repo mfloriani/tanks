@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Murilo/MainMenu.unity
-    guid: b53a908c0b20c4f4dadf0e969bb500c7
-  - enabled: 1
-    path: Assets/Murilo/Skirmish_demo.unity
-    guid: f8b100ecb1182394da1fedfdb0df7e01
-  - enabled: 1
-    path: Assets/Murilo/Battle_royale_demo.unity
-    guid: 5124dc8b8f97b4e409b97df5dcfed0ec
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects: {}

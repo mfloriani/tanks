@@ -14,6 +14,7 @@ public class ControllerInput : MonoBehaviour
     bool reverseR;
 
     bool fire;
+    bool honk;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class ControllerInput : MonoBehaviour
         reverseR = Input.GetButton("RightBumper");
 
         fire = Input.GetButton("Fire");
-
+        honk = Input.GetButtonDown("Honk");
 
         int rL = reverseL ? 1 : 0;
         tank.lTrack = speedL-rL;
@@ -41,6 +42,8 @@ public class ControllerInput : MonoBehaviour
         tank.rTrack = speedR - rR;
 
         tank.firing = fire;
+
+        tank.honking = honk;
 
         tank.aimX = aimX;
         tank.aimY = aimY;
