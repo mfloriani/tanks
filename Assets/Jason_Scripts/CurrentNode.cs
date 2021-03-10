@@ -18,19 +18,19 @@ public class CurrentNode : MonoBehaviour
     {
 
         //Calls our node function
-        CreateNodeList();
+        //CreateNodeList();
 
         CreateNodeList2D();
     }
 
     private void Update()
     {
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.white);
+/*        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.white);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * 100, Color.white);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * 100, Color.white);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * 100, Color.white);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * 100, Color.white);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 100, Color.white);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 100, Color.white);*/
     }
 
     /// <summary>
@@ -38,6 +38,7 @@ public class CurrentNode : MonoBehaviour
     /// </summary>
     public void CreateNodeList()
     {
+
         accessibleNodes.Clear();
 
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))
@@ -95,24 +96,26 @@ public class CurrentNode : MonoBehaviour
         transform.eulerAngles = new Vector3(transform.rotation.x, transform.rotation.y, 0.0f);
         accessibleNodes2D.Clear();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down));//, distance);
 
         AddToList2D();
+
 
         CreateNodeListDiagonal2D();
 
+        /*
         for (int i = 0; i < accessibleNodes2D.Count; i++)
         {
             if (accessibleNodes2D[i] == this.gameObject)
@@ -121,7 +124,7 @@ public class CurrentNode : MonoBehaviour
                 i = -1;
             }
         }
-
+        */
         Debug.Log("List Made");
     }
 
@@ -131,30 +134,34 @@ public class CurrentNode : MonoBehaviour
 
         distance = 5.0f;
         
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up));//, distance);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down), distance);
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down));//, distance);
 
         AddToList2D();
-
-        //transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
     void AddToList2D()
     {
+        if (ray2D.Length > 1)
+        {
+            accessibleNodes2D.Add(ray2D[1].collider.gameObject);
+        }
+        /*
         for (int i = 0; i < ray2D.Length; i++)
         {
             accessibleNodes2D.Add(ray2D[i].collider.gameObject);
         }
+        */
     }
 }
