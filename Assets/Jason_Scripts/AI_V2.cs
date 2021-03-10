@@ -125,7 +125,14 @@ public class AI_V2 : MonoBehaviour
         {
             float speed = timer / timeTaken;
 
+            float rotSpeed = 5.0f;
+
             transform.position = Vector2.Lerp(AIPos, nextNode, speed);
+
+            Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
+            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
+            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
         }
     }
 
