@@ -14,6 +14,7 @@ public class AI_V2 : MonoBehaviour
 
     [SerializeField] GameObject currentNode;
     [SerializeField] GameObject target;
+    [SerializeField] GameObject newNode;
 
     [SerializeField] float timer = 0;
     [SerializeField] float timeTaken = 3.0f;
@@ -107,6 +108,7 @@ public class AI_V2 : MonoBehaviour
             if (Vector2.Distance(currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position, targetNodePos) < Vector2.Distance(nextNode, targetNodePos))
             {
                 nextNode = currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position;
+                newNode.transform.position = nextNode;
                 timer = 0;
                 AIPos = transform.position;
             }
