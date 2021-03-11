@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: tileSand_roadSplitE
+  m_Name: allSprites_default_39
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: a6bb268e91f45ee479a4d3281cde1308, type: 3}
+  m_Sprite: {fileID: 365599467715566674, guid: 93a6d2b4e80f5b341941b7359487bc8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

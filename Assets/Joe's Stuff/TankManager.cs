@@ -165,7 +165,7 @@ public class TankManager : MonoBehaviour
         _speed = 2.0f;
         _gun = gameObject.transform.GetChild(0).gameObject;
         _smoke = gameObject.GetComponent<ParticleSystem>();
-
+        if (_player == null) _player = 0;
         setPlayer();
     }
 
