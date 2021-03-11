@@ -257,6 +257,7 @@ public class AI_V2 : MonoBehaviour
             float startRotation = transform.eulerAngles.z;
             float endRotation = startRotation + 360.0f;
             float t = 0.0f;
+
             while (t < 5)
             {
                 t += Time.deltaTime;
@@ -264,6 +265,7 @@ public class AI_V2 : MonoBehaviour
                 tankHead.transform.eulerAngles = new Vector3(tankHead.transform.eulerAngles.x, tankHead.transform.eulerAngles.y, zRotation);
                 yield return null;
             }
+
         movement = AIMovementMode.smooth;
         targetNodePos = nodes[randomIndex].transform.position;
         target.transform.position = targetNodePos;
