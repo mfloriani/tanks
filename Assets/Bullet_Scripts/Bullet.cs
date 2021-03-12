@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     // Variables
     public float moveSpeed;
     public Vector2 moveDir;
+    GameObject explosion;
 
     public enum bulletState
     {
@@ -23,6 +24,11 @@ public class Bullet : MonoBehaviour
     public int playerLayer = 6;
     public int enemyLayer = 7;
     public int destructibleWallLayer = 11;
+
+    private void Awake()
+    {
+        explosion = (GameObject)Resources.Load("DeathBoom");
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -70,6 +76,7 @@ public class Bullet : MonoBehaviour
             {
                 // Insert more elaborate wall destruction here
                 Destroy(collision.gameObject);
+                Instantiate(explosion, collision.GetContact(0).point, Quaternion.identity);
             }
             Die();
         }

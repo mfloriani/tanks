@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 0
+  hasMulti: 0
   placeholder: {fileID: 0}
   currentBullets: []
 --- !u!61 &1532718210
@@ -458,3 +459,9 @@ MonoBehaviour:
   _lTrack: 0
   _speed: 0
   _movement: {x: 0, y: 0}
+  _player: 0
+  bodySprites: []
+  turretSprites: []
+  shellSprites: []
+  hornSounds: []
+  deathSound: {fileID: 0}
