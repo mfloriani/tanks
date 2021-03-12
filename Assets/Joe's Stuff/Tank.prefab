@@ -10204,16 +10204,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c25db3680497a8e4fbdf9619dca19991, type: 3}
   - {fileID: 21300000, guid: 58e15bec3ed00cd47b5f22d1f90e2c47, type: 3}
   - {fileID: 21300000, guid: 560cf005a9a0b58489232ea8e0b88e8c, type: 3}
+  - {fileID: 21300000, guid: 92a0e4a2884b39440a24a2ca9984032b, type: 3}
   turretSprites:
   - {fileID: 21300000, guid: 68f538b6687fb1d4f9be043f12d68f84, type: 3}
   - {fileID: 21300000, guid: e5ddd98032b39a843b3e5428e6c60dac, type: 3}
   - {fileID: 21300000, guid: cae4727087adef94fbadf362b453b2c4, type: 3}
   - {fileID: 21300000, guid: 2758fb7d77b977549ab2be072cc32567, type: 3}
+  - {fileID: 21300000, guid: 9e6749d79ea95384f89be0d00e002c62, type: 3}
   shellSprites:
   - {fileID: 21300000, guid: fc59555dd8af63f49b04bf171d053b10, type: 3}
   - {fileID: 21300000, guid: 8c28ca92cffb22a448a34b317d702b80, type: 3}
   - {fileID: 21300000, guid: dcef78fd065140c46a369d053676a0e1, type: 3}
   - {fileID: 21300000, guid: 3e51901b08f64174c92aa8a54791cf5c, type: 3}
+  - {fileID: 21300000, guid: 74c39ed9ac6f6634281b8b0b2e5a39ae, type: 3}
   hornSounds:
   - {fileID: 8300000, guid: f19ba09853ac6314381c18ac93d3a71b, type: 3}
   - {fileID: 8300000, guid: 7a19b18803381134489c833efb699201, type: 3}

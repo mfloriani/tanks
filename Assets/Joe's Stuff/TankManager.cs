@@ -113,6 +113,12 @@ public class TankManager : MonoBehaviour
         set { _smoke.emissionRate = value; }
     }
 
+    public int player
+    {
+        get { return _player; }
+        set { _player = value; }
+    }
+
 
     private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
@@ -154,19 +160,32 @@ public class TankManager : MonoBehaviour
     public void Die()
     {
         Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
-        gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);
-        gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        gameObject.GetComponent<SpriteRenderer>().sprite = null;
-        StartCoroutine(WaitForDeath());
+        gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
+        gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();             //access deathboom and play its particles
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;                            //disables the tank body sprite renderer by setting its sprite to null
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        StartCoroutine(WaitForDeath());                                                     //waits two seconds for sound and explosion to play before destroying tank
     }
 
     IEnumerator WaitForDeath()
     {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(2);         //wait for sound and explosion to play
+        Destroy(gameObject);                        //delete the tank
     }
-
+    void Awake()
+    {
+        _state = powerUp.none;
+        _lives = 3;
+        _health = 1;
+        _body = gameObject.GetComponent<Rigidbody2D>();
+        _readyToFire = false;
+        _speed = 2.0f;
+        _gun = gameObject.transform.GetChild(0).gameObject;
+        _smoke = gameObject.GetComponent<ParticleSystem>();
+        if (_player == null) _player = 0;
+        setPlayer();
+    }
     // Start is called before the first frame update
     void Start()
     {
