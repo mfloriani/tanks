@@ -219,7 +219,6 @@ GameObject:
   - component: {fileID: 1532718209}
   - component: {fileID: 1532718210}
   m_Layer: 0
-  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +267,6 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Color: {r: 0.048704028, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -304,7 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88aadc5e30280943925547577f82077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletObject: {fileID: 2286200525811265211, guid: 1906b80b38bed24409c71aa033c88cbd, type: 3}
+  cooldown: 0
+  placeholder: {fileID: 0}
   currentBullets: []
 --- !u!61 &1532718210
 BoxCollider2D:
@@ -343,9 +342,8 @@ GameObject:
   - component: {fileID: 1651517876}
   - component: {fileID: 1651517875}
   - component: {fileID: 1651517874}
-  m_Layer: 6
   - component: {fileID: 1651517877}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +418,6 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -456,6 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9290cc862dcb243ada3e99357fc235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turret: {fileID: 0}
   _rTrack: 0
   _lTrack: 0
   _speed: 0
