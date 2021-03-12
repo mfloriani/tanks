@@ -10,6 +10,7 @@ public class Firing : MonoBehaviour
     float currentCooldown;
 
     public bool hasMulti;
+    Bullet.bulletState bulletType;
 
     // The bullet - set this to the bullet prefab in the inspector
     public GameObject placeholder;
@@ -24,6 +25,7 @@ public class Firing : MonoBehaviour
         currentBullets = new List<GameObject>();
         currentCooldown = cooldown;
         hasMulti = false;
+        bulletType = Bullet.bulletState.standard;
     }
 
     // Update is called once per frame
@@ -48,6 +50,7 @@ public class Firing : MonoBehaviour
                     // Instantiate new bullet
                     GameObject newBullet = Instantiate(placeholder, placeholder.transform.position, placeholder.transform.rotation, null);
                     newBullet.SetActive(true);
+                    newBullet.GetComponent<Bullet>().SetBulletState(bulletType);
                     newBullet.GetComponent<Bullet>().moveDir = placeholder.transform.up;
                     // Set bullet parent to this GameObject
                     newBullet.GetComponent<Bullet>().SetParent(gameObject);
