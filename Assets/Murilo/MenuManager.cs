@@ -67,7 +67,7 @@ public class MenuManager : MonoBehaviour
 
         //Debug.Log(_isMainMenu + " - " + _isGamePaused);
 
-        if (Input.GetButtonDown("Joy1_Start") && !_isMainMenu)
+        if (Input.GetButtonDown("Joys_Start") && !_isMainMenu)
         {
             if (_isGamePaused)
                 Resume();
@@ -136,12 +136,11 @@ public class MenuManager : MonoBehaviour
         _isGamePaused = false;
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(true);
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
+        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         SceneManager.LoadScene(_mainMenuSceneIndex);
 
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
-
-
     }
 }
