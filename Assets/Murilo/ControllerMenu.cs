@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class ControllerMenu : MonoBehaviour
 {
-    [SerializeField] Transform _availableControllers;
-    [SerializeField] Transform _selectedPlayers;
+    [SerializeField] Transform[] _players;
     [SerializeField] Transform _countdownText;
     [SerializeField] int _countdownMaxTime = 5;
 
@@ -24,11 +23,13 @@ public class ControllerMenu : MonoBehaviour
             this.Selected = false;
             this.Confirmed = false;
             this.Connected = false;
+            this.Player = 0;
         }
         public int Id { get; set; }
         public bool Selected { get; set; }
         public bool Confirmed { get; set; }
         public bool Connected { get; set; }
+        public int Player { get; set; }
     }
 
     ControllerState[] _controllers;
@@ -47,10 +48,7 @@ public class ControllerMenu : MonoBehaviour
     void Update()
     {
         UpdateConnectedControllers();
-        //foreach(var p in _controllers)
-        //    Debug.Log(p.Id + ": " + p.Connected + " - " + p.Selected + " - " + p.Confirmed);
-
-
+        
         if (!MenuManager.Instance.IsInsideMainMenu())
             return;
 
@@ -58,20 +56,35 @@ public class ControllerMenu : MonoBehaviour
         var controllers = Input.GetJoystickNames();
         foreach (string s in controllers)
         {
-            // controller moved left our right?
-            float joyXaxis = Input.GetAxis("Joy" + (index+1) + "_Xaxis");
-            if (joyXaxis > _deadZone)
-                AddPlayer(index);
-            else if (joyXaxis < -_deadZone)
-                RemovePlayer(index);
-
-            // controller was confirmed?
-            string joyStartButton = "Joy" + (index + 1) + "_Start";
-            if (Input.GetButtonDown(joyStartButton) && _controllers[index].Selected)
+            string joyButtonA = "Joy" + (index + 1) + "_A";
+            if (Input.GetButtonDown(joyButtonA))
             {
-                ToggleConfirmation(index, true);
+                if(_controllers[index].Selected)
+                {
+                    RemovePlayer(index);
+                }
+                else
+                {
+                    AddPlayer(index);
+                }                
             }
 
+            string joyButtonX = "Joy" + (index + 1) + "_X";
+            if (Input.GetButtonDown(joyButtonX))
+            {
+                if (_controllers[index].Selected && !_controllers[index].Confirmed)
+                {
+                    ToggleConfirmation(index, true);
+                }
+            }
+
+            string joyButtonB = "Joy" + (index + 1) + "_B";
+            if (Input.GetButtonDown(joyButtonB))
+            {
+                Reset();
+                FindObjectOfType<MenuManager>().LoadMainMenu();
+            }
+            
             ++index;
         }
 
@@ -83,9 +96,8 @@ public class ControllerMenu : MonoBehaviour
             if (_countdown <= 0)
             {
                 _countdown = 0;
-                Debug.Log("START THE GAME");
-                MenuManager.Instance.StartGame();
                 Reset();
+                MenuManager.Instance.StartGame();
             }
         }
     }
@@ -128,8 +140,11 @@ public class ControllerMenu : MonoBehaviour
         if(!_controllers[index].Selected)
         {
             _controllers[index].Selected = true;
-            _availableControllers.GetChild(index).gameObject.SetActive(false);
-            _selectedPlayers.GetChild(index).gameObject.SetActive(true);
+
+            _players[index].Find("Join Button").gameObject.SetActive(false);
+            _players[index].Find("Controller").gameObject.SetActive(true);
+            _players[index].Find("Confirmed").gameObject.SetActive(false);
+
             ToggleConfirmation(index, false);
         }
     }
@@ -140,8 +155,11 @@ public class ControllerMenu : MonoBehaviour
         if (_controllers[index].Selected)
         {
             _controllers[index].Selected = false;
-            _availableControllers.GetChild(index).gameObject.SetActive(true);
-            _selectedPlayers.GetChild(index).gameObject.SetActive(false);
+            
+            _players[index].Find("Join Button").gameObject.SetActive(true);
+            _players[index].Find("Controller").gameObject.SetActive(false);
+            _players[index].Find("Confirmed").gameObject.SetActive(false);
+
             ToggleConfirmation(index, false);
         }
     }
@@ -149,12 +167,11 @@ public class ControllerMenu : MonoBehaviour
     // controller pressed start or was removed from the selected list
     void ToggleConfirmation(int index, bool enabled)
     {
-        var go = _selectedPlayers.GetChild(index).Find("Confirmed").gameObject;
-        go.GetComponent<Image>().enabled = enabled;
         _controllers[index].Confirmed = enabled;
+        _players[index].Find("Confirmed").gameObject.SetActive(enabled);
 
         // check if should start the countdown every time a controller confirms 
-        if(enabled)
+        if (enabled)
         {
             if (StartCountdown())
             {
@@ -168,7 +185,6 @@ public class ControllerMenu : MonoBehaviour
             _starting = false;
             _countdownText.gameObject.SetActive(false);
         }
-
     }
 
     // reset controller after the game started for the next time 

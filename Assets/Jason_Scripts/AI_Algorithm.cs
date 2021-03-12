@@ -16,7 +16,7 @@ public class AI_Algorithm : MonoBehaviour
     /// <summary>
     /// This will handle how the AI behaves
     /// </summary>
-    [SerializeField] enum AIStates
+    enum AIStates
     {
         Attack,
         Search,
