@@ -33,12 +33,16 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.layer == playerLayer || collision.gameObject.layer == enemyLayer)
-        {
-            //collision.gameObject.GetComponent<TankManager>().Die();
-            Destroy(gameObject);
+        if(collision.gameObject.layer == playerLayer)
+        {        
             if(collision.gameObject.GetComponent<TankManager>() != null)
                 collision.gameObject.GetComponent<TankManager>().Die();
+            Die();
+        }
+        if(collision.gameObject.layer == enemyLayer)
+        {
+            if (collision.gameObject.GetComponent<AI_V2>() != null)
+                collision.gameObject.GetComponent<AI_V2>().Die();
             Die();
         }
         if(collision.gameObject.layer == wallLayer)
