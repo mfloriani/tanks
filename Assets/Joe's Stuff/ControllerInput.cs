@@ -12,6 +12,7 @@ public class ControllerInput : MonoBehaviour
     float speedR;
     bool reverseL;
     bool reverseR;
+    int player = 0;
 
     bool fire;
     bool honk;
@@ -19,7 +20,7 @@ public class ControllerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        tank.player = player;
     }
 
     // Update is called once per frame

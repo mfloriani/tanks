@@ -10,9 +10,19 @@ public class Bullet : MonoBehaviour
     public float moveSpeed;
     public Vector2 moveDir;
 
+    public enum bulletState
+    {
+        standard,
+        power,
+        bounce
+    }
+
+    bulletState currentState;
+
     private int wallLayer = 9;
     public int playerLayer = 6;
     public int enemyLayer = 7;
+    public int destructibleWallLayer = 11;
 
     // Start is called before the first frame update
     private void Start()
@@ -26,6 +36,11 @@ public class Bullet : MonoBehaviour
         
     }
 
+    public void SetBulletState(bulletState newState)
+    {
+        currentState = newState;
+    }
+
     private void FixedUpdate()
     {
         transform.Translate(gameObject.transform.up * moveSpeed * Time.deltaTime, Space.World);
@@ -33,16 +48,29 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.layer == playerLayer || collision.gameObject.layer == enemyLayer)
-        {
-            //collision.gameObject.GetComponent<TankManager>().Die();
-            Destroy(gameObject);
+        if(collision.gameObject.layer == playerLayer)
+        {        
             if(collision.gameObject.GetComponent<TankManager>() != null)
+                collision.gameObject.GetComponent<TankManager>().Die();
+            Die();
+        }
+        if(collision.gameObject.layer == enemyLayer)
+        {
+            if (collision.gameObject.GetComponent<TankManager>() != null)
                 collision.gameObject.GetComponent<TankManager>().Die();
             Die();
         }
         if(collision.gameObject.layer == wallLayer)
         {
+            Die();
+        }
+        if(collision.gameObject.layer == destructibleWallLayer)
+        {
+            if(currentState == bulletState.power)
+            {
+                // Insert more elaborate wall destruction here
+                Destroy(collision.gameObject);
+            }
             Die();
         }
     }
