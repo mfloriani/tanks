@@ -12,10 +12,12 @@ public class CurrentNode : MonoBehaviour
 
     RaycastHit2D[] ray2D;
 
+    LayerMask nodeLayer;
+
     // Use this for initialization
     void Start()
     {
-
+        nodeLayer = LayerMask.NameToLayer("Nodes");
         //Calls our node function
         //CreateNodeList();
 
@@ -93,19 +95,19 @@ public class CurrentNode : MonoBehaviour
 
         accessibleNodes2D.Clear();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
@@ -119,19 +121,19 @@ public class CurrentNode : MonoBehaviour
     {
         transform.eulerAngles = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z + 45.0f);
         
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.left), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.right), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.up), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
 
-        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down));
+        ray2D = Physics2D.RaycastAll(transform.position, transform.TransformDirection(Vector3.down), Mathf.Infinity, 1 << nodeLayer);
 
         AddToList2D();
     }
