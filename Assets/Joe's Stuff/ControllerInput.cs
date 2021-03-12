@@ -6,35 +6,44 @@ public class ControllerInput : MonoBehaviour
 {
     public TankManager tank;
 
-    float aimX;
-    float aimY;
-    float speedL;
-    float speedR;
-    bool reverseL;
-    bool reverseR;
-    int player = 0;
+    private float aimX;
+    private float aimY;
+    private float speedL;
+    private float speedR;
+    private bool reverseL;
+    private bool reverseR;
+    [SerializeField] private int _player = 0;
 
-    bool fire;
-    bool honk;
+    private bool fire;
+    private bool honk;
+    private string playerprefix = "";
+
+    public int player
+    {
+        get { return _player; }
+        set { _player = value; }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         tank.player = player;
+
+        playerprefix = "Joy" + (player+1) + "_";
     }
 
     // Update is called once per frame
     void Update()
     {
-        aimX = Input.GetAxis("LeftStickX");
-        aimY = Input.GetAxis("LeftStickY");
-        speedL = Input.GetAxis("LeftTrigger");
-        speedR = Input.GetAxis("RightTrigger");
-        reverseL = Input.GetButton("LeftBumper");
-        reverseR = Input.GetButton("RightBumper");
+        aimX = Input.GetAxis(playerprefix + "Xaxis");
+        aimY = Input.GetAxis(playerprefix + "Yaxis");
+        speedL = Input.GetAxis(playerprefix + "LT");
+        speedR = Input.GetAxis(playerprefix + "RT");
+        reverseL = Input.GetButton(playerprefix + "LB");
+        reverseR = Input.GetButton(playerprefix + "RB");
 
-        fire = Input.GetButton("Fire");
-        honk = Input.GetButtonDown("Honk");
+        fire = Input.GetButton( playerprefix + "A");
+        honk = Input.GetButtonDown("B");
 
         int rL = reverseL ? 1 : 0;
         tank.lTrack = speedL-rL;
