@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
         bounce
     }
 
-    bulletState currentState;
+    [SerializeField] public bulletState currentState;
 
     private int wallLayer = 9;
     public int playerLayer = 6;
@@ -76,7 +76,8 @@ public class Bullet : MonoBehaviour
             {
                 // Insert more elaborate wall destruction here
                 Destroy(collision.gameObject);
-                Instantiate(explosion, collision.GetContact(0).point, Quaternion.identity);
+                GameObject newExplosion = Instantiate(explosion, collision.gameObject.transform.position, Quaternion.identity);
+                newExplosion.GetComponent<ParticleSystem>().Play();
             }
             Die();
         }
@@ -89,7 +90,7 @@ public class Bullet : MonoBehaviour
 
     private void Die()
     {
-        parent.GetComponent<Firing>().currentBullets.Remove(gameObject);
+        //parent.GetComponent<Firing>().currentBullets.Remove(gameObject);
         Destroy(gameObject);
     }
 }
