@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class AI_V2 : MonoBehaviour
 {
-    [SerializeField] int newLayer;
+    [SerializeField] int tankLayer;
+    [SerializeField] int wallLayer;
+    [SerializeField] Firing turret;
+    [SerializeField] bool bHasFired = false;
 
-
-    RaycastHit2D ray2D;
+    //RaycastHit2D ray2D;
 
     int randomIndex = 0;
     int newRandomIndex = 0;
@@ -22,6 +24,8 @@ public class AI_V2 : MonoBehaviour
     [SerializeField] GameObject target;
     [SerializeField] GameObject newNode;
     [SerializeField] GameObject tankHead;
+
+    public GameObject rayHitObject;
 
     [SerializeField] float timer = 0;
     [SerializeField] float timeTaken = 3.0f;
@@ -48,6 +52,7 @@ public class AI_V2 : MonoBehaviour
 
     [SerializeField] bool bCoroutineStart = false;
     [SerializeField] bool bPlayerFound = false;
+    [SerializeField] bool bCanMove = true;
 
     [SerializeField] AIStates aiStates;
     [SerializeField] AIMovementMode movement;
@@ -57,10 +62,11 @@ public class AI_V2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        newLayer = LayerMask.NameToLayer("PlayerTank");
+        tankLayer = LayerMask.NameToLayer("PlayerTank");
+        wallLayer = LayerMask.NameToLayer("Wall");
         playerPos = GameObject.FindWithTag("Player");
 
-
+        turret = gameObject.transform.GetChild(0).GetComponent<Firing>();
 
         GameObject[] _nodeGameObject = GameObject.FindGameObjectsWithTag("Node");
 
@@ -114,16 +120,26 @@ public class AI_V2 : MonoBehaviour
             MoveAISmooth();
         }
 
-        ray2D = Physics2D.Raycast(tankHead.transform.position, transform.TransformDirection(Vector3.down), Mathf.Infinity, 1 << newLayer);
 
-        if(ray2D.collider != null && ray2D.collider.tag == "Player")
+
+        if (rayHitObject != null)
         {
-            aiStates = AIStates.Attack;
+            if(rayHitObject.layer == tankLayer)
+            {
+                aiStates = AIStates.Attack;
+            }
+            else if(rayHitObject.layer == wallLayer)
+            {
+                if(aiStates == AIStates.Attack)
+                {
+                    aiStates = AIStates.Search;
+                    bCanMove = true;
+                }
+            }
         }
-        else if(ray2D.collider == null && aiStates == AIStates.Attack || ray2D.collider != null && ray2D.collider.tag != "Player" && aiStates == AIStates.Attack)
-        {
-            Debug.Log("I am being activated " + aiStates);
-        }
+        
+
+
 
         if(aiStates == AIStates.Attack)
         {
@@ -152,6 +168,12 @@ public class AI_V2 : MonoBehaviour
             float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
             tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
+
+
+            if(!bHasFired)
+            {
+                turret.Fire(transform.rotation.eulerAngles.z);
+            }
         }
     }
 
@@ -163,7 +185,7 @@ public class AI_V2 : MonoBehaviour
 
             currentNode = other.gameObject;
 
-            if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates != AIStates.Search)
+            if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Wander)
             {
                 while(newRandomIndex == randomIndex)
                 {
@@ -176,6 +198,10 @@ public class AI_V2 : MonoBehaviour
             else if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Search)
             {
                 StartCoroutine(Rotate360());
+            }
+            else if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Attack)
+            {
+                bCanMove = false;
             }
             CalculateNextNode();
         }
@@ -197,35 +223,38 @@ public class AI_V2 : MonoBehaviour
 
     void MoveAISmooth()
     {
-        timer += Time.deltaTime;
-
-        if(timer > timeTaken)
+        if (bCanMove)
         {
-            CalculateNextNode();
-        }
-        else
-        {
-            Vector3 headRot;
+            timer += Time.deltaTime;
 
-            float speed = timer / timeTaken;
-
-            float rotSpeed = 5.0f;
-
-            transform.position = Vector2.Lerp(AIPos, nextNode, speed);
-
-            if (aiStates == AIStates.Attack)
+            if (timer > timeTaken)
             {
-                headRot = tankHead.transform.rotation.eulerAngles;
+                CalculateNextNode();
             }
             else
             {
-                headRot = transform.rotation.eulerAngles;
-            }
+                Vector3 headRot;
 
-            Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
-            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
-            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
+                float speed = timer / timeTaken;
+
+                float rotSpeed = 5.0f;
+
+                transform.position = Vector2.Lerp(AIPos, nextNode, speed);
+
+                if (aiStates == AIStates.Attack)
+                {
+                    headRot = tankHead.transform.rotation.eulerAngles;
+                }
+                else
+                {
+                    headRot = transform.rotation.eulerAngles;
+                }
+
+                Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
+                float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
+                Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+                transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
+            }
         }
     }
 
@@ -271,5 +300,10 @@ public class AI_V2 : MonoBehaviour
         target.transform.position = targetNodePos;
         CalculateNextNode();
         yield return null;
+    }
+
+    public void Die()
+    {
+        Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
     }
 }
