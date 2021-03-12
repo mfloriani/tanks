@@ -32,6 +32,7 @@ public class TankManager : MonoBehaviour
     public Sprite[] turretSprites;
     public Sprite[] shellSprites;
     public AudioClip[] hornSounds;
+    public AudioClip deathSound;
 
     public enum powerUp         //enum for state of powerUp applied to tank
     {
@@ -128,6 +129,7 @@ public class TankManager : MonoBehaviour
         gameObject.GetComponent<AudioSource>().clip = hornSounds[_player];
         gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
+        
     }
 
     private void Drive()    //this DOES work
@@ -152,6 +154,17 @@ public class TankManager : MonoBehaviour
     public void Die()
     {
         Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+        gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);
+        gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        StartCoroutine(WaitForDeath());
+    }
+
+    IEnumerator WaitForDeath()
+    {
+        yield return new WaitForSeconds(1);
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update
@@ -188,9 +201,6 @@ public class TankManager : MonoBehaviour
 
         if (honking)
             gameObject.GetComponent<AudioSource>().PlayOneShot(gameObject.GetComponent<AudioSource>().clip);
-
-        if (_health <= 0)
-            Die();
     }
 
 
