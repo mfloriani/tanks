@@ -9,8 +9,6 @@ public class AI_V2 : MonoBehaviour
     [SerializeField] Firing turret;
     [SerializeField] bool bHasFired = false;
 
-    //RaycastHit2D ray2D;
-
     int randomIndex = 0;
     int newRandomIndex = 0;
 
@@ -33,13 +31,6 @@ public class AI_V2 : MonoBehaviour
     [SerializeField] Vector2 AIPos;
     [SerializeField] GameObject playerPos;
 
-    enum AIMovementMode
-    {
-        smooth,
-        instant,
-        Search,
-    };
-
     /// <summary>
     /// This will handle how the AI behaves
     /// </summary>
@@ -51,11 +42,9 @@ public class AI_V2 : MonoBehaviour
     };
 
     [SerializeField] bool bCoroutineStart = false;
-    [SerializeField] bool bPlayerFound = false;
     [SerializeField] bool bCanMove = true;
 
     [SerializeField] AIStates aiStates;
-    [SerializeField] AIMovementMode movement;
 
 
 
@@ -90,36 +79,12 @@ public class AI_V2 : MonoBehaviour
         targetNodePos = nodes[randomIndex].transform.position;
     }
 
-    IEnumerator MoveAI()
-    {
-        while(bCoroutineStart)
-        {
-            this.transform.position = nextNode;
-            yield return new WaitForSeconds(1f);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {
         target.transform.position = targetNodePos;
 
-        if(movement == AIMovementMode.instant)
-        {
-            StartMovement();
-        }
-        else if(movement == AIMovementMode.smooth)
-        {
-            bCoroutineStart = false;
-            MoveAISmooth();
-        }
-        else if(movement == AIMovementMode.Search)
-        {
-            targetNodePos = LastPlayerPosition(playerPos.transform.position);
-            bCoroutineStart = false;
-            MoveAISmooth();
-        }
-
+        MoveAISmooth();
 
 
         if (rayHitObject != null)
@@ -136,6 +101,11 @@ public class AI_V2 : MonoBehaviour
                     bCanMove = true;
                 }
             }
+        }
+
+        if(turret.currentBullets.Count == 0)
+        {
+            bHasFired = false;
         }
         
 
@@ -161,6 +131,11 @@ public class AI_V2 : MonoBehaviour
             }
             targetNodePos = attackNode;
 
+            if (targetNodePos.x != transform.position.x || targetNodePos.y != transform.position.y)
+            {
+                bCanMove = true;
+                CalculateNextNode();
+            }
 
             float rotSpeed = 50.0f;
 
@@ -173,6 +148,7 @@ public class AI_V2 : MonoBehaviour
             if(!bHasFired)
             {
                 turret.Fire(transform.rotation.eulerAngles.z);
+                bHasFired = true;
             }
         }
     }
@@ -192,7 +168,11 @@ public class AI_V2 : MonoBehaviour
                     randomIndex = Random.Range(0, nodes.Count);
                 }
                 newRandomIndex = randomIndex;
-
+                if (!bHasFired)
+                {
+                    turret.Fire(tankHead.transform.rotation.eulerAngles.z);
+                    bHasFired = true;
+                }
                 targetNodePos = nodes[randomIndex].transform.position;
             }
             else if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Search)
@@ -258,15 +238,6 @@ public class AI_V2 : MonoBehaviour
         }
     }
 
-    void StartMovement()
-    {
-        if (!bCoroutineStart)
-        {
-            bCoroutineStart = true;
-            StartCoroutine(MoveAI());
-        }
-    }
-
     Vector2 LastPlayerPosition(Vector2 position)
     {
         Vector2 playerNode = nodes[0].transform.position;
@@ -287,7 +258,7 @@ public class AI_V2 : MonoBehaviour
             float endRotation = startRotation + 360.0f;
             float t = 0.0f;
 
-            while (t < 5)
+            while (t < 5 && aiStates != AIStates.Attack)
             {
                 t += Time.deltaTime;
                 float zRotation = Mathf.Lerp(startRotation, endRotation, t / 5) % 360.0f;
@@ -295,15 +266,10 @@ public class AI_V2 : MonoBehaviour
                 yield return null;
             }
 
-        movement = AIMovementMode.smooth;
+        aiStates = AIStates.Wander;
         targetNodePos = nodes[randomIndex].transform.position;
         target.transform.position = targetNodePos;
         CalculateNextNode();
         yield return null;
-    }
-
-    public void Die()
-    {
-        Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
     }
 }
