@@ -49,6 +49,17 @@ public class ControllerMenu : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        Reset();
+    }
+
+    void OnDisable()
+    {
+        
+    }
+
+
     private static void HandleBackButton(int index)
     {
         string joyButtonB = "Joy" + (index + 1) + "_B";
@@ -160,7 +171,7 @@ public class ControllerMenu : MonoBehaviour
     }
 
     // reset controller after the game started for the next time 
-    public void Reset()
+    void Reset()
     {
         _starting = false;
         var controllers = MenuManager.Instance.GetControllers();

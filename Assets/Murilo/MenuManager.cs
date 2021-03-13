@@ -99,8 +99,6 @@ public class MenuManager : MonoBehaviour
 
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
-
-        FindObjectOfType<ControllerMenu>().Reset();
     }
 
     public void SelectBattleRoyaleMode()
@@ -109,8 +107,6 @@ public class MenuManager : MonoBehaviour
 
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
-
-        FindObjectOfType<ControllerMenu>().Reset();
     }
 
     public void StartGame()
