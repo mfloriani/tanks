@@ -11,28 +11,20 @@ enum GameMode
     BattleRoyale
 }
 
-//enum SceneState
-//{
-//    MainMenu,
-//    ControllerMenu,
-//    PauseMenu,
-//    Playing
-//}
-
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
-
+    
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
     [SerializeField] GameObject _firstSelectedPauseMenu;
 
-    bool _isMainMenu = false;
     bool _isGamePaused = false;
 
     const string MAIN_MENU = "Main Menu";
     const string PAUSE_MENU = "Pause Menu";
     const string CONTROLLER_MENU = "Controller Menu";
+    const string GAMEUI = "GameUI";
 
     GameMode _selectedMode = GameMode.None;
     
@@ -55,7 +47,7 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("MenuManager Start");
-
+        
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -63,34 +55,36 @@ public class MenuManager : MonoBehaviour
 
     void Update()
     {
-        _isMainMenu = SceneManager.GetActiveScene().buildIndex == _mainMenuSceneIndex;
+        ControllerManager.Instance.UpdateConnectedControllers();
 
         //Debug.Log(_isMainMenu + " - " + _isGamePaused);
-
-        if (Input.GetButtonDown("Joys_Start") && !_isMainMenu)
+        if(IsInGame())
         {
-            if (_isGamePaused)
-                Resume();
-            else
-                Pause();
+            ControllerManager.Instance.HandleInGameJoinButton();
+
+            if (Input.GetButtonDown("Joys_Start"))
+            {
+                if (_isGamePaused)
+                    Resume();
+                else
+                    Pause();
+            }
         }
     }
 
-    public bool IsInsideMainMenu()
+    public bool IsInGame()
     {
-        return _isMainMenu;
+        return SceneManager.GetActiveScene().buildIndex != _mainMenuSceneIndex;
     }
 
     public void Resume()
     {
-        //Time.timeScale = 1f;
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
         _isGamePaused = false;
     }
 
     public void Pause()
     {
-        //Time.timeScale = 0f;
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(true);
         _isGamePaused = true;
 
@@ -105,7 +99,6 @@ public class MenuManager : MonoBehaviour
 
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
-        
     }
 
     public void SelectBattleRoyaleMode()
@@ -113,12 +106,13 @@ public class MenuManager : MonoBehaviour
         _selectedMode = GameMode.BattleRoyale;
 
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
-        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);        
+        gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
     }
 
     public void StartGame()
     {
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
+        gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
 
         if (_selectedMode == GameMode.Normal)
             SceneManager.LoadScene("Skirmish_demo");
@@ -137,10 +131,17 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(true);
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
+        gameObject.transform.Find(GAMEUI).gameObject.SetActive(false);
+
         SceneManager.LoadScene(_mainMenuSceneIndex);
 
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
+    }
+
+    public ControllerState[] GetControllers()
+    {
+        return ControllerManager.Instance.GetControllers();
     }
 }
