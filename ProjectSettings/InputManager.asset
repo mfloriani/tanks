@@ -515,7 +515,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 0
+    axis: 1
     joyNum: 1
   - serializedVersion: 3
     m_Name: Joy2_Yaxis
@@ -531,7 +531,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 0
+    axis: 1
     joyNum: 2
   - serializedVersion: 3
     m_Name: Joy3_Yaxis
@@ -547,7 +547,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 0
+    axis: 1
     joyNum: 3
   - serializedVersion: 3
     m_Name: Joy4_Yaxis
@@ -563,7 +563,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 0
+    axis: 1
     joyNum: 4
   - serializedVersion: 3
     m_Name: Joy1_LT

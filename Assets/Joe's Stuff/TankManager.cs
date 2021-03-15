@@ -47,6 +47,7 @@ public class TankManager : MonoBehaviour
     private int _health;        //integer for health of tank
 
     private bool _readyToFire;  //boolean for readiness to fire
+    [SerializeField]
     private bool _safe;         //boolean for use with safe zones
     private bool _dead;         //boolean for if tank is dead and waiting to respawn
 
@@ -143,14 +144,21 @@ public class TankManager : MonoBehaviour
     
     public void Die()
     {
-        Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
-        gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
-        gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();             //access deathboom and play its particles
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
-        gameObject.GetComponent<SpriteRenderer>().sprite = null;                            //disables the tank body sprite renderer by setting its sprite to null
-        gameObject.GetComponent<Collider2D>().enabled = false;
-        StartCoroutine(WaitForDeath());                                                     //waits two seconds for sound and explosion to play before destroying tank
-    }
+        if (safe)
+        {
+            Debug.Log("Die has been called, but tank with name \"" + this.name + "\" is safe! Spawncampers, eh?");
+        }
+        else
+        {
+            Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+            gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
+            gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();             //access deathboom and play its particles
+            gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
+            gameObject.GetComponent<SpriteRenderer>().sprite = null;                            //disables the tank body sprite renderer by setting its sprite to null
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            StartCoroutine(WaitForDeath());                                                     //waits two seconds for sound and explosion to play before destroying tank
+        }
+        }
 
     IEnumerator WaitForDeath()
     {
