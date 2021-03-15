@@ -21,8 +21,8 @@ TagManager:
   - Powerup
   - DestructibleWall
   - Nodes
-  - 
-  - 
+  - Level design
+  - Level hole filler
   - 
   - 
   - 
@@ -49,4 +49,10 @@ TagManager:
     locked: 0
   - name: Back
     uniqueID: 3894800811
+    locked: 0
+  - name: Front Level
+    uniqueID: 240028945
+    locked: 0
+  - name: Back Level
+    uniqueID: 350632185
     locked: 0
