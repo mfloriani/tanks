@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public bulletState currentState;
 
+    /*
     public enum bulletState
     {
         standard,
@@ -28,6 +29,7 @@ public class Bullet : MonoBehaviour
     }
 
     bulletState currentState;
+    */
 
     private int wallLayer = 9;
     public int playerLayer = 6;
