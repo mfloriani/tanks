@@ -22,6 +22,17 @@ public class Bullet : MonoBehaviour
 
     bulletState currentState;
 
+    /*
+    public enum bulletState
+    {
+        standard,
+        power,
+        bounce
+    }
+
+    bulletState currentState;
+    */
+
     private int wallLayer = 9;
     public int playerLayer = 6;
     public int enemyLayer = 7;

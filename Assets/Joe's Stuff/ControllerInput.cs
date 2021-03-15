@@ -55,8 +55,6 @@ public class ControllerInput : MonoBehaviour
 
         tank.honking = honk;
 
-        
-
     }
 
     void FixedUpdate()

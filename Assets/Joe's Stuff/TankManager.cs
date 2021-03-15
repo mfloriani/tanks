@@ -137,6 +137,7 @@ public class TankManager : MonoBehaviour
     private void Target()
     {
 
+
         aim = ((Mathf.Round(aim / 45) * 45));
         aim = -aim + 180;
         _gun.transform.eulerAngles = new Vector3(0f, 0f, aim);
@@ -197,7 +198,8 @@ public class TankManager : MonoBehaviour
     void FixedUpdate()
     {
         Drive();
-        if (aim != 0.05)
+
+        if (aim <= 0.05)
         Target();
 
     }
