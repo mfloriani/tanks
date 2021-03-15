@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Node
+  - Platform
+  - PowerUpPlatform
   layers:
   - Default
   - TransparentFX
