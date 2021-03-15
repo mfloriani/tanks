@@ -43,7 +43,7 @@ public class ControllerInput : MonoBehaviour
         reverseR = Input.GetButton(playerprefix + "RB");
 
         fire = Input.GetButton( playerprefix + "A");
-        honk = Input.GetButtonDown("B");
+        honk = Input.GetButtonDown(playerprefix + "B");
 
         int rL = reverseL ? 1 : 0;
         tank.lTrack = speedL-rL;
@@ -55,8 +55,17 @@ public class ControllerInput : MonoBehaviour
 
         tank.honking = honk;
 
-        tank.aimX = aimX;
-        tank.aimY = aimY;
+        tank.aim = AimAngle(aimX, aimY);
 
+    }
+
+    private float AimAngle(float aimX, float aimY)              //convert thumbstick axes data into angle (degrees) for aiming turret
+    {
+        float radAngle = Mathf.Atan2(aimX, aimY);
+        if (radAngle < 0.0f)
+            radAngle += (Mathf.PI * 2.0f);
+        float angle = (180.0f * radAngle / Mathf.PI);
+
+        return angle;
     }
 }
