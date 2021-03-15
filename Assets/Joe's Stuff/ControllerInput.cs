@@ -55,8 +55,13 @@ public class ControllerInput : MonoBehaviour
 
         tank.honking = honk;
 
-        tank.aim = AimAngle(aimX, aimY);
+        
 
+    }
+
+    void FixedUpdate()
+    {
+        tank.aim = AimAngle(aimX, aimY);
     }
 
     private float AimAngle(float aimX, float aimY)              //convert thumbstick axes data into angle (degrees) for aiming turret

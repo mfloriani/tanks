@@ -136,7 +136,7 @@ public class TankManager : MonoBehaviour
     private void Target()
     {
 
-        aim = ((Mathf.Round(aim / 45) * 45) );
+        aim = ((Mathf.Round(aim / 45) * 45));
         aim = -aim + 180;
         _gun.transform.eulerAngles = new Vector3(0f, 0f, aim);
     }
@@ -183,13 +183,15 @@ public class TankManager : MonoBehaviour
         _smoke = gameObject.GetComponent<ParticleSystem>();
         if (_player == null) _player = 0;
         setPlayer();
+        aim = 0;
     }
 
     void FixedUpdate()
     {
         Drive();
-        if(aim != 0)
+        if (aim != 0.05)
         Target();
+
     }
 
     void Update()
