@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: tileGrass_roadTransitionW_dirt
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 35ad01ac02674ca4fbc11e1c66858d4f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3b01174a12aa8664daee643e6052d614, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
