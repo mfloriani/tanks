@@ -11,13 +11,6 @@ public class Bullet : MonoBehaviour
     public Vector2 moveDir;
     GameObject explosion;
 
-    public enum bulletState
-    {
-        standard,
-        power,
-        bounce
-    }
-
     [SerializeField] public bulletState currentState;
 
     public enum bulletState
