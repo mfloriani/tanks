@@ -20,10 +20,11 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public bulletState currentState;
 
-    private int wallLayer = 9;
+    public int wallLayer = 9;
     public int playerLayer = 6;
     public int enemyLayer = 7;
     public int destructibleWallLayer = 11;
+    public int safeLayer = 15;
 
     private void Awake()
     {
@@ -70,6 +71,10 @@ public class Bullet : MonoBehaviour
         {
             Die();
         }
+        if(collision.gameObject.layer == safeLayer)
+        {
+            Die();
+        }
         if(collision.gameObject.layer == destructibleWallLayer)
         {
             if(currentState == bulletState.power)
@@ -88,9 +93,9 @@ public class Bullet : MonoBehaviour
         parent = newParent;
     }
 
-    private void Die()
+    public void Die()
     {
-        //parent.GetComponent<Firing>().currentBullets.Remove(gameObject);
+        parent.GetComponent<Firing>().currentBullets.Remove(gameObject);
         Destroy(gameObject);
     }
 }

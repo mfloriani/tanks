@@ -8,6 +8,7 @@ public class safezone : MonoBehaviour
 
     private int wallLayer = 9;
     public int playerLayer = 6;
+    public int bulletLayer = 5;
     public int enemyLayer = 7;
     public int destructibleWallLayer = 11;
 
@@ -25,6 +26,7 @@ public class safezone : MonoBehaviour
                 collision.gameObject.GetComponent<TankManager>().safe = true;
             Debug.Log(collision.gameObject.name + " entered the safezone!");
         }
+
     }
 
     void OnTriggerExit2D(Collider2D collision)

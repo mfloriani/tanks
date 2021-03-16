@@ -51,10 +51,10 @@ public class TankManager : MonoBehaviour
     private bool _dead;         //boolean for if tank is dead and waiting to respawn
 
 
-    public powerUp state        //getters and setters for powerup state to be used by other classes
+    public int state        //getters and setters for powerup state to be used by other classes
     {
-        get { return _state; }
-        set { _state = value; }
+        get { return (int)_state; }
+        set { _state = (powerUp)value; }
     }
     public bool safe            //getters and setters for safe state to be used by other classes
     {
@@ -66,6 +66,12 @@ public class TankManager : MonoBehaviour
         get { return _dead; }
         set { _dead = value; }
     }
+
+    //public bool pUpState            //getters and setters for dead state to be used by other classes
+    //{
+    //    get { return _state; }
+    //    set { _state = value; }
+    //}
 
     public bool firing            //getters and setters for dead state to be used by other classes
     {
