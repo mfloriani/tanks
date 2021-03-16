@@ -24,7 +24,7 @@ public class TankManager : MonoBehaviour
     private Vector2 _movement;
     [SerializeField]
     private int _player;
-
+    private float _target;
     private GameObject _gun;
     private ParticleSystem _smoke;
 
@@ -47,7 +47,6 @@ public class TankManager : MonoBehaviour
     private int _health;        //integer for health of tank
 
     private bool _readyToFire;  //boolean for readiness to fire
-    [SerializeField]
     private bool _safe;         //boolean for use with safe zones
     private bool _dead;         //boolean for if tank is dead and waiting to respawn
 
@@ -91,12 +90,22 @@ public class TankManager : MonoBehaviour
         set { _lTrack = value; }
     }
 
-    public float aim          //getters and setters for target angle to be used by other classes
+    public float aimX          //getters and setters for left track speed to be used by other classes
     {
-        get { return _aim; }
-        set { _aim = value; }
+        get { return _aimX; }
+        set { _aimX = value; }
+    }
+    public float aimY           //getters and setters for left track speed to be used by other classes
+    {
+        get { return _aimY; }
+        set { _aimY = value; }
     }
 
+    public float target           //getters and setters for target angle to be used by other classes
+    {
+        get { return _target; }
+        set { _target = value; }
+    }
 
     public float smoke           //getters and setters for target angle to be used by other classes
     {
@@ -111,7 +120,14 @@ public class TankManager : MonoBehaviour
     }
 
 
+    private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
+    {
+        float radAngle = Mathf.Atan2(aimX, aimY);
+        if (radAngle < 0.0f) radAngle += (Mathf.PI * 2.0f);
+        float angle = (180.0f * radAngle / Mathf.PI);
 
+        return angle;
+    }
 
     private void setPlayer()
     {
@@ -136,30 +152,27 @@ public class TankManager : MonoBehaviour
 
     private void Target()
     {
-
-
-        aim = ((Mathf.Round(aim / 45) * 45));
-        aim = -aim + 180;
-        _gun.transform.eulerAngles = new Vector3(0f, 0f, aim);
+        target = ((Mathf.Round(AimAngle() / 45) * 45) );
+        target = -target + 180;
+        _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
-    
+
     public void Die()
     {
-        if (safe)
-        {
-            Debug.Log("Die has been called, but tank with name \"" + this.name + "\" is safe! Spawncampers, eh?");
-        }
+        if(!safe){ 
+        Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+        gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
+        gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();             //access deathboom and play its particles
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;                            //disables the tank body sprite renderer by setting its sprite to null
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        StartCoroutine(WaitForDeath());                                                     //waits two seconds for sound and explosion to play before destroying tank
+    }
         else
         {
-            Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
-            gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
-            gameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();             //access deathboom and play its particles
-            gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
-            gameObject.GetComponent<SpriteRenderer>().sprite = null;                            //disables the tank body sprite renderer by setting its sprite to null
-            gameObject.GetComponent<Collider2D>().enabled = false;
-            StartCoroutine(WaitForDeath());                                                     //waits two seconds for sound and explosion to play before destroying tank
+            Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
         }
-        }
+    }
 
     IEnumerator WaitForDeath()
     {
@@ -192,16 +205,13 @@ public class TankManager : MonoBehaviour
         _smoke = gameObject.GetComponent<ParticleSystem>();
         if (_player == null) _player = 0;
         setPlayer();
-        aim = 0;
     }
 
     void FixedUpdate()
     {
         Drive();
-
-        if (aim <= 0.05)
+        if(aimX + aimY != 0)
         Target();
-
     }
 
     void Update()
@@ -211,7 +221,7 @@ public class TankManager : MonoBehaviour
 
         if(firing)
         {
-            turret.Fire(aim);
+            turret.Fire(target);
         }
 
         if (honking)

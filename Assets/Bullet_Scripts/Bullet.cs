@@ -11,27 +11,14 @@ public class Bullet : MonoBehaviour
     public Vector2 moveDir;
     GameObject explosion;
 
+    public enum bulletState
+    {
+        standard,
+        power,
+        bounce
+    }
+
     [SerializeField] public bulletState currentState;
-
-    public enum bulletState
-    {
-        standard,
-        power,
-        bounce
-    }
-
-    bulletState currentState;
-
-    /*
-    public enum bulletState
-    {
-        standard,
-        power,
-        bounce
-    }
-
-    bulletState currentState;
-    */
 
     private int wallLayer = 9;
     public int playerLayer = 6;
@@ -42,7 +29,6 @@ public class Bullet : MonoBehaviour
     {
         explosion = (GameObject)Resources.Load("DeathBoom");
     }
-
 
     // Start is called before the first frame update
     private void Start()
@@ -90,10 +76,8 @@ public class Bullet : MonoBehaviour
             {
                 // Insert more elaborate wall destruction here
                 Destroy(collision.gameObject);
-
                 GameObject newExplosion = Instantiate(explosion, collision.gameObject.transform.position, Quaternion.identity);
                 newExplosion.GetComponent<ParticleSystem>().Play();
-
             }
             Die();
         }
