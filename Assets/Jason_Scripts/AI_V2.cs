@@ -157,6 +157,8 @@ public class AI_V2 : MonoBehaviour
     {
         if(other.CompareTag("Node"))
         {
+            this.transform.position = other.transform.position;
+
             currentNode = other.gameObject;
 
             if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Wander)
@@ -181,6 +183,7 @@ public class AI_V2 : MonoBehaviour
             {
                 bCanMove = false;
             }
+            CalculateNextNode();
         }
     }
 
