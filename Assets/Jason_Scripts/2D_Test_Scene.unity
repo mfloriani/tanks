@@ -560,10 +560,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   moveDir: {x: 0, y: 0}
-  currentState: 0
   playerLayer: 7
   enemyLayer: 6
-  destructibleWallLayer: 11
 --- !u!212 &214833418
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1206,7 +1204,7 @@ GameObject:
   - component: {fileID: 796603782}
   - component: {fileID: 796603781}
   - component: {fileID: 796603783}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1292,7 +1290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 1
-  hasMulti: 0
   placeholder: {fileID: 214833413}
   currentBullets: []
 --- !u!82 &796603780
@@ -6195,7 +6192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &929202581
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6428,7 +6425,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1340286020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6738,7 +6735,7 @@ GameObject:
   - component: {fileID: 1427640365}
   - component: {fileID: 1427640366}
   - component: {fileID: 1427640369}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7575,7 +7572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1795539483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7588,8 +7585,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1032464261a32e459c69ac7c6d3b7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpawn: []
-  playerCount: []
 --- !u!4 &1795539484
 Transform:
   m_ObjectHideFlags: 0
