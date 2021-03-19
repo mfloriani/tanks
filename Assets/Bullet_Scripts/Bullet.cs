@@ -26,6 +26,8 @@ public class Bullet : MonoBehaviour
     public int destructibleWallLayer = 11;
     public int safeLayer = 15;
 
+    int bounces = 0;
+
     private void Awake()
     {
         explosion = (GameObject)Resources.Load("DeathBoom");
@@ -46,12 +48,15 @@ public class Bullet : MonoBehaviour
     public void SetBulletState(bulletState newState)
     {
         currentState = newState;
+        if (currentState == bulletState.bounce)
+            bounces = 4;
     }
 
     private void FixedUpdate()
     {
         transform.Translate(gameObject.transform.up * moveSpeed * Time.deltaTime, Space.World);
-    }
+
+     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -69,22 +74,34 @@ public class Bullet : MonoBehaviour
         }
         if(collision.gameObject.layer == wallLayer)
         {
-            Die();
+            if (bounces <= 0)
+                Die();
+            else
+                --bounces;
         }
         if(collision.gameObject.layer == safeLayer)
         {
             Die();
         }
-        if(collision.gameObject.layer == destructibleWallLayer)
+        if (collision.gameObject.layer == destructibleWallLayer)
         {
-            if(currentState == bulletState.power)
+            if (currentState == bulletState.power)
             {
                 // Insert more elaborate wall destruction here
                 Destroy(collision.gameObject);
                 GameObject newExplosion = Instantiate(explosion, collision.gameObject.transform.position, Quaternion.identity);
                 newExplosion.GetComponent<ParticleSystem>().Play();
             }
-            Die();
+
+            if (bounces <= 0)
+                Die();
+            else
+            { 
+            Vector2 wallNormal = collision.contacts[0].normal;
+            moveDir = Vector2.Reflect(gameObject.GetComponent<Rigidbody2D>().velocity, wallNormal);
+                gameObject.GetComponent<Rigidbody2D>().velocity = moveDir * moveSpeed;
+            --bounces;
+        }
         }
     }
 

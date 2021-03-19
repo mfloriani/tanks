@@ -12,14 +12,9 @@ public class powerUp : MonoBehaviour
     public int playerLayer = 6;
     public int enemyLayer = 7;
     public int destructibleWallLayer = 11;
-    public enum type         //enum for state of powerUp applied to tank
-    {
-        bounceBullet,
-        powerBullet,
-        mines
-    }
-
-    type effect;
+    public AudioClip sfx;
+    TankManager.type effect;
+    Sprite[] spritelist;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +24,10 @@ public class powerUp : MonoBehaviour
 
     private void Awake()
     {
-        int i = Random.Range(0, 2);
-        effect = (type)i; 
+        int i = Random.Range(1, 4);
+        effect = (TankManager.type)i;
+        gameObject.GetComponent<SpriteRenderer>().sprite = spritelist[i];
+
     }
 
     // Update is called once per frame
@@ -43,8 +40,23 @@ public class powerUp : MonoBehaviour
     {
         if (collision.gameObject.layer == playerLayer)
         {
-            if (collision.gameObject.GetComponent<TankManager>() != null) Debug.Log("powerup tripped");
-           //     collision.gameObject.GetComponent<TankManager>();
+            if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().pUpState == TankManager.type.none)
+            {
+                Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
+                collision.gameObject.GetComponent<TankManager>().minecount = 5;
+                collision.gameObject.GetComponent<TankManager>().pUpState = effect;
+                gameObject.GetComponent<AudioSource>().PlayOneShot(sfx);
+                gameObject.GetComponent<Collider2D>().enabled = false;
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+            }
         }   
+    }
+
+    IEnumerable wait()
+    {
+            yield return new WaitForSeconds(1);         //wait for sound and explosion to play
+        gameObject.GetComponent<Collider2D>().enabled = true;
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
     }
 }

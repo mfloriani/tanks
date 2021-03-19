@@ -34,10 +34,33 @@ public class Firing : MonoBehaviour
         currentCooldown += Time.deltaTime;
     }
 
+    public void Fire(float zRotation, TankManager.type pUp)
+    {
+        switch (pUp)
+        {
+            case TankManager.type.bounceBullet:
+                bulletType = Bullet.bulletState.bounce;
+                break;
+
+            case TankManager.type.powerBullet:
+                bulletType = Bullet.bulletState.power;
+                break;
+
+            case TankManager.type.multiShot:
+                bulletType = Bullet.bulletState.standard;
+                hasMulti = true;
+                break;
+            default:
+                bulletType = Bullet.bulletState.standard;
+                Debug.Log("Tank fired with no powerups or with mines");
+                break;
+        }
+        Fire(zRotation);
+    }
     // Call this function when you want the object to fire a bullet.
     public void Fire(float zRotation) // Remove zRotation when convenient
     {
-
+       
         foreach (GameObject b in currentBullets)
         {
             if (!b)
@@ -68,4 +91,5 @@ public class Firing : MonoBehaviour
             }
         }
     }
+
 }
