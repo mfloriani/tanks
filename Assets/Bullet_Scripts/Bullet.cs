@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     // Variables
     public float moveSpeed;
     public Vector2 moveDir;
-    GameObject explosion;
+    public GameObject explosion;
 
     public enum bulletState
     {
@@ -28,10 +28,7 @@ public class Bullet : MonoBehaviour
 
     int bounces = 0;
 
-    private void Awake()
-    {
-        explosion = (GameObject)Resources.Load("DeathBoom");
-    }
+    
 
     // Start is called before the first frame update
     private void Start()
@@ -96,10 +93,13 @@ public class Bullet : MonoBehaviour
             if (bounces <= 0)
                 Die();
             else
-            { 
-            Vector2 wallNormal = collision.contacts[0].normal;
-            moveDir = Vector2.Reflect(gameObject.GetComponent<Rigidbody2D>().velocity, wallNormal);
-                gameObject.GetComponent<Rigidbody2D>().velocity = moveDir * moveSpeed;
+            {
+                //ROTATE THE BULLET HERE
+            Vector2 wallNormal = collision.contacts[0].normal;  //get normalised vector of contact
+            moveDir = Vector2.Reflect(gameObject.transform.up, wallNormal);     //figure out the angle of incidence from where the object has contacted the wall
+
+                gameObject.transform.up = moveDir; //????
+                Debug.Log(moveDir);
             --bounces;
         }
         }

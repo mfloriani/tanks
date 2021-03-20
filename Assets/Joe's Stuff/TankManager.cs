@@ -39,6 +39,7 @@ public class TankManager : MonoBehaviour
     public AudioClip dropSound;
     public GameObject[] spawnPoints;
     private int _minecount;
+public bool hot;
 
     public enum type         //enum for state of powerUp applied to tank
     {
@@ -275,13 +276,36 @@ public class TankManager : MonoBehaviour
             newMine.GetComponent<mine>().player = player;
             newMine.transform.parent = null;
             --minecount;
-
+            if (minecount <= 0)
+                pUpState = type.none;
         }
+
+        if(pUpState != type.none && hot)
+        {
+            hot = false;
+            
+            StartCoroutine(cooldown());
+        }
+
 
         if (honking)
             gameObject.GetComponent<AudioSource>().PlayOneShot(gameObject.GetComponent<AudioSource>().clip);
 
 
+    }
+
+    IEnumerator cooldown()
+    {
+        GameObject ticker = new GameObject();
+        ticker.AddComponent<AudioSource>();
+        GameObject clock = Instantiate(ticker);
+        Debug.Log("Cooling down after pickup!");
+        clock.GetComponent<AudioSource>().PlayOneShot(cooldownSound, 0.8f);
+        yield return new WaitForSeconds(10);         //wait for sound and explosion to play
+            this.pUpState = type.none;
+        Destroy(ticker);
+        Destroy(clock);
+            Debug.Log("Tank has cooled down!");
     }
 }
 

@@ -52,7 +52,6 @@ public class Firing : MonoBehaviour
                 break;
             default:
                 bulletType = Bullet.bulletState.standard;
-                Debug.Log("Tank fired with no powerups or with mines");
                 break;
         }
         Fire(zRotation);

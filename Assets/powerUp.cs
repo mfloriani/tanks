@@ -14,26 +14,33 @@ public class powerUp : MonoBehaviour
     public int destructibleWallLayer = 11;
     public AudioClip sfx;
     TankManager.type effect;
-    Sprite[] spritelist;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        int i = Random.Range(0, 3);
+        effect = (TankManager.type)(i + 1);
+        gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        StartCoroutine(wait());
     }
 
     private void Awake()
     {
-        int i = Random.Range(1, 4);
-        effect = (TankManager.type)i;
-        gameObject.GetComponent<SpriteRenderer>().sprite = spritelist[i];
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
- 
+           
+    }
+
+    private void FixedUpdate()
+    {
+        gameObject.transform.Rotate(0,0,Time.deltaTime*15);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -43,20 +50,26 @@ public class powerUp : MonoBehaviour
             if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().pUpState == TankManager.type.none)
             {
                 Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
-                collision.gameObject.GetComponent<TankManager>().minecount = 5;
+                if(effect == TankManager.type.mines)collision.gameObject.GetComponent<TankManager>().minecount = 5;
                 collision.gameObject.GetComponent<TankManager>().pUpState = effect;
+                collision.gameObject.GetComponent<TankManager>().hot = true;
                 gameObject.GetComponent<AudioSource>().PlayOneShot(sfx);
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                int i = Random.Range(0, 3);
+                effect = (TankManager.type)(i + 1);
+                gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
+                StartCoroutine(wait());
 
             }
         }   
     }
 
-    IEnumerable wait()
+    IEnumerator wait()
     {
-            yield return new WaitForSeconds(1);         //wait for sound and explosion to play
+            yield return new WaitForSeconds(15);         //wait for sound and explosion to play
         gameObject.GetComponent<Collider2D>().enabled = true;
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
     }
 }
