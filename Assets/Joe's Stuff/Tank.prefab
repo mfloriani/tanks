@@ -72,15 +72,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: fc59555dd8af63f49b04bf171d053b10, type: 3}
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 8
+  m_Sprite: {fileID: 21300000, guid: c8cc91c9a284f414bae307bb285cca75, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.36}
+  m_Size: {x: 0.24, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -95,13 +95,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2641470187290679509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe191dadf5d67a48b77c187d0d5d8b9, type: 3}
+  m_Script: {fileID: 11500000, guid: e90fbf5610097bd43a77f21953a49dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   moveDir: {x: 0, y: 0}
+  currentState: 0
   playerLayer: 6
   enemyLayer: 7
+  destructibleWallLayer: 11
 --- !u!50 &2231165859547311372
 Rigidbody2D:
   serializedVersion: 4
@@ -141,7 +143,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.24, y: 0.32}
-    newSize: {x: 0.16, y: 0.36}
+    newSize: {x: 0.24, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -304,7 +306,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -5032,9 +5034,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -5133,15 +5135,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 68f538b6687fb1d4f9be043f12d68f84, type: 3}
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 9
+  m_Sprite: {fileID: 21300000, guid: 03478109e98ca7543ba8542505082296, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.36, y: 0.52}
+  m_Size: {x: 0.28, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5156,10 +5158,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3925016448657606681}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57a980422cc3bac4ca870d49f703d87f, type: 3}
+  m_Script: {fileID: 11500000, guid: 56cb7cc2de08c7840a272c506baea3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.2
+  cooldown: 0
+  hasMulti: 0
   placeholder: {fileID: 2641470187290679509}
   currentBullets: []
 --- !u!198 &1994445548860643289
@@ -5178,7 +5181,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9906,9 +9909,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 8
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -9944,7 +9947,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6aef108040e93b446bd78e9f5f08b02d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 806878d3aa56b3341af6fb823f1ca7d2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.626
   m_Pitch: 1
@@ -10109,7 +10112,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.76, y: 0.8}
-    newSize: {x: 0.76, y: 0.8}
+    newSize: {x: 0.38, y: 0.4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -10154,15 +10157,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5c2a592e2dd44f1498eaa2467440680a, type: 3}
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 6
+  m_Sprite: {fileID: 21300000, guid: 631d9f07a558855498216ace42371444, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.76, y: 0.8}
+  m_Size: {x: 0.38, y: 0.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -10177,10 +10180,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 4003504016865398329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1af6d19773684bd44aeeda2027dbe9a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 206d102a93827f1408b217a4e4fb0979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tank: {fileID: 397371879313652475}
+  turret: {fileID: 4685928069577549766}
+  _rTrack: 0
+  _lTrack: 0
+  _speed: 0
+  _movement: {x: 0, y: 0}
+  _player: 0
+  bodySprites:
+  - {fileID: 21300000, guid: 631d9f07a558855498216ace42371444, type: 3}
+  - {fileID: 21300000, guid: 7791d279982487042a542126228d776f, type: 3}
+  - {fileID: 21300000, guid: 46923cc0c39c7114899682b02808484e, type: 3}
+  - {fileID: 21300000, guid: 3b447bfb313ac8949a77681ee483e1b7, type: 3}
+  turretSprites:
+  - {fileID: 21300000, guid: 03478109e98ca7543ba8542505082296, type: 3}
+  - {fileID: 21300000, guid: cc898c21b36b9eb409ce51be13684476, type: 3}
+  - {fileID: 21300000, guid: 8774f3be9fa2df140a4a815f5af28947, type: 3}
+  - {fileID: 21300000, guid: fc575b788a7e9a948a9c9e096f34a841, type: 3}
+  shellSprites:
+  - {fileID: 21300000, guid: c8cc91c9a284f414bae307bb285cca75, type: 3}
+  - {fileID: 21300000, guid: 028e0167624ad5e46b4b19e573ca7ee3, type: 3}
+  - {fileID: 21300000, guid: 7344ff686bfd0cc4f90ab00ad21ceffe, type: 3}
+  - {fileID: 21300000, guid: afb49e810b0750f43b888d1c6b0bc8b2, type: 3}
+  hornSounds:
+  - {fileID: 8300000, guid: e2bfe49d68e20ae458ee94026f33023b, type: 3}
+  - {fileID: 8300000, guid: 20c64c62f5980f841aee726e9dadd482, type: 3}
+  - {fileID: 8300000, guid: 43771c5870c3160448bdc6b20dc792fd, type: 3}
+  - {fileID: 8300000, guid: 10b999097bd4f5a4dbabb7f48b5f1a59, type: 3}
+  deathSound: {fileID: 8300000, guid: 60984c4626ad21e40b12a51151179ab2, type: 3}
 --- !u!114 &397371879313652475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10190,39 +10219,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4003504016865398329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a7eaae36bc266843a48a4da2d4b26f1, type: 3}
+  m_Script: {fileID: 11500000, guid: d0f011b501e9143459b3313989985d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turret: {fileID: 4685928069577549766}
-  _rTrack: 0
-  _lTrack: 0
-  _speed: 2
-  _movement: {x: 0, y: 0}
+  tank: {fileID: 5082066879740333206}
   _player: 0
-  bodySprites:
-  - {fileID: 21300000, guid: 5c2a592e2dd44f1498eaa2467440680a, type: 3}
-  - {fileID: 21300000, guid: c25db3680497a8e4fbdf9619dca19991, type: 3}
-  - {fileID: 21300000, guid: 58e15bec3ed00cd47b5f22d1f90e2c47, type: 3}
-  - {fileID: 21300000, guid: 560cf005a9a0b58489232ea8e0b88e8c, type: 3}
-  - {fileID: 21300000, guid: 92a0e4a2884b39440a24a2ca9984032b, type: 3}
-  turretSprites:
-  - {fileID: 21300000, guid: 68f538b6687fb1d4f9be043f12d68f84, type: 3}
-  - {fileID: 21300000, guid: e5ddd98032b39a843b3e5428e6c60dac, type: 3}
-  - {fileID: 21300000, guid: cae4727087adef94fbadf362b453b2c4, type: 3}
-  - {fileID: 21300000, guid: 2758fb7d77b977549ab2be072cc32567, type: 3}
-  - {fileID: 21300000, guid: 9e6749d79ea95384f89be0d00e002c62, type: 3}
-  shellSprites:
-  - {fileID: 21300000, guid: fc59555dd8af63f49b04bf171d053b10, type: 3}
-  - {fileID: 21300000, guid: 8c28ca92cffb22a448a34b317d702b80, type: 3}
-  - {fileID: 21300000, guid: dcef78fd065140c46a369d053676a0e1, type: 3}
-  - {fileID: 21300000, guid: 3e51901b08f64174c92aa8a54791cf5c, type: 3}
-  - {fileID: 21300000, guid: 74c39ed9ac6f6634281b8b0b2e5a39ae, type: 3}
-  hornSounds:
-  - {fileID: 8300000, guid: f19ba09853ac6314381c18ac93d3a71b, type: 3}
-  - {fileID: 8300000, guid: 7a19b18803381134489c833efb699201, type: 3}
-  - {fileID: 8300000, guid: d023c37d47973154091034b59d9213c4, type: 3}
-  - {fileID: 8300000, guid: 9c5c229492df2af44b586dec24264179, type: 3}
-  deathSound: {fileID: 8300000, guid: 6d82c4304a4a6f144b441686fd59e57f, type: 3}
 --- !u!198 &7688846525255058710
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -10239,7 +10240,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -14967,9 +14968,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
+  m_SortingOrder: 5
   m_RenderMode: 0
   m_SortMode: 2
   m_MinParticleSize: 0

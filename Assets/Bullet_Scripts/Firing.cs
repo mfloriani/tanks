@@ -37,6 +37,14 @@ public class Firing : MonoBehaviour
     // Call this function when you want the object to fire a bullet.
     public void Fire(float zRotation) // Remove zRotation when convenient
     {
+
+        foreach (GameObject b in currentBullets)
+        {
+            if (!b)
+            {
+                currentBullets.Remove(b);
+            }
+        }
         if (currentCooldown >= cooldown)
         {
             if (currentBullets.Count < 1 || hasMulti)

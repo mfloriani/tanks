@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameUI : MonoBehaviour
 {
-    [SerializeField] Transform _p1;
-    [SerializeField] Transform _p2;
-    [SerializeField] Transform _p3;
-    [SerializeField] Transform _p4;
+    Transform _p1;
+    Transform _p2;
+    Transform _p3;
+    Transform _p4;
 
     void Start()
     {
@@ -22,10 +22,10 @@ public class GameUI : MonoBehaviour
 
     void OnEnable()
     {
-        //_p1 = transform.Find("P1");
-        //_p2 = transform.Find("P2");
-        //_p3 = transform.Find("P3");
-        //_p4 = transform.Find("P4");
+        _p1 = transform.Find("P1");
+        _p2 = transform.Find("P2");
+        _p3 = transform.Find("P3");
+        _p4 = transform.Find("P4");
         ActivatePlayersUI();
     }
 
