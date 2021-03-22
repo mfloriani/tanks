@@ -602,7 +602,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: afd40f3a49302954092e6134d43032cf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c83a1b9717ae4734f8a03e455fd709b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -621,7 +621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214833413}
   m_LocalRotation: {x: -0, y: -0, z: -1, w: -0.00000032782555}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 796603777}
@@ -769,7 +769,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &469404253
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6186,6 +6186,7 @@ GameObject:
   - component: {fileID: 929202582}
   - component: {fileID: 929202581}
   - component: {fileID: 929202583}
+  - component: {fileID: 929202584}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -6252,7 +6253,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 929202580}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.11, y: 6.79, z: 0.1}
+  m_LocalPosition: {x: -9.17, y: -0.87, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6284,6 +6285,57 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48, y: 0.48}
   m_EdgeRadius: 0
+--- !u!50 &929202584
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929202580}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!1 &1023212839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1023212840}
+  m_Layer: 0
+  m_Name: AISpawn
+  m_TagString: AI_Spawn
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1023212840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023212839}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1069930266
 GameObject:
   m_ObjectHideFlags: 0
@@ -6848,7 +6900,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427640364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalPosition: {x: 5, y: 0, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 796603777}
@@ -6877,8 +6929,13 @@ MonoBehaviour:
   newNode: {fileID: 472931057}
   tankHead: {fileID: 796603776}
   rayHitObject: {fileID: 0}
+<<<<<<< Updated upstream
   timer: 0
   timeTaken: 1
+=======
+  timer: 3
+  timeTaken: 3
+>>>>>>> Stashed changes
   AIPos: {x: 0, y: 0}
   playerPos: {fileID: 0}
   bCoroutineStart: 0
@@ -7582,9 +7639,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1795539482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1032464261a32e459c69ac7c6d3b7af, type: 3}
+  m_Script: {fileID: 11500000, guid: f453508fccf9d3049997379cff7feac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AISpawn: {fileID: 1023212839}
+  AI: {fileID: 1427640364}
+  newAI: {fileID: 0}
+  playerSpawn: []
+  playerCount: []
 --- !u!4 &1795539484
 Transform:
   m_ObjectHideFlags: 0
