@@ -147,6 +147,7 @@ public class AI_V2 : MonoBehaviour
 
             if(!bHasFired)
             {
+                Debug.Log("Fire");
                 turret.Fire(transform.rotation.eulerAngles.z);
                 bHasFired = true;
             }
