@@ -171,7 +171,7 @@ public class AI_V2 : MonoBehaviour
                 newRandomIndex = randomIndex;
                 if (!bHasFired)
                 {
-                    turret.Fire(tankHead.transform.rotation.eulerAngles.z);
+                    turret.Fire(tankHead.transform.rotation.eulerAngles.z, 4);
                     bHasFired = true;
                 }
                 targetNodePos = nodes[randomIndex].transform.position;

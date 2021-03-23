@@ -12,6 +12,7 @@ public class ControllerInput : MonoBehaviour
     private float speedR;
     private bool reverseL;
     private bool reverseR;
+    private bool mine;
     [SerializeField] private int _player = 0;
 
     private bool fire;
@@ -42,15 +43,15 @@ public class ControllerInput : MonoBehaviour
         reverseL = Input.GetButton(playerprefix + "LB");
         reverseR = Input.GetButton(playerprefix + "RB");
 
-        fire = Input.GetButton( playerprefix + "A");
+        fire = Input.GetButtonDown( playerprefix + "A");
         honk = Input.GetButtonDown(playerprefix + "B");
-
+        mine = Input.GetButtonDown(playerprefix + "X");
         int rL = reverseL ? 1 : 0;
         tank.lTrack = speedL-rL;
 
         int rR = reverseR ? 1 : 0;
         tank.rTrack = speedR - rR;
-
+        tank.mining = mine;
         tank.firing = fire;
 
         tank.honking = honk;
