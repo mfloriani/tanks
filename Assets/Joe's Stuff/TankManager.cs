@@ -263,7 +263,11 @@ public bool hot;
         _gun = gameObject.transform.GetChild(0).gameObject;
         _smoke = gameObject.GetComponent<ParticleSystem>();
         if (_player == null) _player = 0;
+<<<<<<< Updated upstream
         spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
+=======
+        spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
+>>>>>>> Stashed changes
         setPlayer();
 
         GetComponentInChildren<lifeCounter>().changeVis(false);
