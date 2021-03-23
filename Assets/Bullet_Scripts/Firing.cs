@@ -35,7 +35,7 @@ public class Firing : MonoBehaviour
     }
 
     public void Fire(float zRotation, TankManager.type pUp, int player)
-<<<<<<< Updated upstream
+
     {
         switch (pUp)
         {
@@ -61,35 +61,13 @@ public class Firing : MonoBehaviour
     // Call this function when you want the object to fire a bullet.
     public void Fire(float zRotation, int player) // Remove zRotation when convenient
     {
-=======
-    {
-        switch (pUp)
-        {
-            case TankManager.type.bounceBullet:
-                bulletType = Bullet.bulletState.bounce;
-                break;
-
-            case TankManager.type.powerBullet:
-                bulletType = Bullet.bulletState.power;
-                break;
-
-            case TankManager.type.multiShot:
-                bulletType = Bullet.bulletState.standard;
-                hasMulti = true;
-                break;
-            default:
-                bulletType = Bullet.bulletState.standard;
-                hasMulti = false;
-                break;
-        }
-
         plr = player;
         Fire(zRotation);
     }
     // Call this function when you want the object to fire a bullet.
     public void Fire(float zRotation) // Remove zRotation when convenient
     {
->>>>>>> Stashed changes
+
        
         foreach (GameObject b in currentBullets)
         {
@@ -110,11 +88,9 @@ public class Firing : MonoBehaviour
                     currentCooldown = 0;
                     // Instantiate new bullet
                     GameObject newBullet = Instantiate(placeholder, placeholder.transform.position, placeholder.transform.rotation, null);
-<<<<<<< Updated upstream
-                    newBullet.GetComponent<Bullet>().SetOwner(player);
-=======
+
                     newBullet.GetComponent<Bullet>().SetOwner(plr);
->>>>>>> Stashed changes
+
                     newBullet.SetActive(true);
                     newBullet.GetComponent<Bullet>().SetBulletState(bulletType);
                     newBullet.GetComponent<Bullet>().moveDir = placeholder.transform.up;
