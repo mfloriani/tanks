@@ -43,7 +43,8 @@ public class mine : MonoBehaviour
             switch (collision.gameObject.layer)
             {
                 case playerLayer:
-                    if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
+                    if (collision.gameObject.GetComponent<TankManager>() != null)
+                    //if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
                     {
                         collision.gameObject.GetComponent<TankManager>().Die();
                         GetComponent<Collider2D>().enabled = false;
@@ -52,7 +53,8 @@ public class mine : MonoBehaviour
                     }
                     break;
                 case enemyLayer:
-                    if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
+                    if (collision.gameObject.GetComponent<TankManager>() != null)
+                    //if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
                     {
                         GetComponent<Collider2D>().enabled = false;
                         collision.gameObject.GetComponent<TankManager>().Die();
