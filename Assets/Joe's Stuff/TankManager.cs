@@ -25,6 +25,7 @@ public class TankManager : MonoBehaviour
     private Vector2 _movement;
     [SerializeField]
     private int _player;
+    public int score;
     private float _target;
     private GameObject _gun;
     private ParticleSystem _smoke;
@@ -38,6 +39,11 @@ public class TankManager : MonoBehaviour
     public AudioClip cooldownSound;
     public AudioClip dropSound;
     public GameObject[] spawnPoints;
+    public Sprite[] lifecounter;
+    private float frac = 0;
+
+    Vector3 spawnPos;
+    Vector3 deathPos;
     private int _minecount;
 public bool hot;
 
@@ -157,6 +163,8 @@ public bool hot;
         gameObject.GetComponent<AudioSource>().clip = hornSounds[_player];
         gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
+        gameObject.name = ("Tank " + player);
+        gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
 
     }
 
@@ -181,7 +189,7 @@ public bool hot;
 
     public void Die()
     {
-        if (!safe)
+        if (!safe && !dead)
         {
             Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
@@ -193,7 +201,10 @@ public bool hot;
             gameObject.GetComponent<Collider2D>().enabled = false;
             rTrack = 0;
             lTrack = 0;
+
             StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
+            --_lives;
+            Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
         }
         else
         {
@@ -203,22 +214,29 @@ public bool hot;
 
     IEnumerator WaitForRespawn(GameObject db)
     {
-
-        yield return new WaitForSeconds(2);         //wait for sound and explosion to play
+        GetComponentInChildren<lifeCounter>().changeVis(true); // make the life counter visible
+        yield return new WaitForSeconds(1);         //wait for sound and explosion to play
+        gameObject.GetComponentInChildren<lifeCounter>().updateCount(_lives);
+        yield return new WaitForSeconds(1);         //wait for sound and explosion to play
+        
         Destroy(db);                        //delete the explosion
-        GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
-        while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+        if (_lives <= 0)
         {
-            spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            GetComponentInChildren<lifeCounter>().changeVis(false);
         }
-        gameObject.GetComponent<Collider2D>().enabled = true;
-        gameObject.transform.position = spawn.transform.position;
-        gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
-        gameObject.GetComponent<ControllerInput>().enabled = true;
-        gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
+        else
+        {
 
-        gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f);                     //play the sound given in the editor to tankmanager
-
+            GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+            {
+                spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            }
+            spawnPos = spawn.transform.position;
+            deathPos = gameObject.transform.position;
+            dead = true;
+        }
     }
     void Awake()
     {
@@ -247,6 +265,8 @@ public bool hot;
         if (_player == null) _player = 0;
         spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
         setPlayer();
+
+        GetComponentInChildren<lifeCounter>().changeVis(false);
     }
 
     void FixedUpdate()
@@ -255,8 +275,30 @@ public bool hot;
         if (aimX + aimY != 0)
             Target();
 
+        if (dead)
+        {
+            frac += Time.deltaTime;
+            transform.position = Vector3.Lerp(deathPos, spawnPos, frac);
+            if (frac >= 1)
+                {
+                frac = 0f;
+                dead = false;
+
+                    gameObject.GetComponent<Collider2D>().enabled = true;
+               
+                    gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
+                    gameObject.GetComponent<ControllerInput>().enabled = true;
+                    gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
+                    GetComponentInChildren<lifeCounter>().changeVis(false);
+                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f);                     //play the sound given in the editor to tankmanager
+            }
+        }
     }
 
+    IEnumerator Wait(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+    }
     void Update()
     {
         if (_health <= 0)
@@ -264,7 +306,7 @@ public bool hot;
 
         if (firing)
         {
-            turret.Fire(target, pUpState);
+            turret.Fire(target, pUpState, player);
         }
 
         if (mining && pUpState == type.mines && !(minecount <= 0))

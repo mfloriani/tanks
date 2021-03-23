@@ -34,7 +34,7 @@ public class Firing : MonoBehaviour
         currentCooldown += Time.deltaTime;
     }
 
-    public void Fire(float zRotation, TankManager.type pUp)
+    public void Fire(float zRotation, TankManager.type pUp, int player)
     {
         switch (pUp)
         {
@@ -52,12 +52,13 @@ public class Firing : MonoBehaviour
                 break;
             default:
                 bulletType = Bullet.bulletState.standard;
+                hasMulti = false;
                 break;
         }
-        Fire(zRotation);
+        Fire(zRotation, player);
     }
     // Call this function when you want the object to fire a bullet.
-    public void Fire(float zRotation) // Remove zRotation when convenient
+    public void Fire(float zRotation, int player) // Remove zRotation when convenient
     {
        
         foreach (GameObject b in currentBullets)
@@ -79,6 +80,7 @@ public class Firing : MonoBehaviour
                     currentCooldown = 0;
                     // Instantiate new bullet
                     GameObject newBullet = Instantiate(placeholder, placeholder.transform.position, placeholder.transform.rotation, null);
+                    newBullet.GetComponent<Bullet>().SetOwner(player);
                     newBullet.SetActive(true);
                     newBullet.GetComponent<Bullet>().SetBulletState(bulletType);
                     newBullet.GetComponent<Bullet>().moveDir = placeholder.transform.up;

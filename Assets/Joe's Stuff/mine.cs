@@ -46,6 +46,7 @@ public class mine : MonoBehaviour
                     if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
                     {
                         collision.gameObject.GetComponent<TankManager>().Die();
+                        GetComponent<Collider2D>().enabled = false;
                         Debug.Log("A mine went off!");
                         Destroy(gameObject);
                     }
@@ -53,6 +54,7 @@ public class mine : MonoBehaviour
                 case enemyLayer:
                     if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
                     {
+                        GetComponent<Collider2D>().enabled = false;
                         collision.gameObject.GetComponent<TankManager>().Die();
                         Debug.Log("A mine went off!");
                         Destroy(gameObject);

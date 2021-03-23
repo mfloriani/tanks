@@ -43,7 +43,7 @@ public class ControllerInput : MonoBehaviour
         reverseL = Input.GetButton(playerprefix + "LB");
         reverseR = Input.GetButton(playerprefix + "RB");
 
-        fire = Input.GetButton( playerprefix + "A");
+        fire = Input.GetButtonDown( playerprefix + "A");
         honk = Input.GetButtonDown(playerprefix + "B");
         mine = Input.GetButtonDown(playerprefix + "X");
         int rL = reverseL ? 1 : 0;

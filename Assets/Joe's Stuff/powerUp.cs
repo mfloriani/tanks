@@ -18,11 +18,12 @@ public class powerUp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int i = Random.Range(0, 3);
+        int i = Random.Range(0, 4);
         effect = (TankManager.type)(i + 1);
         gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
         gameObject.GetComponent<Collider2D>().enabled = false;
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<ParticleSystem>().Stop();
         StartCoroutine(wait());
     }
 
@@ -56,7 +57,8 @@ public class powerUp : MonoBehaviour
                 gameObject.GetComponent<AudioSource>().PlayOneShot(sfx);
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                int i = Random.Range(0, 3);
+                gameObject.GetComponent<ParticleSystem>().Stop();
+                int i = Random.Range(0, 4);
                 effect = (TankManager.type)(i + 1);
                 gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
                 StartCoroutine(wait());
@@ -70,6 +72,7 @@ public class powerUp : MonoBehaviour
             yield return new WaitForSeconds(15);         //wait for sound and explosion to play
         gameObject.GetComponent<Collider2D>().enabled = true;
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponent<ParticleSystem>().Play();
 
     }
 }
