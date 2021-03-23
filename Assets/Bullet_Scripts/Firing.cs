@@ -8,7 +8,7 @@ public class Firing : MonoBehaviour
     // Firerate. Set this in the inspector as required.
     public float cooldown;
     float currentCooldown;
-
+    int plr = 4;
     public bool hasMulti;
     Bullet.bulletState bulletType;
 
@@ -35,6 +35,7 @@ public class Firing : MonoBehaviour
     }
 
     public void Fire(float zRotation, TankManager.type pUp, int player)
+
     {
         switch (pUp)
         {
@@ -60,6 +61,13 @@ public class Firing : MonoBehaviour
     // Call this function when you want the object to fire a bullet.
     public void Fire(float zRotation, int player) // Remove zRotation when convenient
     {
+        plr = player;
+        Fire(zRotation);
+    }
+    // Call this function when you want the object to fire a bullet.
+    public void Fire(float zRotation) // Remove zRotation when convenient
+    {
+
        
         foreach (GameObject b in currentBullets)
         {
@@ -80,7 +88,9 @@ public class Firing : MonoBehaviour
                     currentCooldown = 0;
                     // Instantiate new bullet
                     GameObject newBullet = Instantiate(placeholder, placeholder.transform.position, placeholder.transform.rotation, null);
-                    newBullet.GetComponent<Bullet>().SetOwner(player);
+
+                    newBullet.GetComponent<Bullet>().SetOwner(plr);
+
                     newBullet.SetActive(true);
                     newBullet.GetComponent<Bullet>().SetBulletState(bulletType);
                     newBullet.GetComponent<Bullet>().moveDir = placeholder.transform.up;
