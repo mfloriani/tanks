@@ -41,7 +41,6 @@ public class AI_V2 : MonoBehaviour
         Wander,
     };
 
-    [SerializeField] bool bCoroutineStart = false;
     [SerializeField] bool bCanMove = true;
 
     [SerializeField] AIStates aiStates;
