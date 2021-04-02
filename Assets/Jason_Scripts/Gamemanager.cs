@@ -79,6 +79,7 @@ public class Gamemanager : MonoBehaviour
             newAI = Instantiate(AI);
             newAI.transform.position = AISpawn.transform.position;
             newAI.SetActive(true);
+            newAI = null;
             numSpawned++;
             yield return new WaitForSeconds(2.0f);
         }
