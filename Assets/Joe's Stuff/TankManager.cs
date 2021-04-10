@@ -238,6 +238,29 @@ public bool hot;
             dead = true;
         }
     }
+
+    public void Spawn()
+    {
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
+        gameObject.GetComponent<ControllerInput>().enabled = false;
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        rTrack = 0;
+        lTrack = 0;
+
+        GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+        while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+        {
+            spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+        }
+        spawnPos = spawn.transform.position;
+        gameObject.transform.position = new Vector3(0,0,0);
+        deathPos = gameObject.transform.position;
+        setPlayer();
+        dead = true;
+
+    }
+
     void Awake()
     {
         _state = type.none;
