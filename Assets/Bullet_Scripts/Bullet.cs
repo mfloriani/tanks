@@ -20,11 +20,12 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public bulletState currentState;
 
-    public int wallLayer = 9;
-    public int playerLayer = 6;
-    public int enemyLayer = 7;
-    public int destructibleWallLayer = 11;
-    public int safeLayer = 15;
+    private const int wallLayer = 9;
+    private const int playerLayer = 6;
+    private const int enemyLayer = 7;
+    private const int destructibleWallLayer = 11;
+    private const int safezoneLayer = 15;
+    private const int powerupLayer = 10;
 
     int bounces = 0;
     int playerWhoFired = 5;
@@ -122,6 +123,13 @@ public class Bullet : MonoBehaviour
         }
     }
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer == safezoneLayer)
+        {
+            Die();
+        }
     void bounce(Collision2D collision)
     {
         Vector2 wallNormal = collision.contacts[0].normal;  //get normalised vector of contact
