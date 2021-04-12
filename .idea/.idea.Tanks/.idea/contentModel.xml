@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\soapy\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\soapy\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Tanks.-544332857.00" t="ExcludeRecursive" />
-    <e p="D:\Work\Year 5-Masters\Development Project\Tanks" t="IncludeRecursive">
+    <e p="C:\Users\soapy\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Tanks.336441445.00" t="ExcludeRecursive" />
+    <e p="D:\Work\Year 5-Masters\Semester2\Development Project\Tanks" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Bullet_Scripts" t="Include">
@@ -12,21 +12,39 @@
         </e>
         <e p="Jason_Scripts" t="Include">
           <e p="AI_Algorithm.cs" t="Include" />
+          <e p="AI_Final" t="Include">
+            <e p="Master_AI.cs" t="Include" />
+            <e p="Turret_AI.cs" t="Include" />
+          </e>
           <e p="AI_V1.cs" t="Include" />
           <e p="AI_V2.cs" t="Include" />
           <e p="CurrentNode.cs" t="Include" />
+          <e p="Gamemanager.cs" t="Include" />
           <e p="RendererExtensions.cs" t="Include" />
           <e p="Rotation.cs" t="Include" />
         </e>
         <e p="Joe's Stuff" t="Include">
           <e p="ControllerInput.cs" t="Include" />
+          <e p="lifeCounter.cs" t="Include" />
+          <e p="mine.cs" t="Include" />
+          <e p="powerUp.cs" t="Include" />
+          <e p="safezone.cs" t="Include" />
           <e p="TankManager.cs" t="Include" />
         </e>
         <e p="Levels" t="Include">
           <e p="MultiplayerSetUp.cs" t="Include" />
         </e>
         <e p="Murilo" t="Include">
+          <e p="ControllerManager.cs" t="Include" />
+          <e p="ControllerMenu.cs" t="Include" />
+          <e p="GameManager_demo.cs" t="Include" />
+          <e p="GameUI.cs" t="Include" />
           <e p="MenuManager.cs" t="Include" />
+        </e>
+        <e p="Sohail" t="Include">
+          <e p="Gamemanager.cs" t="Include" />
+          <e p="Multiplayer1.cs" t="Include" />
+          <e p="Multiplayer2.cs" t="Include" />
         </e>
         <e p="Tank" t="Include">
           <e p="kenney_topdowntanksredux" t="Include">

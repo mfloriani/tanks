@@ -27,7 +27,7 @@ public class AI_V2 : MonoBehaviour
 
     [SerializeField] float timer = 0;
     [SerializeField] float timeTaken = 3.0f;
-    
+
     [SerializeField] Vector2 AIPos;
     [SerializeField] GameObject playerPos;
 
@@ -67,7 +67,7 @@ public class AI_V2 : MonoBehaviour
         currentNode = nodes[0];
         CalculateNextNode();
 
-        for(int i = 0; i < nodes.Count; i++)
+        for (int i = 0; i < nodes.Count; i++)
         {
             if (Vector2.Distance(nodes[i].transform.position, this.transform.position) < Vector2.Distance(nextNode, this.transform.position))
             {
@@ -89,13 +89,13 @@ public class AI_V2 : MonoBehaviour
 
         if (rayHitObject != null)
         {
-            if(rayHitObject.layer == tankLayer)
+            if (rayHitObject.layer == tankLayer)
             {
                 aiStates = AIStates.Attack;
             }
-            else if(rayHitObject.layer == wallLayer)
+            else if (rayHitObject.layer == wallLayer)
             {
-                if(aiStates == AIStates.Attack)
+                if (aiStates == AIStates.Attack)
                 {
                     aiStates = AIStates.Search;
                     bCanMove = true;
@@ -103,22 +103,22 @@ public class AI_V2 : MonoBehaviour
             }
         }
 
-        if(turret.currentBullets.Count == 0)
+        if (turret.currentBullets.Count == 0)
         {
             bHasFired = false;
         }
-        
 
 
 
-        if(aiStates == AIStates.Attack)
+
+        if (aiStates == AIStates.Attack)
         {
             targetNodePos = LastPlayerPosition(playerPos.transform.position);
-            Vector2 attackNode = new Vector2(500,500);
+            Vector2 attackNode = new Vector2(500, 500);
 
-            for(int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
-                if(nodes[i].transform.position.x == targetNodePos.x && nodes[i].transform.position.y == targetNodePos.y)
+                if (nodes[i].transform.position.x == targetNodePos.x && nodes[i].transform.position.y == targetNodePos.y)
                 {
                     for (int j = 0; j < nodes[i].GetComponent<CurrentNode>().accessibleNodes2D.Count; j++)
                     {
@@ -145,9 +145,9 @@ public class AI_V2 : MonoBehaviour
             tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
 
 
-            if(!bHasFired)
+            if (!bHasFired)
             {
-                turret.Fire(transform.rotation.eulerAngles.z);
+                turret.Fire(transform.rotation.eulerAngles.z,4);
                 bHasFired = true;
             }
         }
@@ -155,35 +155,32 @@ public class AI_V2 : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Node"))
+        if (other.CompareTag("Node"))
         {
-            this.transform.position = other.transform.position;
-
             currentNode = other.gameObject;
 
-            if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Wander)
+            if (other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Wander)
             {
-                while(newRandomIndex == randomIndex)
+                while (newRandomIndex == randomIndex)
                 {
                     randomIndex = Random.Range(0, nodes.Count);
                 }
                 newRandomIndex = randomIndex;
                 if (!bHasFired)
                 {
-                    turret.Fire(tankHead.transform.rotation.eulerAngles.z);
+                    turret.Fire(tankHead.transform.rotation.eulerAngles.z,4);
                     bHasFired = true;
                 }
                 targetNodePos = nodes[randomIndex].transform.position;
             }
-            else if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Search)
+            else if (other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Search)
             {
                 StartCoroutine(Rotate360());
             }
-            else if(other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Attack)
+            else if (other.transform.position.x == targetNodePos.x && other.transform.position.y == targetNodePos.y && aiStates == AIStates.Attack)
             {
                 bCanMove = false;
             }
-            CalculateNextNode();
         }
     }
 
@@ -242,9 +239,9 @@ public class AI_V2 : MonoBehaviour
     {
         Vector2 playerNode = nodes[0].transform.position;
 
-        for(int i = 0; i < nodes.Count; i++)
+        for (int i = 0; i < nodes.Count; i++)
         {
-            if(Vector2.Distance(nodes[i].transform.position, position) < Vector2.Distance(playerNode, position))
+            if (Vector2.Distance(nodes[i].transform.position, position) < Vector2.Distance(playerNode, position))
             {
                 playerNode = nodes[i].transform.position;
             }
@@ -254,17 +251,17 @@ public class AI_V2 : MonoBehaviour
 
     IEnumerator Rotate360()
     {
-            float startRotation = transform.eulerAngles.z;
-            float endRotation = startRotation + 360.0f;
-            float t = 0.0f;
+        float startRotation = transform.eulerAngles.z;
+        float endRotation = startRotation + 360.0f;
+        float t = 0.0f;
 
-            while (t < 5 && aiStates != AIStates.Attack)
-            {
-                t += Time.deltaTime;
-                float zRotation = Mathf.Lerp(startRotation, endRotation, t / 5) % 360.0f;
-                tankHead.transform.eulerAngles = new Vector3(tankHead.transform.eulerAngles.x, tankHead.transform.eulerAngles.y, zRotation);
-                yield return null;
-            }
+        while (t < 5 && aiStates != AIStates.Attack)
+        {
+            t += Time.deltaTime;
+            float zRotation = Mathf.Lerp(startRotation, endRotation, t / 5) % 360.0f;
+            tankHead.transform.eulerAngles = new Vector3(tankHead.transform.eulerAngles.x, tankHead.transform.eulerAngles.y, zRotation);
+            yield return null;
+        }
 
         aiStates = AIStates.Wander;
         targetNodePos = nodes[randomIndex].transform.position;

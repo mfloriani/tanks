@@ -22,10 +22,10 @@ public class GameUI : MonoBehaviour
 
     void OnEnable()
     {
-        _p1 = transform.Find("P1");
-        _p2 = transform.Find("P2");
-        _p3 = transform.Find("P3");
-        _p4 = transform.Find("P4");
+        _p1 = transform.Find("PlayerGameUI 1");
+        _p2 = transform.Find("PlayerGameUI 2");
+        _p3 = transform.Find("PlayerGameUI 3");
+        _p4 = transform.Find("PlayerGameUI 4");
         ActivatePlayersUI();
     }
 

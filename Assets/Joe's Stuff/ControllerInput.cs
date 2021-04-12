@@ -12,6 +12,7 @@ public class ControllerInput : MonoBehaviour
     private float speedR;
     private bool reverseL;
     private bool reverseR;
+    private bool mine;
     [SerializeField] private int _player = 0;
 
     private bool fire;
@@ -27,9 +28,13 @@ public class ControllerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tank.player = player;
+        setPlayer(player);
+    }
 
-        playerprefix = "Joy" + (player+1) + "_";
+    public void setPlayer(int plr)
+    {
+        tank.player = plr;
+        playerprefix = "Joy" + (player + 1) + "_";
     }
 
     // Update is called once per frame
@@ -42,15 +47,15 @@ public class ControllerInput : MonoBehaviour
         reverseL = Input.GetButton(playerprefix + "LB");
         reverseR = Input.GetButton(playerprefix + "RB");
 
-        fire = Input.GetButton( playerprefix + "A");
+        fire = Input.GetButtonDown( playerprefix + "A");
         honk = Input.GetButtonDown(playerprefix + "B");
-
+        mine = Input.GetButtonDown(playerprefix + "X");
         int rL = reverseL ? 1 : 0;
         tank.lTrack = speedL-rL;
 
         int rR = reverseR ? 1 : 0;
         tank.rTrack = speedR - rR;
-
+        tank.mining = mine;
         tank.firing = fire;
 
         tank.honking = honk;
