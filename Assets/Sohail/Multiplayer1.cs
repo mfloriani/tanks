@@ -13,12 +13,14 @@ public class Multiplayer1 : MonoBehaviour
     private ControllerInput _controllerInput;
 
 
-    private readonly GameObject[] _positions = GameObject.FindGameObjectsWithTag("Platform");
+    private  GameObject[] _positions; 
     public TankManager[] tanks;
 
     // Start is called before the first frame update
     void Start()
     {
+        
+        _positions = GameObject.FindGameObjectsWithTag("Platform").;
         for (int i = 0; i < playerAmount; i++)
         {
            tanks[i]= Instantiate(tank);
