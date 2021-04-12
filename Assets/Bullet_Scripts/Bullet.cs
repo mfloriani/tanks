@@ -20,10 +20,12 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public bulletState currentState;
 
-    private int wallLayer = 9;
-    public int playerLayer = 6;
-    public int enemyLayer = 7;
-    public int destructibleWallLayer = 11;
+    private const int wallLayer = 9;
+    private const int playerLayer = 6;
+    private const int enemyLayer = 7;
+    private const int destructibleWallLayer = 11;
+    private const int safezoneLayer = 15;
+    private const int powerupLayer = 10;
 
     private void Awake()
     {
@@ -79,6 +81,14 @@ public class Bullet : MonoBehaviour
                 GameObject newExplosion = Instantiate(explosion, collision.gameObject.transform.position, Quaternion.identity);
                 newExplosion.GetComponent<ParticleSystem>().Play();
             }
+            Die();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer == safezoneLayer)
+        {
             Die();
         }
     }
