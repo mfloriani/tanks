@@ -44,13 +44,24 @@ public class mine : MonoBehaviour
             {
                 case playerLayer:
                     if (collision.gameObject.GetComponent<TankManager>() != null)
-                    //if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
+                    if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().player != player)
                     {
                         collision.gameObject.GetComponent<TankManager>().Die();
                         GetComponent<Collider2D>().enabled = false;
-                        Debug.Log("A mine went off!");
-                        Destroy(gameObject);
+                            ++GameObject.Find("Tank " + player).GetComponent<TankManager>().score;
+                            Debug.Log("Tank " + player + " has mined another player, and scored a point. Their score is now " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "!");
+                            Destroy(gameObject);
                     }
+                    else
+                        {
+                            collision.gameObject.GetComponent<TankManager>().Die();
+                            --GameObject.Find("Tank " + player).GetComponent<TankManager>().score;
+                            GetComponent<Collider2D>().enabled = false;
+                            Debug.Log("A mine went off!");
+                            Debug.Log("Tank " + player + " has ran over their own mine, and lost a point. Their score is now " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "... what an idiot!");
+                            Destroy(gameObject);
+
+                        }
                     break;
                 case enemyLayer:
                     if (collision.gameObject.GetComponent<TankManager>() != null)
