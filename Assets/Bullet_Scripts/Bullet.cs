@@ -20,26 +20,27 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public bulletState currentState;
 
-    public int wallLayer = 9;
-    public int playerLayer = 6;
-    public int enemyLayer = 7;
-    public int destructibleWallLayer = 11;
-    public int safeLayer = 15;
+    private const int wallLayer = 9;
+    private const int playerLayer = 6;
+    private const int enemyLayer = 7;
+    private const int destructibleWallLayer = 11;
+    private const int safeLayer = 15;
+    private const int powerupLayer = 10;
 
     int bounces = 0;
     int playerWhoFired = 5;
-    
+
 
     // Start is called before the first frame update
     private void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     private void Update()
     {
-        
+
     }
 
     public void SetBulletState(bulletState newState)
@@ -53,7 +54,7 @@ public class Bullet : MonoBehaviour
     {
         transform.Translate(gameObject.transform.up * moveSpeed * Time.deltaTime, Space.World);
 
-     }
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -71,15 +72,15 @@ public class Bullet : MonoBehaviour
             }
             else
             {
-                    collision.gameObject.GetComponent<TankManager>().Die();
-                    --GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                    Debug.Log("Tank " + playerWhoFired + " has hit themselves, and lost a point. Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
+                collision.gameObject.GetComponent<TankManager>().Die();
+                --GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                Debug.Log("Tank " + playerWhoFired + " has hit themselves, and lost a point. Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
             }
-               // bounce(collision);
-            
+            // bounce(collision);
+
 
         }
-        if(collision.gameObject.layer == enemyLayer)
+        if (collision.gameObject.layer == enemyLayer)
         {
             if (collision.gameObject.GetComponent<TankManager>() != null)
             {
@@ -89,14 +90,14 @@ public class Bullet : MonoBehaviour
             }
             Die();
         }
-        if(collision.gameObject.layer == wallLayer)
+        if (collision.gameObject.layer == wallLayer)
         {
             if (bounces <= 0)
                 Die();
             else
                 bounce(collision);
         }
-        if(collision.gameObject.layer == safeLayer)
+        if (collision.gameObject.layer == safeLayer)
         {
             Die();
         }
@@ -118,7 +119,16 @@ public class Bullet : MonoBehaviour
             {
                 //ROTATE THE BULLET HERE
                 bounce(collision);
+            }
         }
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == safeLayer)
+        {
+            Die();
         }
     }
 
@@ -131,7 +141,7 @@ public class Bullet : MonoBehaviour
         Debug.Log(moveDir);
         --bounces;
     }
-    public void SetOwner (int player)
+    public void SetOwner(int player)
     {
         playerWhoFired = player;
     }
