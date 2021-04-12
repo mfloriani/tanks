@@ -42,6 +42,8 @@ public class TankManager : MonoBehaviour
     public Sprite[] lifecounter;
     private float frac = 0;
 
+    public bool ai;
+
     Vector3 spawnPos;
     Vector3 deathPos;
     private int _minecount;
@@ -164,7 +166,12 @@ public bool hot;
         gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
         gameObject.name = ("Tank " + player);
+        if(!ai)
         gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
+        else
+            Destroy(gameObject.GetComponentInChildren<lifeCounter>().gameObject);
+
+
 
     }
 
@@ -201,11 +208,13 @@ public bool hot;
             gameObject.GetComponent<Collider2D>().enabled = false;
             rTrack = 0;
             lTrack = 0;
-
             StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
-            --_lives;
-            Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
-        }
+            if (!ai)
+            {
+                --_lives;
+                Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
+            }
+            }
         else
         {
             Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
@@ -220,14 +229,14 @@ public bool hot;
         yield return new WaitForSeconds(1);         //wait for sound and explosion to play
         
         Destroy(db);                        //delete the explosion
-        if (_lives <= 0)
+        if (_lives <= 0 )
         {
             Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
-            GetComponentInChildren<lifeCounter>().changeVis(false);
+            try { GetComponentInChildren<lifeCounter>().changeVis(false); }
+            catch { Debug.Log(gameObject + " tried to access its lifecounter, but it had an error - maybe it's intentional that " +gameObject.name+ " didn't have one?");  }
         }
         else
         {
-
             GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
             while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
             {
@@ -287,7 +296,16 @@ public bool hot;
         _smoke = gameObject.GetComponent<ParticleSystem>();
         if (_player == null) _player = 0;
 
-        spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
+        if (ai == null) ai = false;
+
+        if (ai)
+        {
+            spawnPoints = GameObject.FindGameObjectsWithTag("AI_Spawn");
+            _lives = 10;
+        }
+        else
+            spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
+
 
         setPlayer();
 
