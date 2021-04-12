@@ -70,8 +70,12 @@ public class Bullet : MonoBehaviour
                 Die();
             }
             else
-
-                bounce(collision);
+            {
+                    collision.gameObject.GetComponent<TankManager>().Die();
+                    --GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                    Debug.Log("Tank " + playerWhoFired + " has hit themselves, and lost a point. Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
+            }
+               // bounce(collision);
             
 
         }

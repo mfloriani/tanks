@@ -28,9 +28,13 @@ public class ControllerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tank.player = player;
+        setPlayer(player);
+    }
 
-        playerprefix = "Joy" + (player+1) + "_";
+    public void setPlayer(int plr)
+    {
+        tank.player = plr;
+        playerprefix = "Joy" + (player + 1) + "_";
     }
 
     // Update is called once per frame
