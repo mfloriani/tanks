@@ -20,7 +20,7 @@ public class Multiplayer1 : MonoBehaviour
     void Start()
     {
         
-        _positions = GameObject.FindGameObjectsWithTag("Platform").;
+        _positions = GameObject.FindGameObjectsWithTag("Platform");
         for (int i = 0; i < playerAmount; i++)
         {
            tanks[i]= Instantiate(tank);
