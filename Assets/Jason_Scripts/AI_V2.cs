@@ -41,7 +41,6 @@ public class AI_V2 : MonoBehaviour
         Wander,
     };
 
-    [SerializeField] bool bCoroutineStart = false;
     [SerializeField] bool bCanMove = true;
 
     [SerializeField] AIStates aiStates;
@@ -207,30 +206,24 @@ public class AI_V2 : MonoBehaviour
             if (timer > timeTaken)
             {
                 CalculateNextNode();
+
+                bCanMove = false;
+                StartCoroutine(AIRot());
             }
             else
             {
-                Vector3 headRot;
-
                 float speed = timer / timeTaken;
 
                 float rotSpeed = 5.0f;
 
                 transform.position = Vector2.Lerp(AIPos, nextNode, speed);
 
-                if (aiStates == AIStates.Attack)
-                {
-                    headRot = tankHead.transform.rotation.eulerAngles;
-                }
-                else
-                {
-                    headRot = transform.rotation.eulerAngles;
-                }
 
                 Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
                 float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
                 Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
                 transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
+                tankHead.transform.rotation = Quaternion.Slerp(transform.rotation,q,Time.deltaTime * 5.0f);
             }
         }
     }
@@ -267,6 +260,32 @@ public class AI_V2 : MonoBehaviour
         targetNodePos = nodes[randomIndex].transform.position;
         target.transform.position = targetNodePos;
         CalculateNextNode();
+        yield return null;
+    }
+
+    IEnumerator AIRot()
+    {
+        CalculateNextNode();
+
+        float rotSpeed = 5.0f;
+
+        Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
+
+        Debug.Log(angle);
+
+        float time = 0;
+
+        while (time <= 3)
+        {
+            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+            tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
+            time += Time.deltaTime;
+            Debug.Log(time);
+            yield return null;
+        }
+        Debug.Log("Out");
+        bCanMove = true;
         yield return null;
     }
 }
