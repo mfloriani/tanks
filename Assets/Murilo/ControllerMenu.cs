@@ -17,10 +17,18 @@ public class ControllerMenu : MonoBehaviour
     {
         //Debug.Log("ControllerMenu.Start()");
 
-        
+        if (MenuManager.Instance.ControllerAvatar.Length == 0)
+        {
+            Debug.LogError("No controller avatars set in the GameManager gameobject!");
+        }
+
+        for (int i = 0; i < _players.Length; ++i)
+        {
+            _players[i].Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.ControllerAvatar[i];
+        }
     }
 
-    
+
     void Update()
     {
         if (MenuManager.Instance.IsInGame())
@@ -174,10 +182,14 @@ public class ControllerMenu : MonoBehaviour
     void Reset()
     {
         _starting = false;
-        var controllers = MenuManager.Instance.GetControllers();
-        foreach (var p in controllers)
+        try
         {
-            RemovePlayer(p.Id);
+            var controllers = MenuManager.Instance.GetControllers();
+            foreach (var p in controllers)
+            {
+                RemovePlayer(p.Id);
+            }
         }
+        catch (System.Exception e) { }
     }
 }
