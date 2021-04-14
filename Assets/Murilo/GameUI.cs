@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
@@ -26,6 +27,17 @@ public class GameUI : MonoBehaviour
         _p2 = transform.Find("PlayerGameUI 2");
         _p3 = transform.Find("PlayerGameUI 3");
         _p4 = transform.Find("PlayerGameUI 4");
+
+        if(MenuManager.Instance.PlayerAvatar.Length == 0)
+        {
+            Debug.LogError("No player avatars set in the GameManager gameobject!");
+        }
+
+        _p1.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[0];
+        _p2.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[1];
+        _p3.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[2];
+        _p4.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[3];
+
         ActivatePlayersUI();
     }
 
@@ -40,32 +52,43 @@ public class GameUI : MonoBehaviour
         {
             case PlayerId.Player1:
 
-                _p1.Find("Controller").gameObject.SetActive(true);
+                _p1.Find("Join").gameObject.SetActive(false);
+                _p1.Find("Joined").gameObject.SetActive(true);
                 break;
 
             case PlayerId.Player2:
 
-                _p2.Find("Controller").gameObject.SetActive(true);
+                _p2.Find("Join").gameObject.SetActive(false);
+                _p2.Find("Joined").gameObject.SetActive(true);
                 break;
 
             case PlayerId.Player3:
 
-                _p3.Find("Controller").gameObject.SetActive(true);
+                _p3.Find("Join").gameObject.SetActive(false);
+                _p3.Find("Joined").gameObject.SetActive(true);
                 break;
 
             case PlayerId.Player4:
 
-                _p4.Find("Controller").gameObject.SetActive(true);
+                _p4.Find("Join").gameObject.SetActive(false);
+                _p4.Find("Joined").gameObject.SetActive(true);
                 break;
         }
     }
 
     public void ResetPlayersUI()
     {
-        _p1.Find("Controller").gameObject.SetActive(false);
-        _p2.Find("Controller").gameObject.SetActive(false);
-        _p3.Find("Controller").gameObject.SetActive(false);
-        _p4.Find("Controller").gameObject.SetActive(false);
+        _p1.Find("Join").gameObject.SetActive(true);
+        _p1.Find("Joined").gameObject.SetActive(false);
+
+        _p2.Find("Join").gameObject.SetActive(true);
+        _p2.Find("Joined").gameObject.SetActive(false);
+
+        _p3.Find("Join").gameObject.SetActive(true);
+        _p3.Find("Joined").gameObject.SetActive(false);
+
+        _p4.Find("Join").gameObject.SetActive(true);
+        _p4.Find("Joined").gameObject.SetActive(false);
     }
 
     public void ActivatePlayersUI()
