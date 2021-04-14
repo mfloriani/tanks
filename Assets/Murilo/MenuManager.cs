@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 enum GameMode
 {
@@ -14,6 +15,10 @@ enum GameMode
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
+
+    //public Image[] PlayerAvatar;
+    public Sprite[] PlayerAvatar;
+    public Sprite[] ControllerAvatar;
     
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
