@@ -19,8 +19,8 @@ public class AI_V2 : MonoBehaviour
     Vector2 attackNode;
 
     [SerializeField] GameObject currentNode;
-    [SerializeField] GameObject target;
-    [SerializeField] GameObject newNode;
+    //[SerializeField] GameObject target;
+    //[SerializeField] GameObject newNode;
     [SerializeField] GameObject tankHead;
 
     public GameObject rayHitObject;
@@ -81,7 +81,7 @@ public class AI_V2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        target.transform.position = targetNodePos;
+        //target.transform.position = targetNodePos;
 
         MoveAISmooth();
 
@@ -190,7 +190,6 @@ public class AI_V2 : MonoBehaviour
             if (Vector2.Distance(currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position, targetNodePos) < Vector2.Distance(nextNode, targetNodePos))
             {
                 nextNode = currentNode.GetComponent<CurrentNode>().accessibleNodes2D[i].transform.position;
-                newNode.transform.position = nextNode;
                 timer = 0;
                 AIPos = transform.position;
             }
@@ -258,7 +257,6 @@ public class AI_V2 : MonoBehaviour
 
         aiStates = AIStates.Wander;
         targetNodePos = nodes[randomIndex].transform.position;
-        target.transform.position = targetNodePos;
         CalculateNextNode();
         yield return null;
     }
