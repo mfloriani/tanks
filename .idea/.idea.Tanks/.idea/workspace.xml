@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fc6e8733-008b-4ef4-855b-e22b32b979e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Tanks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Tanks/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Levels/Level2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Levels/Level2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Levels/Level3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Levels/Level3.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Sohail/Multiplayer1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sohail/Multiplayer1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Tank/kenney_topdowntanksredux/PNG/Default size/Sand Level.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Tank/kenney_topdowntanksredux/PNG/Default size/Sand Level.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +76,7 @@
       <workItem from="1618064832146" duration="5977000" />
       <workItem from="1618232345349" duration="3931000" />
       <workItem from="1618491692783" duration="4840000" />
-      <workItem from="1618575152658" duration="1462000" />
+      <workItem from="1618575152658" duration="3046000" />
     </task>
     <servers />
   </component>
