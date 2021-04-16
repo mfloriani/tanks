@@ -120,9 +120,9 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
 
         if (_selectedMode == GameMode.Normal)
-            SceneManager.LoadScene("Skirmish_demo");
+            SceneManager.LoadScene(1);
         else if (_selectedMode == GameMode.BattleRoyale)
-            SceneManager.LoadScene("Battle_royale_demo");
+            SceneManager.LoadScene(2);
     }
 
     public void Quit()

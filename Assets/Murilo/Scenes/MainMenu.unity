@@ -222,9 +222,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -197
       objectReference: {fileID: 0}
+    - target: {fileID: 6841468402062218248, guid: ce9339390e1f7b445a7e74e440ab4927, type: 3}
+      propertyPath: _countdownMaxTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6841468402719808769, guid: ce9339390e1f7b445a7e74e440ab4927, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6841468403143858328, guid: ce9339390e1f7b445a7e74e440ab4927, type: 3}
+      propertyPath: m_text
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6841468403279191968, guid: ce9339390e1f7b445a7e74e440ab4927, type: 3}
       propertyPath: m_IsActive
