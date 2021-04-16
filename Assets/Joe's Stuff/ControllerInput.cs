@@ -34,6 +34,7 @@ public class ControllerInput : MonoBehaviour
     public void setPlayer(int plr)
     {
         tank.player = plr;
+        player = plr;
         playerprefix = "Joy" + (player + 1) + "_";
     }
 
