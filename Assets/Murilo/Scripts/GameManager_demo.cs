@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager_demo : MonoBehaviour
 {
+    [SerializeField] GameObject TankPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +30,17 @@ public class GameManager_demo : MonoBehaviour
     void SpawnNewPlayer(PlayerId id)
     {
         Debug.Log(id + " spawned");
+
+        var t = Instantiate(TankPrefab);
+        t.GetComponent<ControllerInput>().player = ((int)id) - 1;
+        t.GetComponent<ControllerInput>().setPlayer(((int)id)-1);
+
+        WaitToSpawn(t);
+    }
+
+    IEnumerator WaitToSpawn(GameObject tank)
+    {
+        yield return new WaitForSeconds(1);
+        tank.GetComponent<TankManager>().Spawn();
     }
 }

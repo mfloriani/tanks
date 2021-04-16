@@ -178,7 +178,7 @@ public bool hot;
         }
         gameObject.name = ("Tank " + player);
         if(!ai)
-        gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
+            gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
         else
             Destroy(gameObject.GetComponentInChildren<lifeCounter>().gameObject);
 
