@@ -65,16 +65,18 @@ public class Bullet : MonoBehaviour
                 if (collision.gameObject.GetComponent<TankManager>() != null)
                 {
                     collision.gameObject.GetComponent<TankManager>().Die();
-                    ++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                    Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", and scored a point for themselves! Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
+                    //++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                    Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", but won't have scored - this isn't PvP! Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
                 }
                 Die();
             }
             else
             {
-                collision.gameObject.GetComponent<TankManager>().Die();
-                --GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                Debug.Log("Tank " + playerWhoFired + " has hit themselves, and lost a point. Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
+
+                    collision.gameObject.GetComponent<TankManager>().Die();
+                    //--GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                    Debug.Log("Tank " + playerWhoFired + " has hit themselves, and NOT lost a point. Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
+                Die();
             }
             // bounce(collision);
 

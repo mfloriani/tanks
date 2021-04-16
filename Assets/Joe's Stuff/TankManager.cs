@@ -40,6 +40,7 @@ public class TankManager : MonoBehaviour
     public AudioClip dropSound;
     public GameObject[] spawnPoints;
     public Sprite[] lifecounter;
+    public Sprite[] aiSprites;
     private float frac = 0;
 
     public bool ai;
@@ -161,10 +162,19 @@ public bool hot;
 
     private void setPlayer()
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = bodySprites[_player];
-        gameObject.GetComponent<AudioSource>().clip = hornSounds[_player];
-        gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
-        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
+        if (!ai)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = bodySprites[_player];
+            gameObject.GetComponent<AudioSource>().clip = hornSounds[_player];
+            gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = turretSprites[_player];
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = shellSprites[_player];
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = aiSprites[0];
+            gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[1];
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[2];
+        }
         gameObject.name = ("Tank " + player);
         if(!ai)
         gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
@@ -208,19 +218,41 @@ public bool hot;
             gameObject.GetComponent<Collider2D>().enabled = false;
             rTrack = 0;
             lTrack = 0;
-            StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
+
             if (!ai)
             {
+                StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
                 --_lives;
                 Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
             }
+
+            else
+            {
+                StartCoroutine(AIRespawn(deathBoom));
+                Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
             }
-        else
-        {
-            Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
         }
     }
 
+    IEnumerator AIRespawn(GameObject db)
+    {
+        yield return new WaitForSeconds(2);         //wait for sound and explosion to play
+        if (_lives <= 0)
+        {
+            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+        }
+        else
+        {
+            GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+            {
+                spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            }
+            spawnPos = spawn.transform.position;
+            deathPos = gameObject.transform.position;
+            dead = true;
+        }
+    }
     IEnumerator WaitForRespawn(GameObject db)
     {
         GetComponentInChildren<lifeCounter>().changeVis(true); // make the life counter visible
@@ -232,8 +264,7 @@ public bool hot;
         if (_lives <= 0 )
         {
             Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
-            try { GetComponentInChildren<lifeCounter>().changeVis(false); }
-            catch { Debug.Log(gameObject + " tried to access its lifecounter, but it had an error - maybe it's intentional that " +gameObject.name+ " didn't have one?");  }
+            GetComponentInChildren<lifeCounter>().changeVis(false);
         }
         else
         {
@@ -332,9 +363,13 @@ public bool hot;
                     gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
                     gameObject.GetComponent<ControllerInput>().enabled = true;
                     gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
+                if (!ai)
+                {
                     GetComponentInChildren<lifeCounter>().changeVis(false);
+
                     gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f);                     //play the sound given in the editor to tankmanager
-            }
+                }
+                }
         }
     }
 
