@@ -19,8 +19,6 @@ public class AI_V2 : MonoBehaviour
     Vector2 attackNode;
 
     [SerializeField] GameObject currentNode;
-    //[SerializeField] GameObject target;
-    //[SerializeField] GameObject newNode;
     [SerializeField] GameObject tankHead;
 
     public GameObject rayHitObject;
@@ -146,7 +144,7 @@ public class AI_V2 : MonoBehaviour
 
             if (!bHasFired)
             {
-                turret.Fire(transform.rotation.eulerAngles.z,4);
+                turret.Fire(transform.rotation.eulerAngles.z, 4);
                 bHasFired = true;
             }
         }
@@ -167,7 +165,7 @@ public class AI_V2 : MonoBehaviour
                 newRandomIndex = randomIndex;
                 if (!bHasFired)
                 {
-                    turret.Fire(tankHead.transform.rotation.eulerAngles.z,4);
+                    turret.Fire(tankHead.transform.rotation.eulerAngles.z, 4);
                     bHasFired = true;
                 }
                 targetNodePos = nodes[randomIndex].transform.position;
@@ -222,7 +220,11 @@ public class AI_V2 : MonoBehaviour
                 float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
                 Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
                 transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
-                tankHead.transform.rotation = Quaternion.Slerp(transform.rotation,q,Time.deltaTime * 5.0f);
+
+                if (aiStates != AIStates.Attack)
+                {
+                    tankHead.transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5.0f);
+                }
             }
         }
     }
@@ -274,7 +276,7 @@ public class AI_V2 : MonoBehaviour
 
         float time = 0;
 
-        while (time <= 3)
+        while (time <= 3 && tankHead.transform.eulerAngles != this.transform.eulerAngles)
         {
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
             tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
@@ -285,5 +287,30 @@ public class AI_V2 : MonoBehaviour
         Debug.Log("Out");
         bCanMove = true;
         yield return null;
+    }
+
+    public void ResetValues()
+    {
+        randomIndex = 0;
+        newRandomIndex = 0;
+        bHasFired = false;
+        timer = 0;
+        timeTaken = 3.0f;
+
+        targetNodePos = new Vector2(0, 0);
+        nextNode = new Vector2(0, 0);
+        attackNode = new Vector2(0, 0);
+
+        currentNode = null;
+        tankHead = null;
+
+        rayHitObject = null;
+
+
+        AIPos = new Vector2(0, 0);
+        playerPos = null;
+        bCanMove = true;
+
+        Start();
     }
 }
