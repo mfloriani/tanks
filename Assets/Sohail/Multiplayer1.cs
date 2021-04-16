@@ -25,7 +25,7 @@ public class Multiplayer1 : MonoBehaviour
             tanks[i] = Instantiate(tank);
            
             tanks[i].GetComponent<TankManager>().Spawn();
-           tanks[i].GetComponent<ControllerInput>().setPlayer(i);
+           tanks[i].GetComponent<ControllerInput>().player = i;
         }
     }
 

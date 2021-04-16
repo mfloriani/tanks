@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == playerLayer && collision.gameObject.GetComponent<TankManager>().health <=0)          //remove from lives
+        if (collision.gameObject.layer == playerLayer)
         {
             if (collision.gameObject.GetComponent<TankManager>().player != playerWhoFired)
             {
@@ -82,48 +82,28 @@ public class Bullet : MonoBehaviour
 
 
         }
-        else if (collision.gameObject.layer == playerLayer)
-        {
-            if (collision.gameObject.GetComponent<TankManager>().player != playerWhoFired)
-            {
-                if (collision.gameObject.GetComponent<TankManager>() != null)
-                {
-                    collision.gameObject.GetComponent<TankManager>().Die();
-                    //++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                    Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", but didn't kill them! " + collision.gameObject.name + "'s HP is now " + collision.gameObject.GetComponent<TankManager>().health);
-                }
-                
-            }
-            else
-            {
-
-                collision.gameObject.GetComponent<TankManager>().Die();
-                //--GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                Debug.Log("Tank " + playerWhoFired + " has hit themselves, but not died! Their HP is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().health + "... what an idiot!");
-                
-            }
-        }
-        else if (collision.gameObject.layer == enemyLayer)              //remove from health
+        if (collision.gameObject.layer == enemyLayer)
         {
             if (collision.gameObject.GetComponent<TankManager>() != null)
             {
                 collision.gameObject.GetComponent<TankManager>().Die();
-                //++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                ++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
                 Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", and scored a point for themselves! Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
             }
+            Die();
         }
-        else if (collision.gameObject.layer == wallLayer)
+        if (collision.gameObject.layer == wallLayer)
         {
             if (bounces <= 0)
                 Die();
             else
                 bounce(collision);
         }
-        else if (collision.gameObject.layer == safeLayer)
+        if (collision.gameObject.layer == safeLayer)
         {
             Die();
         }
-        else if (collision.gameObject.layer == destructibleWallLayer)
+        if (collision.gameObject.layer == destructibleWallLayer)
         {
             if (currentState == bulletState.power)
             {
