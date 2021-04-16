@@ -42,8 +42,8 @@ public class TankManager : MonoBehaviour
     public Sprite[] lifecounter;
     public Sprite[] aiSprites;
     private float frac = 0;
-
     public bool ai;
+    public bool useHP;
 
     Vector3 spawnPos;
     Vector3 deathPos;
@@ -150,6 +150,12 @@ public bool hot;
         set { _minecount = value; }
     }
 
+    public int health
+    {
+        get { return _health;  }
+        set { _health = value; }
+    }
+
 
     private float AimAngle()              //convert thumbstick axes data into angle (degrees) for aiming turret
     {
@@ -162,6 +168,18 @@ public bool hot;
 
     private void setPlayer()
     {
+        if (!useHP)
+        {
+            _lives = 3;
+            _health = 0;
+            gameObject.GetComponentInChildren<lifeCounter>().changeVis(true);
+        }
+        else
+        {
+            _lives = 1;
+            _health = 25;
+            gameObject.GetComponentInChildren<lifeCounter>().changeVis(false);
+        }
         if (!ai)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = bodySprites[_player];
@@ -180,9 +198,6 @@ public bool hot;
         gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
         else
             Destroy(gameObject.GetComponentInChildren<lifeCounter>().gameObject);
-
-
-
     }
 
     private void Drive()    //this DOES work
@@ -214,6 +229,7 @@ public bool hot;
             deathBoom.GetComponent<ParticleSystem>().Play();
             gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
             gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
+            if(!ai)
             gameObject.GetComponent<ControllerInput>().enabled = false;
             gameObject.GetComponent<Collider2D>().enabled = false;
             rTrack = 0;
@@ -240,6 +256,7 @@ public bool hot;
         if (_lives <= 0)
         {
             Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            Destroy(gameObject);
         }
         else
         {
@@ -252,6 +269,7 @@ public bool hot;
             deathPos = gameObject.transform.position;
             dead = true;
         }
+        gameObject.GetComponent<AI_V2>().ResetValues();
     }
     IEnumerator WaitForRespawn(GameObject db)
     {
@@ -283,6 +301,7 @@ public bool hot;
     {
         gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
         gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
+        if(!ai)
         gameObject.GetComponent<ControllerInput>().enabled = false;
         gameObject.GetComponent<Collider2D>().enabled = false;
         rTrack = 0;
@@ -318,9 +337,8 @@ public bool hot;
     void Start()
     {
         _state = type.none;
-        _lives = 3;
-        _health = 1;
-        _body = gameObject.GetComponent<Rigidbody2D>();
+
+            _body = gameObject.GetComponent<Rigidbody2D>();
         _readyToFire = false;
         _speed = 2.0f;
         _gun = gameObject.transform.GetChild(0).gameObject;
@@ -361,7 +379,8 @@ public bool hot;
                     gameObject.GetComponent<Collider2D>().enabled = true;
                
                     gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
-                    gameObject.GetComponent<ControllerInput>().enabled = true;
+                if(!ai)   
+                gameObject.GetComponent<ControllerInput>().enabled = true;
                     gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
                 if (!ai)
                 {
