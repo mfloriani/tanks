@@ -276,7 +276,7 @@ public class AI_V2 : MonoBehaviour
 
         float time = 0;
 
-        while (time <= 3)
+        while (time <= 3 && tankHead.transform.eulerAngles != this.transform.eulerAngles)
         {
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
             tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
@@ -310,5 +310,7 @@ public class AI_V2 : MonoBehaviour
         AIPos = new Vector2(0, 0);
         playerPos = null;
         bCanMove = true;
+
+        Start();
     }
 }

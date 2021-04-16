@@ -42,6 +42,10 @@ public class TankManager : MonoBehaviour
     public Sprite[] lifecounter;
     public Sprite[] aiSprites;
     private float frac = 0;
+
+    public GameObject currentPowerUp;
+
+
     public bool ai;
     public bool useHP;
 
@@ -246,6 +250,12 @@ public bool hot;
             {
                 StartCoroutine(AIRespawn(deathBoom));
                 Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
+            }
+
+            if(_state != type.none)
+            {
+                GameObject droppedPowerUp = Instantiate(currentPowerUp, transform.position, Quaternion.identity);
+                droppedPowerUp.GetComponent<powerUp>().GetEffect();
             }
         }
     }

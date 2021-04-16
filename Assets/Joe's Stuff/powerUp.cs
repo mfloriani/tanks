@@ -33,6 +33,11 @@ public class powerUp : MonoBehaviour
 
     }
 
+    public TankManager.type GetEffect()
+    {
+        return effect;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -61,8 +66,8 @@ public class powerUp : MonoBehaviour
                 int i = Random.Range(0, 4);
                 effect = (TankManager.type)(i + 1);
                 gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
+                collision.gameObject.GetComponent<TankManager>().currentPowerUp = gameObject;
                 StartCoroutine(wait());
-
             }
         }   
     }
