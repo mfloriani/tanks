@@ -108,8 +108,8 @@ public class AI_V2 : MonoBehaviour
 
 
 
-        if (aiStates == AIStates.Attack)
-        {
+        if (aiStates == AIStates.Attack && playerPos)
+        {   
             targetNodePos = LastPlayerPosition(playerPos.transform.position);
             Vector2 attackNode = new Vector2(500, 500);
 
@@ -272,7 +272,7 @@ public class AI_V2 : MonoBehaviour
         Vector3 vectorToTarget = new Vector3(nextNode.x - transform.position.x, nextNode.y - transform.position.y, 0.0f);
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
 
-        Debug.Log(angle);
+        //Debug.Log(angle);
 
         float time = 0;
 
@@ -281,10 +281,10 @@ public class AI_V2 : MonoBehaviour
             Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
             tankHead.transform.rotation = Quaternion.Slerp(tankHead.transform.rotation, q, Time.deltaTime * rotSpeed);
             time += Time.deltaTime;
-            Debug.Log(time);
+            //Debug.Log(time);
             yield return null;
         }
-        Debug.Log("Out");
+        //Debug.Log("Out");
         bCanMove = true;
         yield return null;
     }

@@ -96,6 +96,12 @@ public class ControllerManager
         }
     }
 
+    public void PlayerJoinedArcadeMode(int id)
+    {
+        _controllers[id].Selected = true;
+        _controllers[id].Confirmed = true;
+    }
+
     public bool IsPlayerActive(PlayerId id)
     {
         int index = (int)id - 1;

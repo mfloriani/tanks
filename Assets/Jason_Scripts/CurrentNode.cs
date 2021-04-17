@@ -119,7 +119,7 @@ public class CurrentNode : MonoBehaviour
 
         CreateNodeListDiagonal2D();
 
-        Debug.Log("List Made");
+        //Debug.Log("List Made");
     }
 
     void CreateNodeListDiagonal2D()

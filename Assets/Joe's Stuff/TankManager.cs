@@ -180,10 +180,11 @@ public bool hot;
         if(!ai)
             gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
         else
-            Destroy(gameObject.GetComponentInChildren<lifeCounter>().gameObject);
-
-
-
+        {
+            var lifeCounter = gameObject.GetComponentInChildren<lifeCounter>();
+            if(lifeCounter)
+                Destroy(lifeCounter.gameObject);
+        }
     }
 
     private void Drive()    //this DOES work
@@ -210,12 +211,16 @@ public bool hot;
         if (!safe && !dead)
         {
             Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+            
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
             GameObject deathBoom = Instantiate(gameObject.transform.GetChild(1).gameObject, gameObject.transform);             //access deathboom and play its particles
             deathBoom.GetComponent<ParticleSystem>().Play();
             gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
             gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
-            gameObject.GetComponent<ControllerInput>().enabled = false;
+            
+            if(gameObject.GetComponent<ControllerInput>())
+                gameObject.GetComponent<ControllerInput>().enabled = false;
+
             gameObject.GetComponent<Collider2D>().enabled = false;
             rTrack = 0;
             lTrack = 0;
@@ -226,11 +231,13 @@ public bool hot;
                 --_lives;
                 Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
             }
-
             else
             {
                 StartCoroutine(AIRespawn(deathBoom));
                 Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
+
+
+
             }
 
             if(_state != type.none)
@@ -250,14 +257,21 @@ public bool hot;
         }
         else
         {
-            GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
-            while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+            if(spawnPoints.Length == 0)
             {
-                spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+                //Debug.LogWarning("No spawn points avaialble");
             }
-            spawnPos = spawn.transform.position;
-            deathPos = gameObject.transform.position;
-            dead = true;
+            else
+            {
+                GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+                while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
+                {
+                    spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+                }
+                spawnPos = spawn.transform.position;
+                deathPos = gameObject.transform.position;
+                dead = true;
+            }
         }
     }
     IEnumerator WaitForRespawn(GameObject db)
@@ -310,6 +324,7 @@ public bool hot;
 
     void Awake()
     {
+        /*
         _state = type.none;
         _lives = 3;
         _health = 1;
@@ -319,7 +334,9 @@ public bool hot;
         _gun = gameObject.transform.GetChild(0).gameObject;
         _smoke = gameObject.GetComponent<ParticleSystem>();
         if (_player == null) _player = 0;
+
         setPlayer();
+        */
     }
     // Start is called before the first frame update
     void Start()
@@ -339,15 +356,20 @@ public bool hot;
         if (ai)
         {
             spawnPoints = GameObject.FindGameObjectsWithTag("AI_Spawn");
+            if(spawnPoints.Length == 0)
+            {
+                Debug.LogWarning("No AI Spawn points set in the scene.");
+            }
             _lives = 10;
         }
         else
             spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
 
-
+        
         setPlayer();
 
-        GetComponentInChildren<lifeCounter>().changeVis(false);
+        if(GetComponentInChildren<lifeCounter>())
+            GetComponentInChildren<lifeCounter>().changeVis(false);
     }
 
     void FixedUpdate()

@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-enum GameMode
+public enum GameMode
 {
     None,
-    Normal,
+    Arcade,
+    Multiplayer,
     BattleRoyale
 }
 
@@ -23,6 +24,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
     [SerializeField] GameObject _firstSelectedPauseMenu;
+    [SerializeField] GameObject _firstSelectedGameOverMenu;
 
     bool _isGamePaused = false;
 
@@ -30,9 +32,14 @@ public class MenuManager : MonoBehaviour
     const string PAUSE_MENU = "Pause Menu";
     const string CONTROLLER_MENU = "Controller Menu";
     const string GAMEUI = "GameUI";
+    const string GAMEOVER_MENU = "GameOver Menu";
 
     GameMode _selectedMode = GameMode.None;
     
+    public GameMode GetSelectedMode()
+    {
+        return _selectedMode;
+    }
 
     void Awake()
     {
@@ -98,9 +105,21 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(_firstSelectedPauseMenu);
     }
 
-    public void SelectSkirmishMode()
+    public void SelectArcadeMode()
     {
-        _selectedMode = GameMode.Normal;
+        _selectedMode = GameMode.Arcade;
+
+        gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
+        //gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
+
+        ControllerManager.Instance.PlayerJoinedArcadeMode(0);
+
+        StartGame();
+    }
+
+    public void SelectMultiplayerMode()
+    {
+        _selectedMode = GameMode.Multiplayer;
 
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
@@ -119,10 +138,11 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
 
-        if (_selectedMode == GameMode.Normal)
+        //if (_selectedMode == GameMode.Arcade)
             SceneManager.LoadScene(1);
-        else if (_selectedMode == GameMode.BattleRoyale)
-            SceneManager.LoadScene(2);
+
+        //else if (_selectedMode == GameMode.BattleRoyale)
+        //    SceneManager.LoadScene(2);
     }
 
     public void Quit()
@@ -137,6 +157,7 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(false);
+        gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
 
@@ -149,4 +170,14 @@ public class MenuManager : MonoBehaviour
     {
         return ControllerManager.Instance.GetControllers();
     }
+
+    public void ShowGameOverMenu()
+    {
+        gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(true);
+        
+        EventSystem.current.firstSelectedGameObject = _firstSelectedGameOverMenu;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(_firstSelectedGameOverMenu);
+    }
+
 }

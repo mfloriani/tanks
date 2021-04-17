@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState
+{
+    Playing,
+    GameOver
+}
+
 public class GameManager_demo : MonoBehaviour
 {
     [SerializeField] GameObject TankPrefab;
+    List<GameObject> _Players = new List<GameObject>();
 
-    // Start is called before the first frame update
+    GameState _currentGameState;
+
     void Start()
     {
         ControllerManager.OnNewPlayerJoined += SpawnNewPlayer;
@@ -19,12 +27,37 @@ public class GameManager_demo : MonoBehaviour
             SpawnNewPlayer(PlayerId.Player3);
         if (ControllerManager.Instance.IsPlayerActive(PlayerId.Player4))
             SpawnNewPlayer(PlayerId.Player4);
+
+        _currentGameState = GameState.Playing;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if(_currentGameState == GameState.Playing)
+        {
+            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            if(enemies.Length > 0)
+            {
+                int enemiesDead = 0;
+            
+                foreach(GameObject e in enemies)
+                {
+                    if(!e.GetComponent<SpriteRenderer>().enabled)
+                    {
+                        ++enemiesDead;
+                    }
+                }
+
+                // All enemies are dead
+                if(enemiesDead == enemies.Length)
+                {
+                    _currentGameState = GameState.GameOver;
+                    Debug.LogWarning("GameOver! No enemies left in the game.");
+
+                    MenuManager.Instance.ShowGameOverMenu();
+                }
+            }
+        }
     }
 
     void SpawnNewPlayer(PlayerId id)
@@ -32,8 +65,12 @@ public class GameManager_demo : MonoBehaviour
         Debug.Log(id + " spawned");
 
         var t = Instantiate(TankPrefab);
+        
+        _Players.Add(t);
+
         t.GetComponent<ControllerInput>().player = ((int)id) - 1;
         t.GetComponent<ControllerInput>().setPlayer(((int)id)-1);
+
 
         WaitToSpawn(t);
     }
