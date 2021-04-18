@@ -10083,7 +10083,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 418682551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e199796b8904a848976943a164147a9, type: 3}
+  m_Script: {fileID: 11500000, guid: bc0da7d243a06d84593e61664e77b41c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TankPrefab: {fileID: 4003504016865398329, guid: 285c118955bcc1542827fa2c9c080aca, type: 3}
@@ -14652,7 +14652,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_Name
-      value: Tank 1 (2)
+      value: AI Tank 3
       objectReference: {fileID: 0}
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_TagString
@@ -22506,7 +22506,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_Name
-      value: Tank 1 (1)
+      value: AI Tank 2
       objectReference: {fileID: 0}
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_TagString
@@ -37079,7 +37079,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_Name
-      value: Tank 1
+      value: AI Tank 1
       objectReference: {fileID: 0}
     - target: {fileID: 2349137446070765196, guid: 957c1de2218483e48ac2f319320b032d, type: 3}
       propertyPath: m_TagString

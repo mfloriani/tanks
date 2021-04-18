@@ -49,7 +49,7 @@ public class TankManager : MonoBehaviour
     Vector3 spawnPos;
     Vector3 deathPos;
     private int _minecount;
-public bool hot;
+    public bool hot;
 
     public enum type         //enum for state of powerUp applied to tank
     {
@@ -67,8 +67,12 @@ public bool hot;
     private bool _readyToFire;  //boolean for readiness to fire
     private bool _safe;         //boolean for use with safe zones
     private bool _dead;         //boolean for if tank is dead and waiting to respawn
+    private bool _deadForGood;  //boolean for if tank is dead and waiting to respawn
 
-
+    public bool IsTankInHell()
+    {
+        return _deadForGood;
+    }
 
     public bool safe            //getters and setters for safe state to be used by other classes
     {
@@ -176,11 +180,15 @@ public bool hot;
             gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[1];
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[2];
         }
-        gameObject.name = ("Tank " + player);
+        
         if(!ai)
+        {
+            gameObject.name = ("Tank " + player); // do not change this :)
             gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
+        }
         else
         {
+            gameObject.name = ("AITank");
             var lifeCounter = gameObject.GetComponentInChildren<lifeCounter>();
             if(lifeCounter)
                 Destroy(lifeCounter.gameObject);
@@ -254,6 +262,7 @@ public bool hot;
         if (_lives <= 0)
         {
             Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            _deadForGood = true;
         }
         else
         {
@@ -285,6 +294,7 @@ public bool hot;
         if (_lives <= 0 )
         {
             Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            _deadForGood = true;
             GetComponentInChildren<lifeCounter>().changeVis(false);
         }
         else
@@ -341,6 +351,7 @@ public bool hot;
     // Start is called before the first frame update
     void Start()
     {
+        _deadForGood = false;
         _state = type.none;
         _lives = 3;
         _health = 1;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public enum GameMode
 {
@@ -72,7 +73,9 @@ public class MenuManager : MonoBehaviour
         //Debug.Log(_isMainMenu + " - " + _isGamePaused);
         if(IsInGame())
         {
-            ControllerManager.Instance.HandleInGameJoinButton();
+            // cannot join the arcade mode 
+            if(GetSelectedMode() != GameMode.Arcade)
+                ControllerManager.Instance.HandleInGameJoinButton();
 
             if (Input.GetButtonDown("Joys_Start"))
             {
@@ -138,11 +141,8 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
 
-        //if (_selectedMode == GameMode.Arcade)
-            SceneManager.LoadScene(1);
 
-        //else if (_selectedMode == GameMode.BattleRoyale)
-        //    SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     public void Quit()
@@ -164,6 +164,8 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
+
+        ControllerManager.Instance.ResetConfirmed();
     }
 
     public ControllerState[] GetControllers()
@@ -171,13 +173,18 @@ public class MenuManager : MonoBehaviour
         return ControllerManager.Instance.GetControllers();
     }
 
-    public void ShowGameOverMenu()
+    public void ShowGameOverMenu(string msg, Color color)
     {
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(true);
         
         EventSystem.current.firstSelectedGameObject = _firstSelectedGameOverMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedGameOverMenu);
+
+        var winner = gameObject.transform.Find(GAMEOVER_MENU).gameObject.transform.Find("Winner");
+        var winnerMsg = winner.Find("Message").GetComponent<TextMeshProUGUI>();
+        winnerMsg.text = msg;
+        winnerMsg.color = color;
     }
 
 }

@@ -145,13 +145,13 @@ public class ControllerMenu : MonoBehaviour
         if (controllers[index].Selected)
         {
             controllers[index].Selected = false;
-            
+        }
             _players[index].Find("Join Button").gameObject.SetActive(true);
             _players[index].Find("Controller").gameObject.SetActive(false);
             _players[index].Find("Confirmed").gameObject.SetActive(false);
 
             ToggleConfirmation(index, false);
-        }
+        
     }
 
     // controller pressed start or was removed from the selected list

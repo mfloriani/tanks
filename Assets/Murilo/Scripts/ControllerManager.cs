@@ -115,4 +115,13 @@ public class ControllerManager
 
         return false;
     }
+
+    public void ResetConfirmed()
+    {
+        for(int i=0; i < _controllers.Length; ++i)
+        {
+            _controllers[i].Selected = false;
+            _controllers[i].Confirmed = false;
+        }
+    }
 }
