@@ -187,4 +187,8 @@ public class MenuManager : MonoBehaviour
         winnerMsg.color = color;
     }
 
+    public void HideGameOverMenu()
+    {
+        gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
+    }
 }

@@ -99,17 +99,26 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Debug.Log(totalAliveInTheGame + " - " + hasPlayerAlive);
+
         if(totalAliveInTheGame == 0)
         {
+            _currentGameState = GameState.GameOver;
             MenuManager.Instance.ShowGameOverMenu("WTF JUST HAPPENED?", Color.white);
         }
         else if (!hasPlayerAlive)
         {
+            _currentGameState = GameState.GameOver;
             MenuManager.Instance.ShowGameOverMenu("LOSERS", Color.white);
         }
         if (hasPlayerAlive && totalAliveInTheGame == 1)
         {
+            _currentGameState = GameState.GameOver;
             MenuManager.Instance.ShowGameOverMenu("PLAYER "+ (playerId+1) + " WON", GetPlayerColor(playerId));
+        }
+        else
+        {
+            MenuManager.Instance.HideGameOverMenu();
         }
     }
 
