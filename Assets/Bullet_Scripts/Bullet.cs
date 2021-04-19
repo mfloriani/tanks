@@ -62,13 +62,14 @@ public class Bullet : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<TankManager>().player != playerWhoFired)
             {
+                Die();
                 if (collision.gameObject.GetComponent<TankManager>() != null)
                 {
                     collision.gameObject.GetComponent<TankManager>().Die();
-                    //++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                    ++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
                     Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", but won't have scored - this isn't PvP! Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
-                }
-                Die();
+                    
+                }                
             }
             else
             {
@@ -94,7 +95,7 @@ public class Bullet : MonoBehaviour
         }
         if (collision.gameObject.layer == wallLayer)
         {
-            if (bounces <= 0)
+            if (bounces <= 0 || currentState != bulletState.bounce)
                 Die();
             else
                 bounce(collision);
