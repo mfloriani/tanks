@@ -6,6 +6,7 @@ public class AI_V2 : MonoBehaviour
 {
     [SerializeField] int tankLayer;
     [SerializeField] int wallLayer;
+    [SerializeField] int dWallLayer;
     [SerializeField] Firing turret;
     [SerializeField] bool bHasFired = false;
 
@@ -50,6 +51,7 @@ public class AI_V2 : MonoBehaviour
     {
         tankLayer = LayerMask.NameToLayer("PlayerTank");
         wallLayer = LayerMask.NameToLayer("Wall");
+        dWallLayer = LayerMask.NameToLayer("DestructibleWall");
         playerPos = GameObject.FindWithTag("Player");
 
         turret = gameObject.transform.GetChild(0).GetComponent<Firing>();
@@ -220,7 +222,7 @@ public class AI_V2 : MonoBehaviour
                 float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
                 Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
                 transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
-
+                
                 if (aiStates != AIStates.Attack)
                 {
                     tankHead.transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5.0f);
