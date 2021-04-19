@@ -90,9 +90,10 @@ public class AI_V2 : MonoBehaviour
         {
             if (rayHitObject.layer == tankLayer)
             {
+                playerPos = rayHitObject;
                 aiStates = AIStates.Attack;
             }
-            else if (rayHitObject.layer == wallLayer)
+            else if (rayHitObject.layer == wallLayer || rayHitObject.layer == dWallLayer)
             {
                 if (aiStates == AIStates.Attack)
                 {
@@ -207,7 +208,7 @@ public class AI_V2 : MonoBehaviour
                 CalculateNextNode();
 
                 bCanMove = false;
-                StartCoroutine(AIRot());
+                //StartCoroutine(AIRot());
             }
             else
             {
@@ -222,11 +223,6 @@ public class AI_V2 : MonoBehaviour
                 float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90.0f;
                 Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
                 transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotSpeed);
-                
-                if (aiStates != AIStates.Attack)
-                {
-                    tankHead.transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5.0f);
-                }
             }
         }
     }
