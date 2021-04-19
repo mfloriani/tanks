@@ -8,6 +8,7 @@ TagManager:
   - Platform
   - PowerUpPlatform
   - AI_Spawn
+  - PowerUp
   layers:
   - Default
   - TransparentFX
