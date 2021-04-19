@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Debug.Log(totalAliveInTheGame + " - " + hasPlayerAlive);
+        //Debug.Log(totalAliveInTheGame + " - " + hasPlayerAlive);
 
         if(totalAliveInTheGame == 0)
         {
