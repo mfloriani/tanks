@@ -145,7 +145,7 @@ public class Bullet : MonoBehaviour
         moveDir = Vector2.Reflect(gameObject.transform.up, wallNormal);     //figure out the angle of incidence from where the object has contacted the wall
 
         gameObject.transform.up = moveDir; //????
-        Debug.Log(moveDir);
+        //Debug.Log(moveDir);
         --bounces;
     }
     public void SetOwner(int player)

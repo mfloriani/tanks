@@ -58,12 +58,35 @@ public class AI_V2 : MonoBehaviour
 
         GameObject[] _nodeGameObject = GameObject.FindGameObjectsWithTag("Node");
 
+        float minDistance = Mathf.Infinity;
+        int closestNodeId = 0;
         for (int i = 0; i < _nodeGameObject.Length; i++)
         {
             nodes.Add(_nodeGameObject[i]);
-        }
 
-        currentNode = nodes[0];
+            float dist = Vector3.Distance(_nodeGameObject[i].transform.position, transform.position);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                closestNodeId = i;
+            }
+        }
+        Debug.Log("Closest node: " + closestNodeId + " - "+ nodes[closestNodeId].name + " - " + transform.position);
+        currentNode = nodes[closestNodeId];
+
+        //currentNode = nodes[0];
+
+        //randomIndex = Random.Range(0, nodes.Count);
+        //targetNodePos = nodes[randomIndex].transform.position;
+
+        var accessibleNodes = nodes[closestNodeId].GetComponent<CurrentNode>().accessibleNodes2D;
+        randomIndex = Random.Range(0, accessibleNodes.Count);
+
+        targetNodePos = accessibleNodes[randomIndex].transform.position;
+
+        Debug.Log(transform.name + " -> targetNodePos: " + targetNodePos + " - closestId: "+ closestNodeId + " - randomIndex: "+ randomIndex);
+
+
         CalculateNextNode();
 
         for (int i = 0; i < nodes.Count; i++)
@@ -75,7 +98,10 @@ public class AI_V2 : MonoBehaviour
                 AIPos = this.transform.position;
             }
         }
-        targetNodePos = nodes[randomIndex].transform.position;
+
+
+        
+
     }
 
     // Update is called once per frame
@@ -107,9 +133,6 @@ public class AI_V2 : MonoBehaviour
         {
             bHasFired = false;
         }
-
-
-
 
         if (aiStates == AIStates.Attack)
         {
@@ -205,9 +228,10 @@ public class AI_V2 : MonoBehaviour
 
             if (timer > timeTaken)
             {
+                //Debug.Log("timer > timeTaken");
                 CalculateNextNode();
 
-                bCanMove = false;
+                //bCanMove = false;
                 //StartCoroutine(AIRot());
             }
             else

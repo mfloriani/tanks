@@ -38,7 +38,7 @@ public class TankManager : MonoBehaviour
     public AudioClip spawnSound;
     public AudioClip cooldownSound;
     public AudioClip dropSound;
-    public GameObject[] spawnPoints;
+    //public GameObject[] spawnPoints;
     public Sprite[] lifecounter;
     public Sprite[] aiSprites;
     private float frac = 0;
@@ -240,11 +240,11 @@ public class TankManager : MonoBehaviour
                 --_lives;
                 //Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
             }
-            else
-            {
-                StartCoroutine(AIRespawn(deathBoom));
+            //else
+            //{
+                //StartCoroutine(AIRespawn(deathBoom));
                 //Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
-            }
+            //}
 
             if(_state != type.none)
             {
@@ -265,21 +265,15 @@ public class TankManager : MonoBehaviour
         }
         else
         {
-            if(spawnPoints.Length == 0)
+            var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
+            GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
+            while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
             {
-                //Debug.LogWarning("No spawn points avaialble");
+                spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
             }
-            else
-            {
-                GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
-                while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
-                {
-                    spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
-                }
-                spawnPos = spawn.transform.position;
-                deathPos = gameObject.transform.position;
-                dead = true;
-            }
+            spawnPos = spawn.transform.position;
+            deathPos = gameObject.transform.position;
+            dead = true;
         }
     }
     IEnumerator WaitForRespawn(GameObject db)
@@ -299,6 +293,7 @@ public class TankManager : MonoBehaviour
         }
         else
         {
+            var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
             GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
             while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
             {
@@ -319,13 +314,14 @@ public class TankManager : MonoBehaviour
         rTrack = 0;
         lTrack = 0;
 
+        var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
         GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
         while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
         {
             spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
         }
         spawnPos = spawn.transform.position;
-        gameObject.transform.position = new Vector3(0,0,0);
+        gameObject.transform.position = spawnPos;
         deathPos = gameObject.transform.position;
         setPlayer();
         dead = true;
@@ -351,20 +347,7 @@ public class TankManager : MonoBehaviour
         if (_player == null) _player = 0;
 
         if (ai == null) ai = false;
-
-        if (ai)
-        {
-            spawnPoints = GameObject.FindGameObjectsWithTag("AI_Spawn");
-            if(spawnPoints.Length == 0)
-            {
-                Debug.LogWarning("No AI Spawn points set in the scene.");
-            }
-            _lives = 10;
-        }
-        else
-            spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
-
-        
+                
         setPlayer();
 
         if(GetComponentInChildren<lifeCounter>())
@@ -382,22 +365,21 @@ public class TankManager : MonoBehaviour
             frac += Time.deltaTime;
             transform.position = Vector3.Lerp(deathPos, spawnPos, frac);
             if (frac >= 1)
-                {
+            {
                 frac = 0f;
                 dead = false;
 
-                    gameObject.GetComponent<Collider2D>().enabled = true;
-               
-                    gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
+                gameObject.GetComponent<Collider2D>().enabled = true;
+                gameObject.GetComponent<SpriteRenderer>().enabled = true;                 //disables the tank body sprite renderer by setting its sprite to null
+                if(gameObject.GetComponent<ControllerInput>())
                     gameObject.GetComponent<ControllerInput>().enabled = true;
-                    gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);              //disable the turret sprite renderer
                 if (!ai)
                 {
                     GetComponentInChildren<lifeCounter>().changeVis(false);
-
-                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f);                     //play the sound given in the editor to tankmanager
+                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f); //play the sound given in the editor to tankmanager
                 }
-                }
+            }
         }
     }
 

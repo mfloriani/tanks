@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum GameState
 {
@@ -13,8 +14,19 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject TankPrefab;
     [SerializeField] GameObject AITankPrefab;
+    [SerializeField] Transform EnemySpawnerList;
+    [SerializeField] Transform EnemiesList;
+    
+    [SerializeField] int MaxEnemiesSameTime = 10;
+
     GameState _currentGameState;
     HashSet<PlayerId> _NewPlayers = new HashSet<PlayerId>();
+
+    float _enemySpawnTime = 0;
+    [SerializeField] float _spawnningInterval = 15;
+    int _lastSpawnerIndexUsed = -1;
+
+    GameMode _selectedMode;
 
     void Start()
     {
@@ -30,6 +42,28 @@ public class GameManager : MonoBehaviour
             SpawnNewPlayer(PlayerId.Player4);
 
         _currentGameState = GameState.Playing;
+
+        _selectedMode = GameMode.None;
+        //try catch exists only to avoid error when the level scene is run directly without using the menu
+        try
+        {
+            _selectedMode = MenuManager.Instance.GetSelectedMode();
+        }
+        catch
+        { }
+
+        if (_selectedMode == GameMode.Arcade)
+        {
+            for (int i = 0; i < (MaxEnemiesSameTime / 2); ++i)
+                SpawnEnemy();
+        }
+        else
+        {
+            for (int i = 0; i < MaxEnemiesSameTime; ++i)
+                SpawnEnemy();
+        }
+
+        
     }
 
     void Update()
@@ -38,15 +72,7 @@ public class GameManager : MonoBehaviour
 
         if (_currentGameState == GameState.Playing)
         {
-            GameMode mode = GameMode.None;
-            //try catch added to avoid error when level not loaded from the menu
-            try
-            {
-                mode = MenuManager.Instance.GetSelectedMode();
-            }
-            catch { }
-
-            switch(mode)
+            switch(_selectedMode)
             {
                 case GameMode.Arcade:
                     HandleArcadeMode();
@@ -129,6 +155,11 @@ public class GameManager : MonoBehaviour
         return playerId;
     }
 
+    int GetTotalEnemiesAlive()
+    {
+        return GetTotalEnemies() - GetTotalDeadEnemies();
+    }
+
     private void HandleBattleRoyaleMode()
     {
         int totalAliveInTheGame = 0;
@@ -144,7 +175,7 @@ public class GameManager : MonoBehaviour
         totalAliveInTheGame += playersAlive;
         
         bool hasPlayerAlive = (playersAlive > 0);
-        Debug.Log("hasPlayerAlive: " + hasPlayerAlive + " - totalPlayersAlive: "+ playersAlive);
+        //Debug.Log("hasPlayerAlive: " + hasPlayerAlive + " - totalPlayersAlive: "+ playersAlive);
 
         int playerId = -1;
         if (hasPlayerAlive && totalAliveInTheGame == 1)
@@ -270,7 +301,6 @@ public class GameManager : MonoBehaviour
                 int playersAlive = TotalPlayersAlive();
                 if (playersAlive == 0 && TotalPlayersInScene() > 0)
                 {
-                    Debug.Log("GAMEOVER FAILED");
                     _currentGameState = GameState.GameOver;
                     MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
                 }
@@ -279,7 +309,15 @@ public class GameManager : MonoBehaviour
                     MenuManager.Instance.HideGameOverMenu();
                 }
             }
-        }        
+        }
+
+        _enemySpawnTime += Time.deltaTime;
+        if(_enemySpawnTime > _spawnningInterval && GetTotalEnemiesAlive() <= MaxEnemiesSameTime)
+        {
+            SpawnEnemy();
+            _enemySpawnTime = 0;
+        }
+
     }
 
     int GetTotalEnemies()
@@ -330,20 +368,30 @@ public class GameManager : MonoBehaviour
         var go = GameObject.Find("/Tank " + idFromZero);
         if(go)
         {
-            Debug.LogError("Player " + idFromZero + " already in the game");
+            //Debug.LogError("Player " + idFromZero + " already in the game");
             return;
         }
 
         var t = Instantiate(TankPrefab);
         t.GetComponent<ControllerInput>().player = idFromZero;
         t.GetComponent<ControllerInput>().setPlayer(idFromZero);
-
-        WaitToSpawn(t);
+        t.GetComponent<TankManager>().Spawn();
     }
 
-    IEnumerator WaitToSpawn(GameObject tank)
+    void SpawnEnemy()
     {
-        yield return new WaitForSeconds(1);
-        tank.GetComponent<TankManager>().Spawn();
+        if(EnemySpawnerList)
+        {
+            int spawnersCount = EnemySpawnerList.childCount;
+
+            if (_lastSpawnerIndexUsed >= (spawnersCount-1))
+                _lastSpawnerIndexUsed = -1;
+
+            //int selectedSpawnerIndex = Random.Range(0, spawnersCount);
+            Transform spawner = EnemySpawnerList.GetChild(++_lastSpawnerIndexUsed);
+
+            Instantiate(AITankPrefab, spawner.position, Quaternion.identity, EnemiesList);
+        }
     }
+
 }
