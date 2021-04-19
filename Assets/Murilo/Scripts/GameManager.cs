@@ -11,7 +11,8 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject TankPrefab;    
+    [SerializeField] GameObject TankPrefab;
+    [SerializeField] GameObject AITankPrefab;
     GameState _currentGameState;
     HashSet<PlayerId> _NewPlayers = new HashSet<PlayerId>();
 
@@ -37,7 +38,14 @@ public class GameManager : MonoBehaviour
 
         if (_currentGameState == GameState.Playing)
         {
-            var mode = MenuManager.Instance.GetSelectedMode();
+            GameMode mode = GameMode.None;
+            //try catch added to avoid error when level not loaded from the menu
+            try
+            {
+                mode = MenuManager.Instance.GetSelectedMode();
+            }
+            catch { }
+
             switch(mode)
             {
                 case GameMode.Arcade:
@@ -71,6 +79,56 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    int TotalPlayersInScene()
+    {
+        int total = 0;
+        for (int i = 0; i < 4; ++i)
+        {
+            var tank = GameObject.Find("/Tank " + i);
+            if (tank) // tank is in the game?
+            {
+                total += 1;
+            }
+        }
+        return total;
+    }
+
+    int TotalPlayersAlive()
+    {
+        int total = 0;
+        for (int i = 0; i < 4; ++i)
+        {
+            var tank = GameObject.Find("/Tank " + i);
+            if (tank) // tank is in the game?
+            {
+                bool isInHell = tank.GetComponent<TankManager>().IsTankInHell();
+                if (!isInHell) // is it dead for good?
+                {
+                    total += 1;
+                }
+            }
+        }
+        return total;
+    }
+
+    int GetLastPlayerAlive()
+    {
+        int playerId = -1;
+        for (int i = 0; i < 4; ++i)
+        {
+            var tank = GameObject.Find("/Tank " + i);
+            if (tank) // tank is in the game?
+            {
+                bool isInHell = tank.GetComponent<TankManager>().IsTankInHell();
+                if (!isInHell) // is it dead for good?
+                {
+                    playerId = i;
+                }
+            }
+        }
+        return playerId;
+    }
+
     private void HandleBattleRoyaleMode()
     {
         int totalAliveInTheGame = 0;
@@ -82,22 +140,15 @@ public class GameManager : MonoBehaviour
             totalAliveInTheGame += (totalEnemies - totalDeadEnemies);
         }
 
-        bool hasPlayerAlive = false;
+        int playersAlive = TotalPlayersAlive();
+        totalAliveInTheGame += playersAlive;
+        
+        bool hasPlayerAlive = (playersAlive > 0);
+        Debug.Log("hasPlayerAlive: " + hasPlayerAlive + " - totalPlayersAlive: "+ playersAlive);
+
         int playerId = -1;
-        for(int i=0; i < 4; ++i)
-        {
-            var tank = GameObject.Find("/Tank "+i);
-            if(tank) // tank is in the game?
-            {
-                bool isInHell = tank.GetComponent<TankManager>().IsTankInHell();
-                if(!isInHell) // is it dead for good?
-                {
-                    playerId = i;
-                    hasPlayerAlive = true;
-                    totalAliveInTheGame += 1; // add to the counting
-                }
-            }
-        }
+        if (hasPlayerAlive && totalAliveInTheGame == 1)
+            playerId = GetLastPlayerAlive();
 
         //Debug.Log(totalAliveInTheGame + " - " + hasPlayerAlive);
 
@@ -106,20 +157,20 @@ public class GameManager : MonoBehaviour
             _currentGameState = GameState.GameOver;
             MenuManager.Instance.ShowGameOverMenu("WTF JUST HAPPENED?", Color.white);
         }
-        else if (!hasPlayerAlive)
+        else if (!hasPlayerAlive && TotalPlayersInScene() > 0)
         {
             _currentGameState = GameState.GameOver;
-            MenuManager.Instance.ShowGameOverMenu("LOSERS", Color.white);
+            MenuManager.Instance.ShowGameOverMenu("YOU LOST", Color.white);
         }
         if (hasPlayerAlive && totalAliveInTheGame == 1)
         {
             _currentGameState = GameState.GameOver;
             MenuManager.Instance.ShowGameOverMenu("PLAYER "+ (playerId+1) + " WON", GetPlayerColor(playerId));
         }
-        else
-        {
-            MenuManager.Instance.HideGameOverMenu();
-        }
+        //else
+        //{
+        //    MenuManager.Instance.HideGameOverMenu();
+        //}
     }
 
     private void HandleMultiplayerMode()
@@ -160,7 +211,7 @@ public class GameManager : MonoBehaviour
                                 
                 if (maxScoreId == -1) // do we have a winner?
                 {
-                    MenuManager.Instance.ShowGameOverMenu("LOSER", Color.white);
+                    MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
                 }
                 if (tie) // more than one player with the highest score
                 {
@@ -169,6 +220,19 @@ public class GameManager : MonoBehaviour
                 else // someone was better
                 {
                     MenuManager.Instance.ShowGameOverMenu("PLAYER " + (maxScoreId + 1) + " WON", GetPlayerColor(maxScoreId));
+                }
+            }
+            else // there are enemies, but are there players?
+            {
+                int playersAlive = TotalPlayersAlive();
+                if(playersAlive == 0 && TotalPlayersInScene() > 0)
+                {
+                    _currentGameState = GameState.GameOver;
+                    MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
+                }
+                else
+                {
+                    MenuManager.Instance.HideGameOverMenu();
                 }
             }
         }
@@ -200,6 +264,20 @@ public class GameManager : MonoBehaviour
             {
                 _currentGameState = GameState.GameOver;
                 MenuManager.Instance.ShowGameOverMenu("YOU WON", Color.red);
+            }
+            else // there are enemies, but are there players?
+            {
+                int playersAlive = TotalPlayersAlive();
+                if (playersAlive == 0 && TotalPlayersInScene() > 0)
+                {
+                    Debug.Log("GAMEOVER FAILED");
+                    _currentGameState = GameState.GameOver;
+                    MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
+                }
+                else
+                {
+                    MenuManager.Instance.HideGameOverMenu();
+                }
             }
         }        
     }

@@ -46,7 +46,7 @@ public void updateCount(int lives)
     {
         if (lives < 0) lives = 0;
         sprite.sprite = icons[lives];
-        Debug.Log("Life counter updated to have " + lives + " lives");
+        //Debug.Log("Life counter updated to have " + lives + " lives");
     }
     // Update is called once per frame
     void Update()

@@ -74,6 +74,7 @@ public class TankManager : MonoBehaviour
         return _deadForGood;
     }
 
+
     public bool safe            //getters and setters for safe state to be used by other classes
     {
         get { return _safe; }
@@ -218,7 +219,7 @@ public class TankManager : MonoBehaviour
     {
         if (!safe && !dead)
         {
-            Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+            //Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
             
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
             GameObject deathBoom = Instantiate(gameObject.transform.GetChild(1).gameObject, gameObject.transform);             //access deathboom and play its particles
@@ -237,15 +238,12 @@ public class TankManager : MonoBehaviour
             {
                 StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
                 --_lives;
-                Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
+                //Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
             }
             else
             {
                 StartCoroutine(AIRespawn(deathBoom));
-                Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
-
-
-
+                //Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
             }
 
             if(_state != type.none)
@@ -261,8 +259,9 @@ public class TankManager : MonoBehaviour
         yield return new WaitForSeconds(2);         //wait for sound and explosion to play
         if (_lives <= 0)
         {
-            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            //Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
             _deadForGood = true;
+            //Debug.Log("deadForGood");
         }
         else
         {
@@ -293,8 +292,9 @@ public class TankManager : MonoBehaviour
         Destroy(db);                        //delete the explosion
         if (_lives <= 0 )
         {
-            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
             _deadForGood = true;
+            //Debug.Log("deadForGood");
+            //Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
             GetComponentInChildren<lifeCounter>().changeVis(false);
         }
         else
@@ -334,26 +334,14 @@ public class TankManager : MonoBehaviour
 
     void Awake()
     {
-        /*
-        _state = type.none;
-        _lives = 3;
-        _health = 1;
-        _body = gameObject.GetComponent<Rigidbody2D>();
-        _readyToFire = false;
-        _speed = 2.0f;
-        _gun = gameObject.transform.GetChild(0).gameObject;
-        _smoke = gameObject.GetComponent<ParticleSystem>();
-        if (_player == null) _player = 0;
-
-        setPlayer();
-        */
+        
     }
     // Start is called before the first frame update
     void Start()
     {
-        _deadForGood = false;
         _state = type.none;
         _lives = 3;
+        _deadForGood = false;
         _health = 1;
         _body = gameObject.GetComponent<Rigidbody2D>();
         _readyToFire = false;
@@ -429,7 +417,7 @@ public class TankManager : MonoBehaviour
 
         if (mining && pUpState == type.mines && !(minecount <= 0))
         {
-            Debug.Log("A mine has been laid by tank " + gameObject.name);
+            //Debug.Log("A mine has been laid by tank " + gameObject.name);
             GameObject newMine = Instantiate(mine, gameObject.transform);
             gameObject.GetComponent<AudioSource>().PlayOneShot(dropSound, 0.8f);
             newMine.SetActive(true);
@@ -459,13 +447,13 @@ public class TankManager : MonoBehaviour
         GameObject ticker = new GameObject();
         ticker.AddComponent<AudioSource>();
         GameObject clock = Instantiate(ticker);
-        Debug.Log("Cooling down after pickup!");
+        //Debug.Log("Cooling down after pickup!");
         clock.GetComponent<AudioSource>().PlayOneShot(cooldownSound, 0.8f);
         yield return new WaitForSeconds(10);         //wait for sound and explosion to play
-            this.pUpState = type.none;
+        this.pUpState = type.none;
         Destroy(ticker);
         Destroy(clock);
-            Debug.Log("Tank has cooled down!");
+        //Debug.Log("Tank has cooled down!");
     }
 }
 
