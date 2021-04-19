@@ -80,7 +80,7 @@ SpriteRenderer:
   m_Size: {x: 0.16, y: 0.36}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &643384196156055991
@@ -92,10 +92,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 86363307923408159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe191dadf5d67a48b77c187d0d5d8b9, type: 3}
+  m_Script: {fileID: 11500000, guid: e90fbf5610097bd43a77f21953a49dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 0
   moveDir: {x: 0, y: 0}
-  playerLayer: 6
-  enemyLayer: 7
+  explosion: {fileID: 5344174733521406568, guid: 62bc556f00d8a2747a333619c9c306df, type: 3}
+  currentState: 0
