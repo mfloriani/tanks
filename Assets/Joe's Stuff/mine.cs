@@ -49,7 +49,7 @@ public class mine : MonoBehaviour
                         collision.gameObject.GetComponent<TankManager>().Die();
                         GetComponent<Collider2D>().enabled = false;
                             //++GameObject.Find("Tank " + player).GetComponent<TankManager>().score;
-                            Debug.Log("Tank " + player + " has mined another player, and did not score a point. Their score is still " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "!");
+                            //Debug.Log("Tank " + player + " has mined another player, and did not score a point. Their score is still " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "!");
                             Destroy(gameObject);
                     }
                     else
@@ -57,8 +57,8 @@ public class mine : MonoBehaviour
                             collision.gameObject.GetComponent<TankManager>().Die();
                             //--GameObject.Find("Tank " + player).GetComponent<TankManager>().score;
                             GetComponent<Collider2D>().enabled = false;
-                            Debug.Log("A mine went off!");
-                            Debug.Log("Tank " + player + " has ran over their own mine, and has not lost a point. Their score is still " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "... what an idiot!");
+                            //Debug.Log("A mine went off!");
+                            //Debug.Log("Tank " + player + " has ran over their own mine, and has not lost a point. Their score is still " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "... what an idiot!");
                             Destroy(gameObject);
 
                         }
@@ -70,12 +70,12 @@ public class mine : MonoBehaviour
                         GetComponent<Collider2D>().enabled = false;
                         ++GameObject.Find("Tank " + player).GetComponent<TankManager>().score;
                         collision.gameObject.GetComponent<TankManager>().Die();
-                        Debug.Log("Tank " + player + " has mined an enemy, and scored a point. Their score is now " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "!");
+                        //Debug.Log("Tank " + player + " has mined an enemy, and scored a point. Their score is now " + GameObject.Find("Tank " + player).GetComponent<TankManager>().score + "!");
                         Destroy(gameObject);
                     }
                     break;
                 default:
-                    Debug.Log("Something hit the mine, but it didn't go off!");
+                    //Debug.Log("Something hit the mine, but it didn't go off!");
                     break;
             }
             

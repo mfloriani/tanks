@@ -55,7 +55,7 @@ public class powerUp : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().pUpState == TankManager.type.none)
             {
-                Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
+                //Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
                 if(effect == TankManager.type.mines)collision.gameObject.GetComponent<TankManager>().minecount = 5;
                 collision.gameObject.GetComponent<TankManager>().pUpState = effect;
                 collision.gameObject.GetComponent<TankManager>().hot = true;

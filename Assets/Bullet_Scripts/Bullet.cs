@@ -62,21 +62,22 @@ public class Bullet : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<TankManager>().player != playerWhoFired)
             {
-                Die();
                 if (collision.gameObject.GetComponent<TankManager>() != null)
                 {
                     collision.gameObject.GetComponent<TankManager>().Die();
-                    ++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                    Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", but won't have scored - this isn't PvP! Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
-                    
-                }                
+                    //++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
+                    //Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + 
+                    //    ", but won't have scored - this isn't PvP! Their score is still " 
+                    //    + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
+                }
+                Die();
             }
             else
             {
 
                     collision.gameObject.GetComponent<TankManager>().Die();
                     //--GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                    Debug.Log("Tank " + playerWhoFired + " has hit themselves, and NOT lost a point. Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
+                    //Debug.Log("Tank " + playerWhoFired + " has hit themselves, and NOT lost a point. Their score is still " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score + "... what an idiot!");
                 Die();
             }
             // bounce(collision);
@@ -88,14 +89,17 @@ public class Bullet : MonoBehaviour
             if (collision.gameObject.GetComponent<TankManager>() != null)
             {
                 collision.gameObject.GetComponent<TankManager>().Die();
-                ++GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score;
-                Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", and scored a point for themselves! Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
+
+                var tank = GameObject.Find("Tank " + playerWhoFired);
+                if (tank)
+                    ++tank.GetComponent<TankManager>().score;
+                //Debug.Log("Tank " + playerWhoFired + " has hit " + collision.gameObject.name + ", and scored a point for themselves! Their score is now " + GameObject.Find("Tank " + playerWhoFired).GetComponent<TankManager>().score);
             }
             Die();
         }
         if (collision.gameObject.layer == wallLayer)
         {
-            if (bounces <= 0 || currentState != bulletState.bounce)
+            if (bounces <= 0)
                 Die();
             else
                 bounce(collision);
@@ -141,7 +145,7 @@ public class Bullet : MonoBehaviour
         moveDir = Vector2.Reflect(gameObject.transform.up, wallNormal);     //figure out the angle of incidence from where the object has contacted the wall
 
         gameObject.transform.up = moveDir; //????
-        Debug.Log(moveDir);
+        //Debug.Log(moveDir);
         --bounces;
     }
     public void SetOwner(int player)

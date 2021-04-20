@@ -21,13 +21,13 @@ public class Turret_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       RaycastHit2D ray2D = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.down), Mathf.Infinity, 1 << tankLayer | 1 << wallLayer | 1 << dWallLayer);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down), Color.yellow);
+        RaycastHit2D ray2D = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.down), Mathf.Infinity, 1 << tankLayer | 1 << wallLayer | 1 << dWallLayer);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 5, Color.red);
 
         if (ray2D.collider != null)
         {
             AI.rayHitObject = ray2D.collider.gameObject;
         }
-    
+
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - PowerUpPlatform
   - AI_Spawn
   - PowerUp
+  - Enemy
   layers:
   - Default
   - TransparentFX
