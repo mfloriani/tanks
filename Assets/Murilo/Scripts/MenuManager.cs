@@ -32,7 +32,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField] AudioSource sfx;   //audiosource for playing select/confirm sounds
     [SerializeField] AudioSource bgm;
     [SerializeField] AudioClip[] clips; //clip array for storing select/confirm sounds
-
+    [SerializeField] AudioClip win;
+    [SerializeField] AudioClip lose;
+    [SerializeField] AudioClip menumusic;
+    [SerializeField] AudioClip gamemusic;
+    
     bool _isGamePaused = false;
 
     GameObject last;
@@ -110,18 +114,23 @@ public class MenuManager : MonoBehaviour
 
     public void Resume()
     {
+        sfx.PlayOneShot(clips[2]);
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
+        last = null;
         _isGamePaused = false;
     }
 
     public void Pause()
     {
+        sfx.PlayOneShot(clips[2]);
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(true);
         _isGamePaused = true;
         last = null;
         EventSystem.current.firstSelectedGameObject = _firstSelectedPauseMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedPauseMenu);
+
+        
     }
 
     public void SelectArcadeMode()
@@ -163,7 +172,10 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
         bgm.Stop();
         last = null;
+        bgm.clip = gamemusic;   //set the music to game music
+        bgm.Play();             //play the game music - JG
         SceneManager.LoadScene(1);
+
     }
 
     public void Quit()
@@ -181,7 +193,7 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-        if(!bgm.isPlaying) bgm.Play();
+        if (!bgm.isPlaying) { bgm.clip = menumusic; bgm.Play(); } // set bgm to menu music and play it - JG
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -206,6 +218,10 @@ public class MenuManager : MonoBehaviour
         var winnerMsg = winner.Find("Message").GetComponent<TextMeshProUGUI>();
         winnerMsg.text = msg;
         winnerMsg.color = color;
+        last = null;
+        if (winner) bgm.clip = win;     //set soundclip to the win if someone won
+        else bgm.clip = lose;           // if no winner, set it to a sad tuba
+        bgm.PlayOneShot(bgm.clip);         //play the win sound - JG
     }
 
     public void HideGameOverMenu()

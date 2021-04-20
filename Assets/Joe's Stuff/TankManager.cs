@@ -25,6 +25,7 @@ public class TankManager : MonoBehaviour
     private Vector2 _movement;
     [SerializeField]
     private int _player;
+    
     public int score;
     private float _target;
     private GameObject _gun;
@@ -210,7 +211,7 @@ public class TankManager : MonoBehaviour
 
     private void Target()
     {
-        target = ((Mathf.Round(AimAngle() / 45) * 45));
+        target = AimAngle();//((Mathf.Round(AimAngle() / 45) * 45));
         target = -target + 180;
         _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
@@ -219,6 +220,9 @@ public class TankManager : MonoBehaviour
     {
         if (!safe && !dead)
         {
+            GameObject ticker = GameObject.FindGameObjectWithTag("clock_player" + player);
+            if(ticker)Destroy(ticker);
+            pUpState = type.none;
             //Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
@@ -230,6 +234,7 @@ public class TankManager : MonoBehaviour
             if(gameObject.GetComponent<ControllerInput>())
                 gameObject.GetComponent<ControllerInput>().enabled = false;
 
+            
 
             try { gameObject.GetComponentInChildren<Tracks>().enabled = false; }// gameObject.GetComponentInChildren<Tracks>().gameObject.GetComponent<ParticleSystem>().enableEmission = false; }
             catch { Debug.Log("No tracks system on the tank that just died - maybe try adding one?"); }
@@ -433,8 +438,11 @@ public class TankManager : MonoBehaviour
     IEnumerator cooldown()
     {
         GameObject ticker = new GameObject();
+        
         ticker.AddComponent<AudioSource>();
         GameObject clock = Instantiate(ticker);
+
+        clock.tag = "clock_player" + player;
         //Debug.Log("Cooling down after pickup!");
         clock.GetComponent<AudioSource>().PlayOneShot(cooldownSound, 0.8f);
         yield return new WaitForSeconds(10);         //wait for sound and explosion to play
