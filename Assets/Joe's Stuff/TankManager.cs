@@ -217,6 +217,8 @@ public bool hot;
             gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
             gameObject.GetComponent<ControllerInput>().enabled = false;
             gameObject.GetComponent<Collider2D>().enabled = false;
+            try { gameObject.GetComponentInChildren<Tracks>().enabled = false; }
+            catch { Debug.Log("No tracks system on the tank that just died - maybe try adding one?"); }
             rTrack = 0;
             lTrack = 0;
 
@@ -283,6 +285,9 @@ public bool hot;
             spawnPos = spawn.transform.position;
             deathPos = gameObject.transform.position;
             dead = true;
+
+            try { gameObject.GetComponentInChildren<Tracks>().enabled = true; }
+            catch { Debug.Log("No tracks system on the tank that just died - maybe try adding one?"); }
         }
     }
 
