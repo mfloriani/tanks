@@ -230,8 +230,8 @@ public class TankManager : MonoBehaviour
             if(gameObject.GetComponent<ControllerInput>())
                 gameObject.GetComponent<ControllerInput>().enabled = false;
 
-            
-            try { gameObject.GetComponentInChildren<Tracks>().enabled = false; gameObject.GetComponentInChildren<Tracks>().gameObject.GetComponent<ParticleSystem>().enableEmission = false; }
+
+            try { gameObject.GetComponentInChildren<Tracks>().enabled = false; }// gameObject.GetComponentInChildren<Tracks>().gameObject.GetComponent<ParticleSystem>().enableEmission = false; }
             catch { Debug.Log("No tracks system on the tank that just died - maybe try adding one?"); }
             rTrack = 0;
             lTrack = 0;
@@ -378,7 +378,7 @@ public class TankManager : MonoBehaviour
                     gameObject.GetComponent<ControllerInput>().enabled = true;
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);              //disable the turret sprite renderer
 
-                try { gameObject.GetComponentInChildren<Tracks>().enabled = true; gameObject.GetComponentInChildren<Tracks>().gameObject.GetComponent<ParticleSystem>().enableEmission = true; }
+                try { gameObject.GetComponentInChildren<Tracks>().enabled = true; }// gameObject.GetComponentInChildren<Tracks>().gameObject.GetComponent<ParticleSystem>().enableEmission = true; }
                 catch { Debug.Log("No tracks system on the tank that just died - maybe try adding one?"); }
                 if (!ai)
                 {

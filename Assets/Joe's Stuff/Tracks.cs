@@ -26,7 +26,7 @@ public class Tracks : MonoBehaviour
         if (Vector3.Distance(lastEmit, transform.position) > delta)
         {
 
-            var pos = transform.position + (transform.forward * gap * dir);
+            var pos = transform.position + (new Vector3(0f,0f,0f)* gap * dir);
             ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
             ep.position = pos;
             ep.rotation = -transform.rotation.eulerAngles.z;
