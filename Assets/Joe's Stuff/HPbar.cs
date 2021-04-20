@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Multiplayer2 : MonoBehaviour
+public class HPbar : MonoBehaviour
 {
-    public int playerAmount;
-
-    private TankManager tank;
     // Start is called before the first frame update
     void Start()
     {

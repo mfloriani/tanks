@@ -31,7 +31,13 @@ public class CurrentNode : MonoBehaviour
 
     private void Update()
     {
+        
+    }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 
     /// <summary>
@@ -119,7 +125,7 @@ public class CurrentNode : MonoBehaviour
 
         CreateNodeListDiagonal2D();
 
-        Debug.Log("List Made");
+        //Debug.Log("List Made");
     }
 
     void CreateNodeListDiagonal2D()

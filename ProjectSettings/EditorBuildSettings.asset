@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Murilo/Scenes/MainMenu.unity
     guid: 5e9cb4782b5084448bc93fce3f0a05f4
   - enabled: 1
-    path: Assets/Murilo/Scenes/Level3_Murilo.unity
-    guid: c3512eefc705ef8498485d1478dd9aea
-  - enabled: 1
-    path: Assets/Murilo/Scenes/Level2_Murilo.unity
-    guid: ba8a9fef78bbad7498582381e653dd1b
+    path: Assets/Murilo/Scenes/PrototypeLevel.unity
+    guid: c65a7d1286c33834888424328331754a
   m_configObjects: {}
