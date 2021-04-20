@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   moveDir: {x: 0, y: 0}
-  explosion: {fileID: 5344174733521406568, guid: 67a861ab98ae09049bab768ab6f04df5, type: 3}
+  explosion: {fileID: 5344174733521406568, guid: 62bc556f00d8a2747a333619c9c306df, type: 3}
   currentState: 0
 --- !u!50 &2231165859547311372
 Rigidbody2D:
