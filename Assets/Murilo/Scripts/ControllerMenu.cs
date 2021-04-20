@@ -9,8 +9,7 @@ public class ControllerMenu : MonoBehaviour
     [SerializeField] Transform[] _players;
     [SerializeField] Transform _countdownText;
     [SerializeField] int _countdownMaxTime = 5;
-    [SerializeField] AudioSource sfx;
-    [SerializeField] AudioClip[] clips;
+
     float _countdown;
     bool _starting = false;
 
@@ -50,7 +49,6 @@ public class ControllerMenu : MonoBehaviour
         {
             _countdown -= Time.deltaTime;
             _countdownText.GetComponent<TextMeshProUGUI>().SetText(((int)_countdown).ToString());
-            if (_countdown % 1 == 0) sfx.PlayOneShot(clips[0], 0.8f);   //plays a snare drum on countdown
             if (_countdown <= 0)
             {
                 _countdown = 0;
@@ -103,7 +101,6 @@ public class ControllerMenu : MonoBehaviour
             else
             {
                 AddPlayer(index);
-                sfx.PlayOneShot(clips[2], 0.8f);
             }
         }
     }
