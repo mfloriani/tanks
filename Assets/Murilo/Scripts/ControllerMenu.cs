@@ -103,7 +103,7 @@ public class ControllerMenu : MonoBehaviour
             else
             {
                 AddPlayer(index);
-                sfx.PlayOneShot(clips[2], 0.8f);
+                sfx.PlayOneShot(clips[index], 0.8f);
             }
         }
     }

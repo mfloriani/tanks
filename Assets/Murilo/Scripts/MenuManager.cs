@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
 
 
     [SerializeField] AudioSource sfx;   //audiosource for playing select/confirm sounds
+    [SerializeField] AudioSource bgm;
     [SerializeField] AudioClip[] clips; //clip array for storing select/confirm sounds
 
     bool _isGamePaused = false;
@@ -156,9 +157,10 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
+        last = null;
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
-
+        bgm.Stop();
 
         SceneManager.LoadScene(1);
     }
@@ -178,7 +180,7 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-
+        bgm.Play();
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
