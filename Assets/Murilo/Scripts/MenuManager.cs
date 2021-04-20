@@ -104,6 +104,7 @@ public class MenuManager : MonoBehaviour
 
     public bool IsInGame()
     {
+
         return SceneManager.GetActiveScene().buildIndex != _mainMenuSceneIndex;
     }
 
@@ -117,7 +118,7 @@ public class MenuManager : MonoBehaviour
     {
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(true);
         _isGamePaused = true;
-
+        last = null;
         EventSystem.current.firstSelectedGameObject = _firstSelectedPauseMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedPauseMenu);
@@ -157,11 +158,11 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        last = null;
+        
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
         bgm.Stop();
-
+        last = null;
         SceneManager.LoadScene(1);
     }
 
@@ -196,7 +197,7 @@ public class MenuManager : MonoBehaviour
     public void ShowGameOverMenu(string msg, Color color)
     {
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(true);
-        
+        last = null;
         EventSystem.current.firstSelectedGameObject = _firstSelectedGameOverMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedGameOverMenu);
@@ -210,5 +211,6 @@ public class MenuManager : MonoBehaviour
     public void HideGameOverMenu()
     {
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
+        last = null;
     }
 }
