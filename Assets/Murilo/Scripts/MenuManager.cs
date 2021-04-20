@@ -23,6 +23,12 @@ public class MenuManager : MonoBehaviour
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
     [SerializeField] GameObject _firstSelectedPauseMenu;
+    [SerializeField] GameObject _firstSelectedGameOverMenu;
+
+
+    [SerializeField] AudioSource sfx;   //audiosource for playing select/confirm sounds
+    [SerializeField] AudioSource music;
+    [SerializeField] AudioClip[] clips; //clip array for storing select/confirm sounds
 
     bool _isGamePaused = false;
 
@@ -56,6 +62,7 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
+        
     }
 
     void Update()
@@ -123,6 +130,10 @@ public class MenuManager : MonoBehaviour
             SceneManager.LoadScene(1);
         else if (_selectedMode == GameMode.BattleRoyale)
             SceneManager.LoadScene(2);
+        music.Stop();
+
+        SceneManager.LoadScene(1);
+
     }
 
     public void Quit()
@@ -132,6 +143,7 @@ public class MenuManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
+
         _isGamePaused = false;
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(true);
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(false);
@@ -139,7 +151,7 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-
+        music.Play();
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
