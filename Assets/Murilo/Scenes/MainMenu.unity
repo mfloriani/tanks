@@ -354,6 +354,23 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6551428759128179638, guid: 6e7ba04f3d3e70f42b7c384bfc66657d, type: 3}
+
+      propertyPath: win
+      value: 
+      objectReference: {fileID: 8300000, guid: 68f97b0d98512ca41a11511a07bfac57, type: 3}
+    - target: {fileID: 6551428759128179638, guid: 6e7ba04f3d3e70f42b7c384bfc66657d, type: 3}
+      propertyPath: lose
+      value: 
+      objectReference: {fileID: 8300000, guid: 83de68ee7cdfd27488bce42e9a45ad27, type: 3}
+    - target: {fileID: 6551428759128179638, guid: 6e7ba04f3d3e70f42b7c384bfc66657d, type: 3}
+      propertyPath: gamemusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b0316664ed1a914fb1928c53b17ee42, type: 3}
+    - target: {fileID: 6551428759128179638, guid: 6e7ba04f3d3e70f42b7c384bfc66657d, type: 3}
+      propertyPath: menumusic
+      value: 
+      objectReference: {fileID: 8300000, guid: d2549948e71a6c54fb1cbc5f348ffee6, type: 3}
+
       propertyPath: bgm
       value: 
       objectReference: {fileID: 295723535594527689}
@@ -361,6 +378,7 @@ PrefabInstance:
       propertyPath: sfx
       value: 
       objectReference: {fileID: 295723535594527690}
+
     - target: {fileID: 6551428759128179638, guid: 6e7ba04f3d3e70f42b7c384bfc66657d, type: 3}
       propertyPath: clips.Array.size
       value: 3
