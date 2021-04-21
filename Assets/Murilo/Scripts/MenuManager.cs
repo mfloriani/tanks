@@ -216,10 +216,11 @@ public class MenuManager : MonoBehaviour
 
         var winner = gameObject.transform.Find(GAMEOVER_MENU).gameObject.transform.Find("Winner");
         var winnerMsg = winner.Find("Message").GetComponent<TextMeshProUGUI>();
+        
         winnerMsg.text = msg;
         winnerMsg.color = color;
         last = null;
-        if (winner) bgm.clip = win;     //set soundclip to the win if someone won
+        if (winnerMsg.text != "YOU FAILED") bgm.clip = win;     //set soundclip to the win if someone won
         else bgm.clip = lose;           // if no winner, set it to a sad tuba
         bgm.PlayOneShot(bgm.clip);         //play the win sound - JG
     }

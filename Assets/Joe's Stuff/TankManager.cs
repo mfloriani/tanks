@@ -222,7 +222,7 @@ public class TankManager : MonoBehaviour
         {
             if (pUpState != type.none)
             {
-                GameObject ticker = GameObject.FindGameObjectWithTag("clock_player" + player);
+                GameObject ticker = GameObject.Find("clock_player" + player);
                 if (ticker) Destroy(ticker);
             }
             pUpState = type.none;
@@ -445,7 +445,7 @@ public class TankManager : MonoBehaviour
         ticker.AddComponent<AudioSource>();
         GameObject clock = Instantiate(ticker);
 
-        clock.tag = "clock_player" + player;
+        clock.name = "clock_player" + player;
         //Debug.Log("Cooling down after pickup!");
         clock.GetComponent<AudioSource>().PlayOneShot(cooldownSound, 0.8f);
         yield return new WaitForSeconds(10);         //wait for sound and explosion to play
