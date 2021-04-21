@@ -174,6 +174,7 @@ public class MenuManager : MonoBehaviour
         last = null;
         bgm.clip = gamemusic;   //set the music to game music
         bgm.Play();             //play the game music - JG
+        bgm.loop = true;
         SceneManager.LoadScene(1);
 
     }
@@ -193,7 +194,8 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-        if (!bgm.isPlaying) { bgm.clip = menumusic; bgm.Play(); } // set bgm to menu music and play it - JG
+        if (!bgm.isPlaying || bgm.clip == gamemusic) { bgm.clip = menumusic; bgm.Play(); bgm.loop = true; } // set bgm to menu music and play it - JG
+        
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -220,9 +222,10 @@ public class MenuManager : MonoBehaviour
         winnerMsg.text = msg;
         winnerMsg.color = color;
         last = null;
+        bgm.loop = false;
         if (winnerMsg.text != "YOU FAILED") bgm.clip = win;     //set soundclip to the win if someone won
         else bgm.clip = lose;           // if no winner, set it to a sad tuba
-        bgm.PlayOneShot(bgm.clip);         //play the win sound - JG
+        bgm.PlayOneShot(bgm.clip, 1.2f);         //play the win sound - JG
     }
 
     public void HideGameOverMenu()

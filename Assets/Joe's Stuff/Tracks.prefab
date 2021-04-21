@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   system: {fileID: 8887182536059888320}
-  delta: 0.65
+  delta: 0.35
   gap: 0.1
 --- !u!198 &8887182536059888320
 ParticleSystem:
@@ -4792,8 +4792,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 350632185
-  m_SortingLayer: 4
+  m_SortingLayerID: 240028945
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_RenderMode: 3
   m_SortMode: 0

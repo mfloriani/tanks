@@ -60,6 +60,7 @@ public void updateCount(int lives)
     {
         if (endVis)
         {
+            fadeTime += 3.5f;
             sprite.enabled = true;
         }
         else
