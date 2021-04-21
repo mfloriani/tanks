@@ -96,6 +96,12 @@ public class ControllerManager
         }
     }
 
+    public void PlayerJoinedArcadeMode(int id)
+    {
+        _controllers[id].Selected = true;
+        _controllers[id].Confirmed = true;
+    }
+
     public bool IsPlayerActive(PlayerId id)
     {
         int index = (int)id - 1;
@@ -108,5 +114,14 @@ public class ControllerManager
         }
 
         return false;
+    }
+
+    public void ResetConfirmed()
+    {
+        for(int i=0; i < _controllers.Length; ++i)
+        {
+            _controllers[i].Selected = false;
+            _controllers[i].Confirmed = false;
+        }
     }
 }

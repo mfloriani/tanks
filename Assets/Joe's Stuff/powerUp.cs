@@ -33,6 +33,11 @@ public class powerUp : MonoBehaviour
 
     }
 
+    public TankManager.type GetEffect()
+    {
+        return effect;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +55,7 @@ public class powerUp : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<TankManager>() != null && collision.gameObject.GetComponent<TankManager>().pUpState == TankManager.type.none)
             {
-                Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
+                //Debug.Log("Powerup tripped! Tank with name " + collision.gameObject.name + " should now have the powerup " + effect);
                 if(effect == TankManager.type.mines)collision.gameObject.GetComponent<TankManager>().minecount = 5;
                 collision.gameObject.GetComponent<TankManager>().pUpState = effect;
                 collision.gameObject.GetComponent<TankManager>().hot = true;
@@ -61,8 +66,8 @@ public class powerUp : MonoBehaviour
                 int i = Random.Range(0, 4);
                 effect = (TankManager.type)(i + 1);
                 gameObject.GetComponent<SpriteRenderer>().sprite = pickupSprites[i];
+                collision.gameObject.GetComponent<TankManager>().currentPowerUp = gameObject;
                 StartCoroutine(wait());
-
             }
         }   
     }

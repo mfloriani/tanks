@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +20,22 @@ public class GameUI : MonoBehaviour
     
     void Update()
     {
-        
+        UpdateScores();
+    }
+
+    public void UpdateScores()
+    {
+        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        if (gm)
+        {
+            var scores = gm.GetScore();
+
+            _p1.Find("Joined").Find("Score").GetComponent<TextMeshProUGUI>().text = scores[0].ToString();
+            _p2.Find("Joined").Find("Score").GetComponent<TextMeshProUGUI>().text = scores[1].ToString();
+            _p3.Find("Joined").Find("Score").GetComponent<TextMeshProUGUI>().text = scores[2].ToString();
+            _p4.Find("Joined").Find("Score").GetComponent<TextMeshProUGUI>().text = scores[3].ToString();
+
+        }
     }
 
     void OnEnable()
@@ -38,7 +55,15 @@ public class GameUI : MonoBehaviour
         _p3.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[2];
         _p4.Find("Joined").Find("Controller").gameObject.GetComponent<Image>().sprite = MenuManager.Instance.PlayerAvatar[3];
 
-        ActivatePlayersUI();
+        if (MenuManager.Instance.GetSelectedMode() == GameMode.Arcade)
+        {
+            ActivatePlayerUI(PlayerId.Player1);
+            DeactivateMultiplayerUI();
+        }
+        else
+        {
+            ActivatePlayersUI();
+        }
     }
 
     void OnDisable()
@@ -76,17 +101,36 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    void DeactivateMultiplayerUI()
+    {
+        _p2.gameObject.SetActive(false);
+        _p2.Find("Join").gameObject.SetActive(false);
+        _p2.Find("Joined").gameObject.SetActive(false);
+
+        _p3.gameObject.SetActive(false);
+        _p3.Find("Join").gameObject.SetActive(false);
+        _p3.Find("Joined").gameObject.SetActive(false);
+
+        _p4.gameObject.SetActive(false);
+        _p4.Find("Join").gameObject.SetActive(false);
+        _p4.Find("Joined").gameObject.SetActive(false);
+    }
+
     public void ResetPlayersUI()
     {
+        _p1.gameObject.SetActive(true);
         _p1.Find("Join").gameObject.SetActive(true);
         _p1.Find("Joined").gameObject.SetActive(false);
 
+        _p2.gameObject.SetActive(true);
         _p2.Find("Join").gameObject.SetActive(true);
         _p2.Find("Joined").gameObject.SetActive(false);
 
+        _p3.gameObject.SetActive(true);
         _p3.Find("Join").gameObject.SetActive(true);
         _p3.Find("Joined").gameObject.SetActive(false);
 
+        _p4.gameObject.SetActive(true);
         _p4.Find("Join").gameObject.SetActive(true);
         _p4.Find("Joined").gameObject.SetActive(false);
     }

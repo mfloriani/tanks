@@ -25,6 +25,7 @@ public class TankManager : MonoBehaviour
     private Vector2 _movement;
     [SerializeField]
     private int _player;
+    
     public int score;
     private float _target;
     private GameObject _gun;
@@ -38,17 +39,18 @@ public class TankManager : MonoBehaviour
     public AudioClip spawnSound;
     public AudioClip cooldownSound;
     public AudioClip dropSound;
-    public GameObject[] spawnPoints;
+    //public GameObject[] spawnPoints;
     public Sprite[] lifecounter;
     public Sprite[] aiSprites;
     private float frac = 0;
+    public GameObject currentPowerUp;
 
     public bool ai;
 
     Vector3 spawnPos;
     Vector3 deathPos;
     private int _minecount;
-public bool hot;
+    public bool hot;
 
     public enum type         //enum for state of powerUp applied to tank
     {
@@ -66,7 +68,12 @@ public bool hot;
     private bool _readyToFire;  //boolean for readiness to fire
     private bool _safe;         //boolean for use with safe zones
     private bool _dead;         //boolean for if tank is dead and waiting to respawn
+    private bool _deadForGood;  //boolean for if tank is dead and waiting to respawn
 
+    public bool IsTankInHell()
+    {
+        return _deadForGood;
+    }
 
 
     public bool safe            //getters and setters for safe state to be used by other classes
@@ -175,14 +182,19 @@ public bool hot;
             gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[1];
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = aiSprites[2];
         }
-        gameObject.name = ("Tank " + player);
+        
         if(!ai)
-        gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
+        {
+            gameObject.name = ("Tank " + player); // do not change this :)
+            gameObject.GetComponentInChildren<lifeCounter>().setPlayer(player);
+        }
         else
-            Destroy(gameObject.GetComponentInChildren<lifeCounter>().gameObject);
-
-
-
+        {
+            gameObject.name = ("AITank");
+            var lifeCounter = gameObject.GetComponentInChildren<lifeCounter>();
+            if(lifeCounter)
+                Destroy(lifeCounter.gameObject);
+        }
     }
 
     private void Drive()    //this DOES work
@@ -199,7 +211,7 @@ public bool hot;
 
     private void Target()
     {
-        target = ((Mathf.Round(AimAngle() / 45) * 45));
+        target = AimAngle();//((Mathf.Round(AimAngle() / 45) * 45));
         target = -target + 180;
         _gun.transform.eulerAngles = new Vector3(0f, 0f, target);
     }
@@ -208,14 +220,30 @@ public bool hot;
     {
         if (!safe && !dead)
         {
-            Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+            if (pUpState != type.none)
+            {
+                GameObject ticker = GameObject.Find("clock_player" + player);
+                if (ticker) Destroy(ticker);
+            }
+            pUpState = type.none;
+            //Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
             GameObject deathBoom = Instantiate(gameObject.transform.GetChild(1).gameObject, gameObject.transform);             //access deathboom and play its particles
             deathBoom.GetComponent<ParticleSystem>().Play();
             gameObject.transform.GetChild(0).gameObject.SetActive(false);                       //disable the turret sprite renderer
             gameObject.GetComponent<SpriteRenderer>().enabled = false;                            //disables the tank body sprite renderer by setting its sprite to null
-            gameObject.GetComponent<ControllerInput>().enabled = false;
+            
+            if(gameObject.GetComponent<ControllerInput>())
+                gameObject.GetComponent<ControllerInput>().enabled = false;
+
+
             gameObject.GetComponent<Collider2D>().enabled = false;
+
+            try { gameObject.GetComponentInChildren<Tracks>().enabled = false; }
+            catch { Debug.LogError("No tracks system on the tank that just died - maybe try adding one?"); }
+
+
             rTrack = 0;
             lTrack = 0;
 
@@ -223,13 +251,18 @@ public bool hot;
             {
                 StartCoroutine(WaitForRespawn(deathBoom));                                                     //waits two seconds for sound and explosion to play before destroying tank
                 --_lives;
-                Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
+                //Debug.Log(gameObject.name + " is dead, and will respawn with " + _lives + " lives. Try to dodge next time!");
             }
+            //else
+            //{
+                //StartCoroutine(AIRespawn(deathBoom));
+                //Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
+            //}
 
-            else
+            if(_state != type.none)
             {
-                StartCoroutine(AIRespawn(deathBoom));
-                Debug.Log("Die has been called, tank with name \"" + this.name + "\" - but he was safe! Spawncampers, eh?");
+                GameObject droppedPowerUp = Instantiate(currentPowerUp, transform.position, Quaternion.identity);
+                droppedPowerUp.GetComponent<powerUp>().GetEffect();
             }
         }
     }
@@ -239,10 +272,13 @@ public bool hot;
         yield return new WaitForSeconds(2);         //wait for sound and explosion to play
         if (_lives <= 0)
         {
-            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            //Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            _deadForGood = true;
+            //Debug.Log("deadForGood");
         }
         else
         {
+            var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
             GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
             while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
             {
@@ -263,11 +299,14 @@ public bool hot;
         Destroy(db);                        //delete the explosion
         if (_lives <= 0 )
         {
-            Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
+            _deadForGood = true;
+            //Debug.Log("deadForGood");
+            //Debug.Log(gameObject.name + " is dead, and won't be coming back. Game over man, game over!");
             GetComponentInChildren<lifeCounter>().changeVis(false);
         }
         else
         {
+            var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
             GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
             while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
             {
@@ -276,6 +315,7 @@ public bool hot;
             spawnPos = spawn.transform.position;
             deathPos = gameObject.transform.position;
             dead = true;
+
         }
     }
 
@@ -287,14 +327,15 @@ public bool hot;
         gameObject.GetComponent<Collider2D>().enabled = false;
         rTrack = 0;
         lTrack = 0;
-
+ 
+        var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
         GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
         while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
         {
             spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
         }
         spawnPos = spawn.transform.position;
-        gameObject.transform.position = new Vector3(0,0,0);
+        gameObject.transform.position = spawnPos;
         deathPos = gameObject.transform.position;
         setPlayer();
         dead = true;
@@ -303,22 +344,14 @@ public bool hot;
 
     void Awake()
     {
-        _state = type.none;
-        _lives = 3;
-        _health = 1;
-        _body = gameObject.GetComponent<Rigidbody2D>();
-        _readyToFire = false;
-        _speed = 2.0f;
-        _gun = gameObject.transform.GetChild(0).gameObject;
-        _smoke = gameObject.GetComponent<ParticleSystem>();
-        if (_player == null) _player = 0;
-        setPlayer();
+        
     }
     // Start is called before the first frame update
     void Start()
     {
         _state = type.none;
         _lives = 3;
+        _deadForGood = false;
         _health = 1;
         _body = gameObject.GetComponent<Rigidbody2D>();
         _readyToFire = false;
@@ -328,19 +361,11 @@ public bool hot;
         if (_player == null) _player = 0;
 
         if (ai == null) ai = false;
-
-        if (ai)
-        {
-            spawnPoints = GameObject.FindGameObjectsWithTag("AI_Spawn");
-            _lives = 10;
-        }
-        else
-            spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
-
-
+                
         setPlayer();
 
-        GetComponentInChildren<lifeCounter>().changeVis(false);
+        if(GetComponentInChildren<lifeCounter>())
+            GetComponentInChildren<lifeCounter>().changeVis(false);
     }
 
     void FixedUpdate()
@@ -354,22 +379,25 @@ public bool hot;
             frac += Time.deltaTime;
             transform.position = Vector3.Lerp(deathPos, spawnPos, frac);
             if (frac >= 1)
-                {
+            {
                 frac = 0f;
                 dead = false;
 
-                    gameObject.GetComponent<Collider2D>().enabled = true;
-               
-                    gameObject.GetComponent<SpriteRenderer>().enabled = true;                            //disables the tank body sprite renderer by setting its sprite to null
+                gameObject.GetComponent<BoxCollider2D>().enabled = true;
+                gameObject.GetComponent<SpriteRenderer>().enabled = true;                 //disables the tank body sprite renderer by setting its sprite to null
+                if(gameObject.GetComponent<ControllerInput>())
                     gameObject.GetComponent<ControllerInput>().enabled = true;
-                    gameObject.transform.GetChild(0).gameObject.SetActive(true);                       //disable the turret sprite renderer
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);              //disable the turret sprite renderer
+
+                try { gameObject.GetComponentInChildren<Tracks>().enabled = true; }
+                catch { Debug.LogError("No tracks system on the tank that just died - maybe try adding one?"); }
+
                 if (!ai)
                 {
                     GetComponentInChildren<lifeCounter>().changeVis(false);
-
-                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f);                     //play the sound given in the editor to tankmanager
+                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.3f); //play the sound given in the editor to tankmanager
                 }
-                }
+            }
         }
     }
 
@@ -389,7 +417,7 @@ public bool hot;
 
         if (mining && pUpState == type.mines && !(minecount <= 0))
         {
-            Debug.Log("A mine has been laid by tank " + gameObject.name);
+            //Debug.Log("A mine has been laid by tank " + gameObject.name);
             GameObject newMine = Instantiate(mine, gameObject.transform);
             gameObject.GetComponent<AudioSource>().PlayOneShot(dropSound, 0.8f);
             newMine.SetActive(true);
@@ -417,15 +445,18 @@ public bool hot;
     IEnumerator cooldown()
     {
         GameObject ticker = new GameObject();
+        
         ticker.AddComponent<AudioSource>();
         GameObject clock = Instantiate(ticker);
-        Debug.Log("Cooling down after pickup!");
+
+        clock.name = "clock_player" + player;
+        //Debug.Log("Cooling down after pickup!");
         clock.GetComponent<AudioSource>().PlayOneShot(cooldownSound, 0.8f);
         yield return new WaitForSeconds(10);         //wait for sound and explosion to play
-            this.pUpState = type.none;
+        this.pUpState = type.none;
         Destroy(ticker);
         Destroy(clock);
-            Debug.Log("Tank has cooled down!");
+        //Debug.Log("Tank has cooled down!");
     }
 }
 

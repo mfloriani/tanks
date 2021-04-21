@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class lifeCounter : MonoBehaviour
 {
-
+    float fadeTime = 0f;
+    bool fade = false;
     public Sprite[] icons;
     SpriteRenderer sprite;
     int player;
@@ -46,22 +47,14 @@ public void updateCount(int lives)
     {
         if (lives < 0) lives = 0;
         sprite.sprite = icons[lives];
-        Debug.Log("Life counter updated to have " + lives + " lives");
+        //Debug.Log("Life counter updated to have " + lives + " lives");
     }
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
-
-    IEnumerator turnOnThenOff()
-    {
-        sprite.enabled = true;
-        //goes invisible after four seconds
-        yield return new WaitForSeconds(4);
-        sprite.enabled = false;
-    }
 
     public void changeVis(bool endVis)
     {
@@ -70,11 +63,25 @@ public void updateCount(int lives)
             sprite.enabled = true;
         }
         else
-            StartCoroutine(turnOnThenOff());
+        {
+            fadeTime += 3.5f;
+        fade = true;
+        }  //turnOnThenOff();
     }
     private void FixedUpdate()
     {
         transform.rotation = Quaternion.identity;
         gameObject.transform.position = (transform.parent.position + new Vector3(0f,1f,0f)) ;
+
+        if (fade)
+        {
+            sprite.enabled = true;
+            fadeTime -= Time.deltaTime;
+            if (fadeTime <= 0f)
+            {
+                sprite.enabled = false;
+                fade = false;
+            }
+        }
     }
 }
