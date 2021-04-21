@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         else if (!hasPlayerAlive && TotalPlayersInScene() > 0)
         {
             _currentGameState = GameState.GameOver;
-            MenuManager.Instance.ShowGameOverMenu("YOU LOST", Color.white);
+            MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
         }
         if (hasPlayerAlive && totalAliveInTheGame == 1)
         {
