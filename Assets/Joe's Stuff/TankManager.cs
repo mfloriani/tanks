@@ -220,8 +220,11 @@ public class TankManager : MonoBehaviour
     {
         if (!safe && !dead)
         {
-            GameObject ticker = GameObject.FindGameObjectWithTag("clock_player" + player);
-            if(ticker)Destroy(ticker);
+            if (pUpState != type.none)
+            {
+                GameObject ticker = GameObject.FindGameObjectWithTag("clock_player" + player);
+                if (ticker) Destroy(ticker);
+            }
             pUpState = type.none;
             //Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
