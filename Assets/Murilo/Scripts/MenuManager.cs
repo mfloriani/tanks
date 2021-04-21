@@ -98,8 +98,6 @@ public class MenuManager : MonoBehaviour
             sfx.PlayOneShot(clips[0], 1f);  //play a move cursor sound - JG
 
         last = EventSystem.current.currentSelectedGameObject;
-
-
     }
 
     public bool IsInGame()
@@ -158,7 +156,6 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
         bgm.Stop();
@@ -182,6 +179,7 @@ public class MenuManager : MonoBehaviour
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
         if (!bgm.isPlaying) bgm.Play();
+
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);

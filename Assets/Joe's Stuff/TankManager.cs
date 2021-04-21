@@ -220,7 +220,7 @@ public class TankManager : MonoBehaviour
         if (!safe && !dead)
         {
             //Debug.Log("Die has been called, tank with name \"" + this.name + "\" should now be dead");
-            
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.GetComponent<AudioSource>().PlayOneShot(deathSound);                     //play the sound given in the editor to tankmanager
             GameObject deathBoom = Instantiate(gameObject.transform.GetChild(1).gameObject, gameObject.transform);             //access deathboom and play its particles
             deathBoom.GetComponent<ParticleSystem>().Play();
@@ -306,6 +306,7 @@ public class TankManager : MonoBehaviour
             spawnPos = spawn.transform.position;
             deathPos = gameObject.transform.position;
             dead = true;
+
         }
     }
 
@@ -317,7 +318,7 @@ public class TankManager : MonoBehaviour
         gameObject.GetComponent<Collider2D>().enabled = false;
         rTrack = 0;
         lTrack = 0;
-
+ 
         var spawnPoints = GameObject.FindGameObjectsWithTag("Platform");
         GameObject spawn = spawnPoints[(int)Random.Range(0, spawnPoints.Length)].gameObject;
         while (spawn.GetComponent<safezone>() != null && spawn.GetComponent<safezone>().full == true)
@@ -373,7 +374,7 @@ public class TankManager : MonoBehaviour
                 frac = 0f;
                 dead = false;
 
-                gameObject.GetComponent<Collider2D>().enabled = true;
+                gameObject.GetComponent<BoxCollider2D>().enabled = true;
                 gameObject.GetComponent<SpriteRenderer>().enabled = true;                 //disables the tank body sprite renderer by setting its sprite to null
                 if(gameObject.GetComponent<ControllerInput>())
                     gameObject.GetComponent<ControllerInput>().enabled = true;
@@ -385,7 +386,7 @@ public class TankManager : MonoBehaviour
                 if (!ai)
                 {
                     GetComponentInChildren<lifeCounter>().changeVis(false);
-                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.7f); //play the sound given in the editor to tankmanager
+                    gameObject.GetComponent<AudioSource>().PlayOneShot(spawnSound, 0.3f); //play the sound given in the editor to tankmanager
                 }
             }
         }
