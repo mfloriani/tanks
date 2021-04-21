@@ -21,7 +21,7 @@ public class MenuManager : MonoBehaviour
     //public Image[] PlayerAvatar;
     public Sprite[] PlayerAvatar;
     public Sprite[] ControllerAvatar;
-    
+
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
     [SerializeField] GameObject _firstSelectedPauseMenu;
@@ -44,7 +44,7 @@ public class MenuManager : MonoBehaviour
     const string GAMEOVER_MENU = "GameOver Menu";
 
     GameMode _selectedMode = GameMode.None;
-    
+
     public GameMode GetSelectedMode()
     {
         return _selectedMode;
@@ -53,7 +53,7 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         //Debug.Log("MenuManager Awake");
-        
+
         if (Instance == null)
         {
             Instance = this;
@@ -68,7 +68,7 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("MenuManager Start");
-        
+
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -79,10 +79,10 @@ public class MenuManager : MonoBehaviour
         ControllerManager.Instance.UpdateConnectedControllers();
 
         //Debug.Log(_isMainMenu + " - " + _isGamePaused);
-        if(IsInGame())
+        if (IsInGame())
         {
             // cannot join the arcade mode 
-            if(GetSelectedMode() != GameMode.Arcade)
+            if (GetSelectedMode() != GameMode.Arcade)
                 ControllerManager.Instance.HandleInGameJoinButton();
 
             if (Input.GetButtonDown("Joys_Start"))
@@ -98,8 +98,6 @@ public class MenuManager : MonoBehaviour
             sfx.PlayOneShot(clips[0], 1f);  //play a move cursor sound - JG
 
         last = EventSystem.current.currentSelectedGameObject;
-
-        
     }
 
     public bool IsInGame()
@@ -158,7 +156,6 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
         bgm.Stop();
@@ -181,7 +178,8 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-        if(!bgm.isPlaying) bgm.Play();
+        if (!bgm.isPlaying) bgm.Play();
+
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
