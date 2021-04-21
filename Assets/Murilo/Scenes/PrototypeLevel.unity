@@ -6583,6 +6583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank
       objectReference: {fileID: 0}
+    - target: {fileID: 4003504016865398329, guid: 285c118955bcc1542827fa2c9c080aca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4241665522693711683, guid: 285c118955bcc1542827fa2c9c080aca, type: 3}
       propertyPath: m_RootOrder
       value: 1
