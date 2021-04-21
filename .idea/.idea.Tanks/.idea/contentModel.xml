@@ -36,16 +36,21 @@
           <e p="MultiplayerSetUp.cs" t="Include" />
         </e>
         <e p="Murilo" t="Include">
-          <e p="ControllerManager.cs" t="Include" />
-          <e p="ControllerMenu.cs" t="Include" />
-          <e p="GameManager_demo.cs" t="Include" />
-          <e p="GameUI.cs" t="Include" />
-          <e p="MenuManager.cs" t="Include" />
+          <e p="Scripts" t="Include">
+            <e p="ControllerManager.cs" t="Include" />
+            <e p="ControllerMenu.cs" t="Include" />
+            <e p="GameManager_demo.cs" t="Include" />
+            <e p="GameUI.cs" t="Include" />
+            <e p="MenuManager.cs" t="Include" />
+          </e>
         </e>
         <e p="Sohail" t="Include">
+          <e p="CircleShrink.cs" t="Include" />
+          <e p="Eachwall.cs" t="Include" />
           <e p="Gamemanager.cs" t="Include" />
           <e p="Multiplayer1.cs" t="Include" />
           <e p="Multiplayer2.cs" t="Include" />
+          <e p="Wall.cs" t="Include" />
         </e>
         <e p="Tank" t="Include">
           <e p="kenney_topdowntanksredux" t="Include">
