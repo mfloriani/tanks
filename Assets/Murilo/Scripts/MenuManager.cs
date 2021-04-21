@@ -21,13 +21,21 @@ public class MenuManager : MonoBehaviour
     //public Image[] PlayerAvatar;
     public Sprite[] PlayerAvatar;
     public Sprite[] ControllerAvatar;
-    
+
     [SerializeField] int _mainMenuSceneIndex = 0;
     [SerializeField] GameObject _firstSelectedMainMenu;
     [SerializeField] GameObject _firstSelectedPauseMenu;
+
     [SerializeField] GameObject _firstSelectedGameOverMenu;
 
+
+    [SerializeField] AudioSource sfx;   //audiosource for playing select/confirm sounds
+    [SerializeField] AudioSource bgm;
+    [SerializeField] AudioClip[] clips; //clip array for storing select/confirm sounds
+
     bool _isGamePaused = false;
+
+    GameObject last;
 
     const string MAIN_MENU = "Main Menu";
     const string PAUSE_MENU = "Pause Menu";
@@ -36,7 +44,7 @@ public class MenuManager : MonoBehaviour
     const string GAMEOVER_MENU = "GameOver Menu";
 
     GameMode _selectedMode = GameMode.None;
-    
+
     public GameMode GetSelectedMode()
     {
         return _selectedMode;
@@ -45,7 +53,7 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         //Debug.Log("MenuManager Awake");
-        
+
         if (Instance == null)
         {
             Instance = this;
@@ -60,7 +68,7 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("MenuManager Start");
-        
+
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -71,10 +79,10 @@ public class MenuManager : MonoBehaviour
         ControllerManager.Instance.UpdateConnectedControllers();
 
         //Debug.Log(_isMainMenu + " - " + _isGamePaused);
-        if(IsInGame())
+        if (IsInGame())
         {
             // cannot join the arcade mode 
-            if(GetSelectedMode() != GameMode.Arcade)
+            if (GetSelectedMode() != GameMode.Arcade)
                 ControllerManager.Instance.HandleInGameJoinButton();
 
             if (Input.GetButtonDown("Joys_Start"))
@@ -85,10 +93,18 @@ public class MenuManager : MonoBehaviour
                     Pause();
             }
         }
+
+        if (last && last != EventSystem.current.currentSelectedGameObject)
+            sfx.PlayOneShot(clips[0], 1f);  //play a move cursor sound - JG
+
+        last = EventSystem.current.currentSelectedGameObject;
+
+
     }
 
     public bool IsInGame()
     {
+
         return SceneManager.GetActiveScene().buildIndex != _mainMenuSceneIndex;
     }
 
@@ -102,7 +118,7 @@ public class MenuManager : MonoBehaviour
     {
         gameObject.transform.Find(PAUSE_MENU).gameObject.SetActive(true);
         _isGamePaused = true;
-
+        last = null;
         EventSystem.current.firstSelectedGameObject = _firstSelectedPauseMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedPauseMenu);
@@ -124,6 +140,8 @@ public class MenuManager : MonoBehaviour
     {
         _selectedMode = GameMode.Multiplayer;
 
+        sfx.PlayOneShot(clips[1], 0.8f);  //play a confirm selection sound - JG
+
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
     }
@@ -132,16 +150,19 @@ public class MenuManager : MonoBehaviour
     {
         _selectedMode = GameMode.BattleRoyale;
 
+        sfx.PlayOneShot(clips[1], 0.8f);  //play a confirm selection sound - JG
+
         gameObject.transform.Find(MAIN_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(true);
     }
 
     public void StartGame()
     {
+
         gameObject.transform.Find(CONTROLLER_MENU).gameObject.SetActive(false);
         gameObject.transform.Find(GAMEUI).gameObject.SetActive(true);
-
-
+        bgm.Stop();
+        last = null;
         SceneManager.LoadScene(1);
     }
 
@@ -160,7 +181,7 @@ public class MenuManager : MonoBehaviour
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
-
+        if (!bgm.isPlaying) bgm.Play();
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedMainMenu);
@@ -176,7 +197,7 @@ public class MenuManager : MonoBehaviour
     public void ShowGameOverMenu(string msg, Color color)
     {
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(true);
-        
+        last = null;
         EventSystem.current.firstSelectedGameObject = _firstSelectedGameOverMenu;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(_firstSelectedGameOverMenu);
@@ -190,5 +211,6 @@ public class MenuManager : MonoBehaviour
     public void HideGameOverMenu()
     {
         gameObject.transform.Find(GAMEOVER_MENU).gameObject.SetActive(false);
+        last = null;
     }
 }

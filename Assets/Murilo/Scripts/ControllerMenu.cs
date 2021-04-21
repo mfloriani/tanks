@@ -9,7 +9,8 @@ public class ControllerMenu : MonoBehaviour
     [SerializeField] Transform[] _players;
     [SerializeField] Transform _countdownText;
     [SerializeField] int _countdownMaxTime = 5;
-
+    [SerializeField] AudioSource sfx;
+    [SerializeField] AudioClip[] clips;
     float _countdown;
     bool _starting = false;
 
@@ -49,6 +50,7 @@ public class ControllerMenu : MonoBehaviour
         {
             _countdown -= Time.deltaTime;
             _countdownText.GetComponent<TextMeshProUGUI>().SetText(((int)_countdown).ToString());
+            if (_countdown % 1 == 0) sfx.PlayOneShot(clips[0], 0.8f);   //plays a snare drum on countdown
             if (_countdown <= 0)
             {
                 _countdown = 0;
@@ -64,7 +66,7 @@ public class ControllerMenu : MonoBehaviour
 
     void OnDisable()
     {
-        
+
     }
 
 
@@ -101,6 +103,7 @@ public class ControllerMenu : MonoBehaviour
             else
             {
                 AddPlayer(index);
+                sfx.PlayOneShot(clips[index], 0.8f);
             }
         }
     }
@@ -110,8 +113,8 @@ public class ControllerMenu : MonoBehaviour
     {
         int selected = 0;
         int confirmed = 0;
-        
-        foreach(var c in MenuManager.Instance.GetControllers())
+
+        foreach (var c in MenuManager.Instance.GetControllers())
         {
             if (c.Selected)
                 selected++;
@@ -146,12 +149,12 @@ public class ControllerMenu : MonoBehaviour
         {
             controllers[index].Selected = false;
         }
-            _players[index].Find("Join Button").gameObject.SetActive(true);
-            _players[index].Find("Controller").gameObject.SetActive(false);
-            _players[index].Find("Confirmed").gameObject.SetActive(false);
+        _players[index].Find("Join Button").gameObject.SetActive(true);
+        _players[index].Find("Controller").gameObject.SetActive(false);
+        _players[index].Find("Confirmed").gameObject.SetActive(false);
 
-            ToggleConfirmation(index, false);
-        
+        ToggleConfirmation(index, false);
+
     }
 
     // controller pressed start or was removed from the selected list
