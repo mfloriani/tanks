@@ -26,11 +26,13 @@
         </e>
         <e p="Joe's Stuff" t="Include">
           <e p="ControllerInput.cs" t="Include" />
+          <e p="HPbar.cs" t="Include" />
           <e p="lifeCounter.cs" t="Include" />
           <e p="mine.cs" t="Include" />
           <e p="powerUp.cs" t="Include" />
           <e p="safezone.cs" t="Include" />
           <e p="TankManager.cs" t="Include" />
+          <e p="Tracks.cs" t="Include" />
         </e>
         <e p="Levels" t="Include">
           <e p="MultiplayerSetUp.cs" t="Include" />
@@ -39,7 +41,7 @@
           <e p="Scripts" t="Include">
             <e p="ControllerManager.cs" t="Include" />
             <e p="ControllerMenu.cs" t="Include" />
-            <e p="GameManager_demo.cs" t="Include" />
+            <e p="Gamemanager.cs" t="Include" />
             <e p="GameUI.cs" t="Include" />
             <e p="MenuManager.cs" t="Include" />
           </e>
@@ -47,9 +49,6 @@
         <e p="Sohail" t="Include">
           <e p="CircleShrink.cs" t="Include" />
           <e p="Eachwall.cs" t="Include" />
-          <e p="Gamemanager.cs" t="Include" />
-          <e p="Multiplayer1.cs" t="Include" />
-          <e p="Multiplayer2.cs" t="Include" />
           <e p="Wall.cs" t="Include" />
         </e>
         <e p="Tank" t="Include">
