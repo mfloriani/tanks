@@ -192,8 +192,8 @@ public class MenuManager : MonoBehaviour
 
         SceneManager.LoadScene(_mainMenuSceneIndex);
 
-        if (!bgm.isPlaying || bgm.clip == gamemusic) { bgm.clip = menumusic; bgm.Play(); bgm.loop = true; } // set bgm to menu music and play it - JG
-        
+        if (!bgm.isPlaying || bgm.clip == gamemusic || bgm.clip == lose || bgm.clip == win) { last = null; bgm.Stop(); bgm.clip = menumusic; bgm.Play(); bgm.loop = true; } // set bgm to menu music and play it - JG
+
 
         EventSystem.current.firstSelectedGameObject = _firstSelectedMainMenu;
         EventSystem.current.SetSelectedGameObject(null);
