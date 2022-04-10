@@ -172,7 +172,9 @@ public class MenuManager : MonoBehaviour
         bgm.clip = gamemusic;   //set the music to game music
         bgm.Play();             //play the game music - JG
         bgm.loop = true;
-        SceneManager.LoadScene(1);
+
+        //SceneManager.LoadScene(1);
+        SceneManager.LoadScene((int)Random.Range(1, 3));     // load a random level from scene index 1-2.
 
     }
 

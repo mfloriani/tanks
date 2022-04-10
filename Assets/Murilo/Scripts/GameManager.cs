@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
         int total = 0;
         for (int i = 0; i < 4; ++i)
         {
-            var tank = GameObject.Find("/Tank " + i);
+            var tank = GameObject.Find("Tank " + i);
             if (tank) // tank is in the game?
             {
                 total += 1;
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
         int total = 0;
         for (int i = 0; i < 4; ++i)
         {
-            var tank = GameObject.Find("/Tank " + i);
+            var tank = GameObject.Find("Tank " + i);
             if (tank) // tank is in the game?
             {
                 bool isInHell = tank.GetComponent<TankManager>().IsTankInHell();
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         int playerId = -1;
         for (int i = 0; i < 4; ++i)
         {
-            var tank = GameObject.Find("/Tank " + i);
+            var tank = GameObject.Find("Tank " + i);
             if (tank) // tank is in the game?
             {
                 bool isInHell = tank.GetComponent<TankManager>().IsTankInHell();
@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         else if (!hasPlayerAlive && TotalPlayersInScene() > 0)
         {
             _currentGameState = GameState.GameOver;
-            MenuManager.Instance.ShowGameOverMenu("YOU LOST", Color.white);
+            MenuManager.Instance.ShowGameOverMenu("YOU FAILED", Color.white);
         }
         if (hasPlayerAlive && totalAliveInTheGame == 1)
         {
@@ -372,7 +372,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        var t = Instantiate(TankPrefab);
+        GameObject t = Instantiate(TankPrefab.gameObject, null);
         t.GetComponent<ControllerInput>().player = idFromZero;
         t.GetComponent<ControllerInput>().setPlayer(idFromZero);
         t.GetComponent<TankManager>().Spawn();

@@ -243,7 +243,7 @@ public class TankManager : MonoBehaviour
             gameObject.GetComponent<Collider2D>().enabled = false;
 
             try { gameObject.GetComponentInChildren<Tracks>().enabled = false; }
-            catch { Debug.LogError("No tracks system on the tank that just died - maybe try adding one?"); }
+            catch { /*Debug.LogError("No tracks system on the tank that just died - maybe try adding one?");*/ }
 
 
             rTrack = 0;
